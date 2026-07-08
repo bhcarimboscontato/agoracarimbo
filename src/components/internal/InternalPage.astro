@@ -1,0 +1,779 @@
+---
+import ContactForm from "@components/forms/ContactForm.astro";
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import { businessInfo } from "@data/site";
+import type { InternalPage, InternalPageItem } from "@data/internalPages";
+import { createWhatsAppUrl, getWhatsAppUrl } from "@lib/whatsapp";
+
+type Props = {
+  page: InternalPage;
+};
+
+const { page } = Astro.props;
+
+function getSecondaryHref(href: string): string {
+  return href === "route" ? businessInfo.googleMapsRouteUrl : href;
+}
+
+function hasMedia(item: InternalPageItem): boolean {
+  return Boolean(item.image || item.icon);
+}
+
+function getItemCtaHref(item: InternalPageItem): string {
+  if (item.whatsappText) {
+    return createWhatsAppUrl(item.whatsappText);
+  }
+
+  return getWhatsAppUrl(item.whatsappMessage ?? "general");
+}
+---
+
+<article class="internal-page">
+  <section class="internal-hero">
+    <div class="container internal-hero__grid">
+      <div class="internal-hero__content">
+        <p class="internal-eyebrow">{page.eyebrow}</p>
+        <h1>{page.title}</h1>
+        <p>{page.subtitle}</p>
+        <div class="internal-hero__actions">
+          {
+            page.primaryCta && (
+              <ButtonLink href={getWhatsAppUrl(page.primaryCta.message)} label={page.primaryCta.label} external>
+                <Icon name="icon-whatsapp" size="sm" />
+              </ButtonLink>
+            )
+          }
+          {
+            page.secondaryCta && (
+              <ButtonLink href={getSecondaryHref(page.secondaryCta.href)} label={page.secondaryCta.label} variant="secondary" external={page.secondaryCta.href === "route"}>
+                <Icon name={page.secondaryCta.href === "route" ? "icon-route" : "icon-stamp"} size="sm" />
+              </ButtonLink>
+            )
+          }
+        </div>
+      </div>
+
+      <div class="internal-hero__visual" aria-hidden={!page.heroImage}>
+        {
+          page.heroImage ? (
+            <img src={page.heroImage.src} alt={page.heroImage.alt} width="640" height="420" loading="eager" decoding="async" />
+          ) : (
+            <div class="internal-hero__mark">
+              <Icon name="icon-stamp" size="xl" />
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    page.intro && (
+      <section class="internal-intro">
+        <div class="container">
+          <p>{page.intro}</p>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.sections.map((section) => (
+      <section class:list={["internal-section", `internal-section--${section.variant ?? "cards"}`]}>
+        <div class="container internal-section__inner">
+          <div class="internal-section__header">
+            {section.eyebrow && <p class="internal-eyebrow">{section.eyebrow}</p>}
+            <h2>{section.title}</h2>
+            {section.description && <p>{section.description}</p>}
+          </div>
+
+          {
+            section.variant === "products" ? (
+              <div class="internal-product-grid">
+                {
+                  section.items.map((item, index) => (
+                    <article class:list={["internal-product-card", index < 2 ? "internal-product-card--featured" : ""]}>
+                      <div class="internal-product-card__image">
+                        {item.image && <img src={item.image} alt={item.alt ?? item.title} width="620" height="420" loading="lazy" decoding="async" />}
+                      </div>
+
+                      <div class="internal-product-card__body">
+                        <div class="internal-product-card__head">
+                          <p>Modelo</p>
+                          <h3>{item.title}</h3>
+                        </div>
+
+                        {item.tags && (
+                          <div class="internal-product-tags" aria-label={`Características do ${item.title}`}>
+                            {item.tags.map((tag) => <span>{tag}</span>)}
+                          </div>
+                        )}
+
+                        <p class="internal-product-card__description">{item.description}</p>
+
+                        {item.bullets && (
+                          <div class="internal-product-card__list">
+                            <strong>Indicado para</strong>
+                            <ul>
+                              {item.bullets.map((bullet) => <li>{bullet}</li>)}
+                            </ul>
+                          </div>
+                        )}
+
+                        {item.benefits && (
+                          <div class="internal-product-card__list internal-product-card__list--benefits">
+                            <strong>Diferenciais</strong>
+                            <ul>
+                              {item.benefits.map((benefit) => <li>{benefit}</li>)}
+                            </ul>
+                          </div>
+                        )}
+
+                        {item.ctaLabel && (
+                          <a class="internal-product-card__cta" href={getItemCtaHref(item)} target="_blank" rel="noopener noreferrer">
+                            <Icon name="icon-whatsapp" size="sm" />
+                            <span>{item.ctaLabel}</span>
+                          </a>
+                        )}
+                      </div>
+                    </article>
+                  ))
+                }
+              </div>
+            ) : (
+              <div class:list={["internal-items", `internal-items--${section.variant ?? "cards"}`]}>
+                {
+                  section.items.map((item, index) => (
+                    <article class:list={["internal-item", hasMedia(item) ? "internal-item--media" : ""]}>
+                      <div class="internal-item__top">
+                        {
+                          item.image ? (
+                            <img src={item.image} alt={item.alt ?? item.title} width="520" height="360" loading="lazy" decoding="async" />
+                          ) : item.icon ? (
+                            <span class="internal-item__icon" aria-hidden="true">
+                              <Icon name={item.icon} size="lg" />
+                            </span>
+                          ) : section.variant === "steps" ? (
+                            <span class="internal-item__number">{String(index + 1).padStart(2, "0")}</span>
+                          ) : null
+                        }
+                        {section.variant === "steps" && hasMedia(item) && <span class="internal-item__number">{String(index + 1).padStart(2, "0")}</span>}
+                      </div>
+
+                      <div class="internal-item__content">
+                        <h3>{item.title}</h3>
+                        <p>{item.description}</p>
+                        {
+                          item.bullets && (
+                            <ul>
+                              {item.bullets.map((bullet) => (
+                                <li>{bullet}</li>
+                              ))}
+                            </ul>
+                          )
+                        }
+                        {
+                          item.ctaLabel && (item.href || item.whatsappMessage || item.whatsappText) && (
+                            <a
+                              class="internal-item__cta"
+                              href={item.href ?? getItemCtaHref(item)}
+                              target={item.href ? undefined : "_blank"}
+                              rel={item.href ? undefined : "noopener noreferrer"}
+                            >
+                              {item.ctaLabel}
+                            </a>
+                          )
+                        }
+                      </div>
+                    </article>
+                  ))
+                }
+              </div>
+            )
+          }
+        </div>
+      </section>
+    ))
+  }
+
+  {
+    page.contact && (
+      <section class="internal-contact">
+        <div class="container internal-contact__grid">
+          <div class="internal-contact__panel">
+            <p class="internal-eyebrow">Mensagem</p>
+            <h2>Envie os dados iniciais do pedido</h2>
+            <p>O formulário deixa as informações organizadas para atendimento. Para resposta mais rápida, use também o WhatsApp.</p>
+          </div>
+          <ContactForm />
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.primaryCta && !page.contact && (
+      <section class="internal-final">
+        <div class="container internal-final__inner">
+          <div>
+            <p class="internal-eyebrow">Próximo passo</p>
+            <h2>{page.finalCta?.title ?? "Quer resolver pelo WhatsApp?"}</h2>
+            <p>{page.finalCta?.text ?? "Envie sua necessidade e receba orientação para escolher o modelo adequado."}</p>
+          </div>
+          <ButtonLink href={getWhatsAppUrl(page.primaryCta.message)} label={page.primaryCta.label} external>
+            <Icon name="icon-whatsapp" size="sm" />
+          </ButtonLink>
+        </div>
+      </section>
+    )
+  }
+</article>
+
+<style>
+  .internal-page {
+    background: var(--color-white);
+  }
+
+  .internal-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+    color: var(--color-black);
+    background:
+      radial-gradient(circle at 88% 18%, rgb(249 115 22 / 8%), transparent 24rem),
+      linear-gradient(180deg, var(--color-white), var(--color-gray-50));
+    border-bottom: 4px solid var(--color-orange-600);
+  }
+
+  .internal-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgb(17 17 17 / 3%) 1px, transparent 1px),
+      linear-gradient(180deg, rgb(17 17 17 / 2%) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: linear-gradient(180deg, #000, transparent 78%);
+  }
+
+  .internal-hero__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .internal-hero__content {
+    max-width: 48rem;
+  }
+
+  .internal-eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.24em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .internal-hero h1 {
+    max-width: 13ch;
+    margin-bottom: var(--space-5);
+    font-size: clamp(2.45rem, 5.5vw, 4.9rem);
+    line-height: 0.98;
+    letter-spacing: 0;
+  }
+
+  .internal-hero__content > p:last-of-type {
+    max-width: 45rem;
+    margin-bottom: var(--space-6);
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.35vw, 1.25rem);
+    line-height: 1.6;
+  }
+
+  .internal-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .internal-hero__visual {
+    display: grid;
+    min-height: 16rem;
+    align-items: center;
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-white);
+  }
+
+  .internal-hero__visual img {
+    width: 100%;
+    height: 100%;
+    min-height: 16rem;
+    max-height: 30rem;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .internal-hero__visual img[src*="logo-principal"] {
+    width: min(70%, 18rem);
+    min-height: auto;
+    margin: auto;
+    object-fit: contain;
+    padding: var(--space-8);
+  }
+
+  .internal-hero__mark {
+    display: grid;
+    place-items: center;
+    min-height: 16rem;
+    color: var(--color-orange-600);
+    background:
+      radial-gradient(circle at center, rgb(249 115 22 / 10%), transparent 12rem),
+      var(--color-white);
+  }
+
+  .internal-intro {
+    padding-block: clamp(2rem, 4vw, 3rem);
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .internal-intro p {
+    max-width: 68rem;
+    margin: 0;
+    color: rgb(255 255 255 / 88%);
+    font-size: clamp(1.04rem, 1.45vw, 1.35rem);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.65;
+  }
+
+  .internal-section {
+    padding-block: clamp(3rem, 6vw, 5rem);
+    background: var(--color-white);
+  }
+
+  .internal-section:nth-of-type(odd) {
+    background: var(--color-gray-50);
+  }
+
+  .internal-section__inner {
+    display: grid;
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .internal-section__header {
+    max-width: 56rem;
+  }
+
+  .internal-section__header h2,
+  .internal-final h2,
+  .internal-contact h2 {
+    max-width: 18ch;
+    margin-bottom: var(--space-4);
+    color: var(--color-black);
+    font-size: clamp(2rem, 4vw, 3.8rem);
+    line-height: 1.06;
+    letter-spacing: 0;
+  }
+
+  .internal-section__header > p:last-child,
+  .internal-final p,
+  .internal-contact__panel > p:last-child {
+    max-width: 44rem;
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.2vw, 1.14rem);
+    line-height: 1.7;
+  }
+
+  .internal-items {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .internal-items--cards,
+  .internal-items--feature {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .internal-items--steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    counter-reset: steps;
+  }
+
+  .internal-items--split {
+    grid-template-columns: minmax(0, 0.8fr);
+  }
+
+  .internal-product-grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .internal-product-card {
+    display: grid;
+    grid-column: span 2;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-lg);
+    background: var(--color-white);
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .internal-product-card:hover {
+    border-color: rgb(249 115 22 / 32%);
+    transform: translateY(-2px);
+  }
+
+  .internal-product-card--featured {
+    grid-column: span 3;
+  }
+
+  .internal-product-card__image {
+    display: grid;
+    min-height: 15rem;
+    place-items: center;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    background:
+      radial-gradient(circle at 50% 48%, rgb(249 115 22 / 8%), transparent 12rem),
+      var(--color-gray-50);
+  }
+
+  .internal-product-card__image img {
+    width: 100%;
+    height: clamp(13rem, 22vw, 17rem);
+    object-fit: contain;
+  }
+
+  .internal-product-card__body {
+    display: grid;
+    gap: var(--space-4);
+    padding: clamp(1.1rem, 2vw, 1.5rem);
+  }
+
+  .internal-product-card__head p {
+    margin: 0 0 var(--space-1);
+    color: var(--color-orange-700);
+    font-size: 0.72rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.2em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .internal-product-card__head h3 {
+    margin: 0;
+    color: var(--color-black);
+    font-size: clamp(1.65rem, 2.7vw, 2.35rem);
+    line-height: 1.02;
+  }
+
+  .internal-product-card:not(.internal-product-card--featured) .internal-product-card__head h3 {
+    font-size: clamp(1.35rem, 2vw, 1.85rem);
+  }
+
+  .internal-product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .internal-product-tags span {
+    border: 1px solid rgb(249 115 22 / 24%);
+    border-radius: var(--radius-sm);
+    padding: 0.34rem 0.55rem;
+    color: var(--color-orange-800);
+    font-size: 0.76rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    background: var(--color-orange-50);
+  }
+
+  .internal-product-card__description {
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: clamp(0.96rem, 1vw, 1.04rem);
+    line-height: 1.62;
+  }
+
+  .internal-product-card__list {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .internal-product-card__list strong {
+    color: var(--color-black);
+    font-size: var(--text-sm);
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .internal-product-card__list ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .internal-product-card__list li {
+    position: relative;
+    padding-left: 1.15rem;
+    color: var(--color-gray-800);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.35;
+  }
+
+  .internal-product-card__list li::before {
+    content: "";
+    position: absolute;
+    top: 0.45em;
+    left: 0;
+    width: 0.42rem;
+    height: 0.42rem;
+    background: var(--color-orange-600);
+  }
+
+  .internal-product-card__list--benefits li::before {
+    background: var(--color-black);
+  }
+
+  .internal-product-card__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 2.85rem;
+    border: 2px solid var(--color-orange-600);
+    border-radius: var(--radius-sm);
+    padding: 0.72rem 0.9rem;
+    color: var(--color-white);
+    font-size: 0.78rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: var(--color-orange-600);
+    transition:
+      border-color var(--transition-fast),
+      background-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .internal-product-card__cta:hover {
+    border-color: var(--color-orange-800);
+    background: var(--color-orange-700);
+    transform: translateY(-1px);
+  }
+
+  .internal-product-card__cta :global(.site-icon) {
+    filter: brightness(0) invert(100%);
+  }
+
+  .internal-item {
+    display: grid;
+    gap: var(--space-4);
+    min-width: 0;
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    background: var(--color-white);
+  }
+
+  .internal-item__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .internal-item__top > img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    background: var(--color-gray-50);
+  }
+
+  .internal-item__icon,
+  .internal-item__number {
+    display: grid;
+    width: 3.2rem;
+    height: 3.2rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: var(--radius-sm);
+    color: var(--color-orange-700);
+    background: var(--color-orange-50);
+  }
+
+  .internal-item__number {
+    color: var(--color-white);
+    font-weight: var(--font-weight-bold);
+    background: var(--color-orange-600);
+  }
+
+  .internal-item h3 {
+    margin-bottom: var(--space-2);
+    color: var(--color-black);
+    font-size: clamp(1.16rem, 1.5vw, 1.45rem);
+    line-height: 1.15;
+  }
+
+  .internal-item p {
+    margin: 0;
+    color: var(--color-gray-700);
+    line-height: 1.65;
+  }
+
+  .internal-item ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .internal-item li {
+    position: relative;
+    padding-left: 1.25rem;
+    color: var(--color-gray-800);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .internal-item li::before {
+    content: "";
+    position: absolute;
+    top: 0.72em;
+    left: 0;
+    width: 0.42rem;
+    height: 0.42rem;
+    background: var(--color-orange-600);
+  }
+
+  .internal-item__cta {
+    display: inline-flex;
+    width: fit-content;
+    margin-top: var(--space-4);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .internal-contact,
+  .internal-final {
+    padding-block: clamp(3rem, 6vw, 5rem);
+    background:
+      radial-gradient(circle at 82% 18%, rgb(249 115 22 / 7%), transparent 22rem),
+      var(--color-gray-50);
+  }
+
+  .internal-contact__grid,
+  .internal-final__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+    align-items: start;
+  }
+
+  .internal-contact__panel {
+    max-width: 36rem;
+  }
+
+  .internal-final__inner {
+    align-items: center;
+    border-top: 3px solid var(--color-orange-600);
+    padding-top: var(--space-8);
+  }
+
+  @media (min-width: 64rem) {
+    .internal-hero__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(20rem, 30rem);
+    }
+
+    .internal-contact__grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(22rem, 1fr);
+    }
+
+    .internal-final__inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+  }
+
+  @media (max-width: 63.99rem) {
+    .internal-items--cards,
+    .internal-items--feature,
+    .internal-items--steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .internal-product-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .internal-product-card,
+    .internal-product-card--featured {
+      grid-column: span 1;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .internal-hero__actions :global(.button),
+    .internal-final :global(.button) {
+      width: 100%;
+    }
+
+    .internal-hero__visual {
+      min-height: 13rem;
+    }
+
+    .internal-items--cards,
+    .internal-items--feature,
+    .internal-items--steps,
+    .internal-items--split {
+      grid-template-columns: 1fr;
+    }
+
+    .internal-product-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .internal-product-card__image {
+      min-height: 12rem;
+    }
+
+    .internal-product-card__image img {
+      height: 12rem;
+    }
+
+    .internal-product-card__cta {
+      width: 100%;
+    }
+
+    .internal-item {
+      padding: var(--space-4);
+    }
+
+    .internal-section__header h2,
+    .internal-final h2,
+    .internal-contact h2 {
+      font-size: clamp(2rem, 10vw, 3rem);
+    }
+  }
+</style>

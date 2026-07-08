@@ -1,0 +1,23 @@
+---
+type Props = {
+  href: string;
+  variant?: "primary" | "secondary" | "ghost";
+  label: string;
+  external?: boolean;
+};
+
+const { href, variant = "primary", label, external = false } = Astro.props;
+const conversionType = href.includes("wa.me") ? "whatsapp" : undefined;
+---
+
+<a
+  class={`button button--${variant}`}
+  href={href}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  data-event={conversionType ? "cta_click" : undefined}
+  data-conversion={conversionType}
+>
+  <slot />
+  <span>{label}</span>
+</a>

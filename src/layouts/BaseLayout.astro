@@ -1,0 +1,60 @@
+---
+import Header from "@components/layout/Header.astro";
+import Footer from "@components/layout/Footer.astro";
+import CookieConsent from "@components/ui/CookieConsent.astro";
+import SeoHead from "@components/seo/SeoHead.astro";
+import { brandAssets } from "@data/site";
+import {
+  getLocalBusinessSchema,
+  getOrganizationSchema,
+  getWebPageSchema,
+  getWebSiteSchema
+} from "@lib/seo";
+import "@styles/global.css";
+
+type Props = {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  noindex?: boolean;
+  structuredData?: Record<string, unknown>[];
+};
+
+const { title, description, canonicalPath, noindex = false, structuredData = [] } = Astro.props;
+const organizationSchema = getOrganizationSchema();
+const webSiteSchema = getWebSiteSchema();
+const webPageSchema = getWebPageSchema({ title, description, canonicalPath });
+const localBusinessSchema = getLocalBusinessSchema();
+const schemas = [organizationSchema, webSiteSchema, localBusinessSchema, webPageSchema, ...structuredData];
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SeoHead
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      noindex={noindex}
+    />
+    <link rel="icon" href={brandAssets.favicon} sizes="any" />
+    <link rel="apple-touch-icon" href={brandAssets.appleTouchIcon} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    {schemas.map((schema) => <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />)}
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <CookieConsent />
+  </body>
+</html>

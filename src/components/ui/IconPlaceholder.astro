@@ -1,0 +1,10 @@
+---
+type Props = {
+  label: string;
+  size?: "sm" | "md" | "lg";
+};
+
+const { label, size = "md" } = Astro.props;
+---
+
+<span class={`icon-placeholder icon-placeholder--${size}`} aria-hidden="true" title={label}></span>

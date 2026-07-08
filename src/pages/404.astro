@@ -1,0 +1,90 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import { getWhatsAppUrl } from "@lib/whatsapp";
+
+const seo = {
+  title: "Página não encontrada",
+  description:
+    "A página que você tentou acessar não foi encontrada. Volte para a BH Carimbos, veja os tipos de carimbos em BH ou fale pelo WhatsApp.",
+  canonicalPath: "/404/",
+  noindex: true
+};
+---
+
+<BaseLayout {...seo}>
+  <section class="not-found">
+    <div class="container not-found__inner">
+      <p class="not-found__eyebrow">Erro 404</p>
+      <h1>Página não encontrada</h1>
+      <p>
+        O endereço pode ter mudado ou não existir. Você pode voltar para a página inicial, ver a
+        central de carimbos em BH ou falar com o atendimento.
+      </p>
+
+      <div class="not-found__actions">
+        <ButtonLink href="/" label="Voltar para a Home" variant="secondary" />
+        <ButtonLink href="/carimbos-bh/" label="Ver carimbos em BH" />
+        <ButtonLink href={getWhatsAppUrl("general")} label="Falar pelo WhatsApp" external>
+          <Icon name="icon-whatsapp" size="sm" />
+        </ButtonLink>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 62vh;
+    border-bottom: 4px solid var(--color-orange-600);
+    padding-block: clamp(4rem, 9vw, 7rem);
+    background:
+      linear-gradient(90deg, rgb(17 17 17 / 3%) 1px, transparent 1px) 0 0 / 52px 52px,
+      linear-gradient(180deg, var(--color-white), var(--color-gray-50));
+  }
+
+  .not-found__inner {
+    max-width: 58rem;
+  }
+
+  .not-found__eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .not-found h1 {
+    max-width: 11ch;
+    margin: 0;
+    color: var(--color-black);
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .not-found p:not(.not-found__eyebrow) {
+    max-width: 42rem;
+    margin: var(--space-5) 0 0;
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  @media (max-width: 47.99rem) {
+    .not-found__actions :global(.button-link) {
+      width: 100%;
+    }
+  }
+</style>

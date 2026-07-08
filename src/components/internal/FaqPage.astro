@@ -1,0 +1,728 @@
+---
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import type { FaqPageData } from "@data/faqPage";
+
+type Props = {
+  page: FaqPageData;
+};
+
+const { page } = Astro.props;
+const totalQuestions = page.categories.reduce((total, category) => total + category.questions.length, 0);
+---
+
+<article class="faq-page">
+  <section class="faq-hero">
+    <div class="container faq-hero__inner">
+      <p class="faq-eyebrow">{page.eyebrow}</p>
+      <h1>{page.title}</h1>
+      <p>{page.subtitle}</p>
+      <div class="faq-hero__meta" aria-label="Resumo da página">
+        <span>{page.categories.length} categorias</span>
+        <span>{totalQuestions} perguntas</span>
+        <span>Atendimento em BH</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-tools" aria-labelledby="faq-tools-title">
+    <div class="container faq-tools__grid">
+      <div class="faq-search">
+        <label id="faq-tools-title" for="faq-search">Buscar dúvida</label>
+        <div class="faq-search__field">
+          <input
+            id="faq-search"
+            type="search"
+            placeholder="Buscar por prazo, entrega, CNPJ, médico, pagamento..."
+            autocomplete="off"
+            data-faq-search
+          />
+        </div>
+        <p data-faq-count>{totalQuestions} perguntas disponíveis.</p>
+      </div>
+
+      <nav class="faq-index" aria-label="Categorias de perguntas frequentes">
+        {page.categories.map((category) => <a href={`#${category.id}`}>{category.title}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="faq-content" aria-label="Lista de perguntas frequentes">
+    <div class="container faq-content__inner">
+      <div class="faq-empty" data-faq-empty hidden>
+        <h2>Não encontrou sua dúvida?</h2>
+        <p>Fale com a gente pelo WhatsApp para receber orientação sobre seu pedido.</p>
+        <ButtonLink href={page.finalCta.href} label="Falar pelo WhatsApp" external>
+          <Icon name="icon-whatsapp" size="sm" />
+        </ButtonLink>
+      </div>
+
+      {
+        page.categories.map((category) => (
+          <section class="faq-category" id={category.id} data-faq-category data-category-title={category.title}>
+            <div class="faq-category__head">
+              <p class="faq-eyebrow">{category.title}</p>
+              <h2>{category.title}</h2>
+              <p>{category.description}</p>
+            </div>
+
+            <div class="faq-category__items">
+              {
+                category.questions.map((item) => (
+                  <details
+                    class="faq-detail"
+                    data-faq-item
+                    data-search-text={`${category.title} ${item.question} ${item.answer}`.toLowerCase()}
+                  >
+                    <summary>
+                      <span>{item.question}</span>
+                      <span class="faq-detail__indicator" aria-hidden="true"></span>
+                    </summary>
+                    <div class="faq-detail__answer">
+                      <p>{item.answer}</p>
+                    </div>
+                  </details>
+                ))
+              }
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="faq-links" aria-labelledby="faq-links-title">
+    <div class="container faq-links__inner">
+      <div>
+        <p class="faq-eyebrow">Links úteis</p>
+        <h2 id="faq-links-title">Continue navegando</h2>
+      </div>
+      <nav aria-label="Links úteis da página de perguntas frequentes">
+        {page.usefulLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="faq-final" aria-labelledby="faq-final-title">
+    <div class="container faq-final__inner">
+      <div>
+        <p class="faq-eyebrow">Atendimento</p>
+        <h2 id="faq-final-title">{page.finalCta.title}</h2>
+        <p>{page.finalCta.text}</p>
+      </div>
+      <ButtonLink href={page.finalCta.href} label={page.finalCta.label} external>
+        <Icon name="icon-whatsapp" size="sm" />
+      </ButtonLink>
+    </div>
+  </section>
+</article>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>("[data-faq-search]");
+  const faqItems = [...document.querySelectorAll<HTMLElement>("[data-faq-item]")];
+  const faqCategories = [...document.querySelectorAll<HTMLElement>("[data-faq-category]")];
+  const emptyState = document.querySelector<HTMLElement>("[data-faq-empty]");
+  const count = document.querySelector<HTMLElement>("[data-faq-count]");
+
+  const relatedTerms: Record<string, string[]> = {
+    advogado: ["oab", "juridico", "juridica", "escritorio", "advocacia", "profissional"],
+    assinatura: ["rubrica", "assinar", "documento", "validade", "manual", "digital"],
+    atendimento: ["whatsapp", "pedido", "orcamento", "contato", "duvida", "solicitar"],
+    automatico: ["auto", "modelo", "pratico", "frequente", "escritorio", "rotina"],
+    bh: ["belo", "horizonte", "mg", "regiao"],
+    cartao: ["credito", "debito", "visa", "mastercard", "elo", "pagamento"],
+    cnpj: ["empresa", "mei", "razao", "social", "comercial", "negocio", "nota"],
+    clinica: ["consultorio", "saude", "medico", "psicologo", "nutricionista", "recepcao"],
+    contato: ["telefone", "email", "whatsapp", "falar", "atendimento"],
+    cookies: ["privacidade", "dados", "lgpd", "politica", "consentimento"],
+    dados: ["informacoes", "texto", "nome", "cnpj", "registro", "profissao", "endereco"],
+    datador: ["data", "protocolo", "recebimento", "controle", "documento"],
+    debito: ["cartao", "pagamento", "credito"],
+    entrega: ["motoboy", "receber", "envio", "regiao", "localidade", "endereco"],
+    enfermagem: ["enfermeiro", "tecnico", "coren", "profissional", "saude"],
+    erro: ["corrigir", "dado", "errado", "revisar", "ajustar"],
+    fiscal: ["nota", "nf", "pagamento", "empresa"],
+    hora: ["urgente", "rapido", "rapida", "minutos", "prazo", "mesmo", "dia"],
+    localizacao: ["endereco", "loja", "venda", "nova", "maria", "helena", "maps"],
+    madeira: ["manual", "tradicional", "almofada", "modelo"],
+    medico: ["crm", "profissional", "saude", "clinica", "consultorio"],
+    modelo: ["tipo", "tamanho", "automatico", "madeira", "nykon", "trodat", "colop"],
+    motoboy: ["entrega", "envio", "receber", "regiao"],
+    numerador: ["numero", "sequencial", "controle", "protocolo", "documento"],
+    pagamento: ["pix", "cartao", "credito", "debito", "nota", "fiscal", "valor", "preco"],
+    pampulha: ["regiao", "entrega", "motoboy", "bairro"],
+    pedido: ["orcamento", "solicitar", "whatsapp", "comprar", "fazer", "atendimento"],
+    pix: ["pagamento", "transferencia"],
+    prazo: ["tempo", "producao", "entrega", "urgencia", "rapido", "hora", "minutos"],
+    privacidade: ["dados", "lgpd", "cookies", "politica", "seguranca"],
+    psicologo: ["crp", "profissional", "saude", "consultorio", "clinica"],
+    retirada: ["buscar", "loja", "endereco", "venda", "nova", "maria", "helena"],
+    urgente: ["rapido", "rapida", "pressa", "hoje", "hora", "minutos", "prazo"],
+    venda: ["nova", "maria", "helena", "loja", "endereco", "retirada"]
+  };
+
+  const stopWords = new Set([
+    "a",
+    "ao",
+    "aos",
+    "as",
+    "com",
+    "como",
+    "da",
+    "das",
+    "de",
+    "do",
+    "dos",
+    "e",
+    "em",
+    "eu",
+    "me",
+    "na",
+    "nas",
+    "no",
+    "nos",
+    "o",
+    "os",
+    "ou",
+    "para",
+    "por",
+    "pra",
+    "que",
+    "se",
+    "tem",
+    "um",
+    "uma",
+    "vocês",
+    "voces"
+  ]);
+
+  function normalize(value: string) {
+    return value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  }
+
+  function tokenize(value: string) {
+    return normalize(value)
+      .split(/[^a-z0-9]+/i)
+      .filter((token) => token.length > 1 && !stopWords.has(token));
+  }
+
+  function expandTokens(tokens: string[]) {
+    const expanded = new Set(tokens);
+
+    tokens.forEach((token) => {
+      const matches = relatedTerms[token] ?? [];
+
+      matches.forEach((term) => {
+        expanded.add(normalize(term));
+      });
+
+      Object.entries(relatedTerms).forEach(([key, values]) => {
+        if (values.map(normalize).includes(token)) {
+          expanded.add(normalize(key));
+          values.forEach((term) => expanded.add(normalize(term)));
+        }
+      });
+    });
+
+    return [...expanded];
+  }
+
+  function itemMatchesQuery(item: HTMLElement, query: string) {
+    if (!query) return true;
+
+    const normalizedQuery = normalize(query);
+    const baseText = normalize(item.dataset.searchText ?? "");
+    const queryTokens = tokenize(query);
+    const expandedTokens = expandTokens(queryTokens);
+
+    if (baseText.includes(normalizedQuery)) return true;
+    if (queryTokens.length === 0) return true;
+
+    const directMatches = queryTokens.filter((token) => baseText.includes(token)).length;
+    const expandedMatches = expandedTokens.filter((token) => baseText.includes(token)).length;
+    const minimumScore = queryTokens.length === 1 ? 1 : Math.ceil(queryTokens.length * 0.65);
+
+    return directMatches >= minimumScore || expandedMatches >= minimumScore;
+  }
+
+  function updateFilter() {
+    const query = searchInput?.value ?? "";
+    let visibleItems = 0;
+
+    faqItems.forEach((item) => {
+      const isVisible = itemMatchesQuery(item, query);
+      item.hidden = !isVisible;
+      if (isVisible) visibleItems += 1;
+    });
+
+    faqCategories.forEach((category) => {
+      const hasVisibleItem = Boolean(category.querySelector("[data-faq-item]:not([hidden])"));
+      category.hidden = !hasVisibleItem;
+    });
+
+    if (emptyState) emptyState.hidden = visibleItems > 0;
+
+    if (count) {
+      if (!query.trim()) {
+        count.textContent = `${faqItems.length} perguntas disponíveis.`;
+        return;
+      }
+
+      count.textContent =
+        visibleItems === 1
+          ? "1 pergunta encontrada."
+          : `${visibleItems} perguntas encontradas.`;
+    }
+  }
+
+  searchInput?.addEventListener("input", updateFilter);
+</script>
+
+<style>
+  .faq-page {
+    background: var(--color-white);
+  }
+
+  .faq-hero {
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-orange-600);
+    padding-block: clamp(3.25rem, 7vw, 5.75rem);
+    background:
+      radial-gradient(circle at 88% 18%, rgb(249 115 22 / 8%), transparent 24rem),
+      linear-gradient(180deg, var(--color-white), var(--color-gray-50));
+  }
+
+  .faq-hero__inner {
+    max-width: 70rem;
+  }
+
+  .faq-eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.22em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .faq-hero h1 {
+    max-width: 12ch;
+    margin-bottom: var(--space-5);
+    color: var(--color-black);
+    font-size: clamp(2.45rem, 5.5vw, 4.8rem);
+    line-height: 0.98;
+    letter-spacing: 0;
+  }
+
+  .faq-hero__inner > p:not(.faq-eyebrow) {
+    max-width: 58rem;
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.35vw, 1.22rem);
+    line-height: 1.65;
+  }
+
+  .faq-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+  }
+
+  .faq-hero__meta span {
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-sm);
+    padding: 0.58rem 0.75rem;
+    color: var(--color-black);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    background: var(--color-white);
+  }
+
+  .faq-tools {
+    position: relative;
+    z-index: 8;
+    border-bottom: 1px solid rgb(17 17 17 / 10%);
+    padding-block: var(--space-4);
+    background: rgb(255 255 255 / 96%);
+    backdrop-filter: blur(12px);
+  }
+
+  .faq-tools__grid {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  .faq-search {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .faq-search label {
+    color: var(--color-black);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+  }
+
+  .faq-search__field {
+    position: relative;
+  }
+
+  .faq-search__field::before {
+    content: "";
+    position: absolute;
+    inset: 0.32rem;
+    border: 1px solid rgb(249 115 22 / 28%);
+    border-radius: calc(var(--radius-sm) - 1px);
+    pointer-events: none;
+  }
+
+  .faq-search input {
+    width: 100%;
+    min-height: 3.15rem;
+    border: 1px solid rgb(17 17 17 / 14%);
+    border-radius: var(--radius-sm);
+    padding: 0.78rem 0.95rem;
+    color: var(--color-black);
+    font: inherit;
+    background: var(--color-white);
+    box-shadow: 0 10px 24px rgb(17 17 17 / 4%);
+  }
+
+  .faq-search input:focus {
+    outline: 3px solid rgb(249 115 22 / 26%);
+    border-color: var(--color-orange-600);
+  }
+
+  .faq-search input::placeholder {
+    color: rgb(17 17 17 / 48%);
+  }
+
+  .faq-search p {
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: var(--text-sm);
+  }
+
+  .faq-index {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(8.75rem, 1fr));
+    gap: var(--space-2);
+    align-items: stretch;
+  }
+
+  .faq-index a,
+  .faq-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.28rem;
+    border: 1px solid rgb(249 115 22 / 22%);
+    border-radius: var(--radius-sm);
+    padding: 0.52rem 0.72rem;
+    color: var(--color-orange-800);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.18;
+    text-align: center;
+    text-decoration: none;
+    background: var(--color-orange-50);
+    transition:
+      border-color var(--transition-fast),
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .faq-index a:hover,
+  .faq-index a:focus-visible,
+  .faq-links a:hover,
+  .faq-links a:focus-visible {
+    border-color: var(--color-orange-600);
+    color: var(--color-black);
+    background: var(--color-white);
+    transform: translateY(-1px);
+  }
+
+  .faq-index a:focus-visible,
+  .faq-links a:focus-visible {
+    outline: 3px solid rgb(249 115 22 / 24%);
+    outline-offset: 2px;
+  }
+
+  .faq-content {
+    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+    background: var(--color-white);
+  }
+
+  .faq-content__inner {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .faq-category {
+    scroll-margin-top: calc(var(--site-header-sticky-offset, 5.65rem) + 7.5rem);
+    display: grid;
+    grid-template-columns: minmax(14rem, 0.42fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
+  }
+
+  .faq-category__head {
+    position: sticky;
+    top: calc(var(--site-header-sticky-offset, 5.65rem) + 7.25rem);
+  }
+
+  .faq-category__head h2,
+  .faq-links h2,
+  .faq-final h2,
+  .faq-empty h2 {
+    max-width: 16ch;
+    margin-bottom: var(--space-3);
+    color: var(--color-black);
+    font-size: clamp(1.8rem, 3vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
+  .faq-category__head > p:last-child,
+  .faq-final p,
+  .faq-empty p {
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: clamp(0.96rem, 1.1vw, 1.05rem);
+    line-height: 1.65;
+  }
+
+  .faq-category__items {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .faq-detail {
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-white);
+    transition:
+      border-color var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+
+  .faq-detail:hover,
+  .faq-detail[open] {
+    border-color: rgb(249 115 22 / 34%);
+    background: rgb(255 247 237 / 38%);
+  }
+
+  .faq-detail summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-4);
+    align-items: center;
+    min-height: 4rem;
+    padding: clamp(1rem, 2vw, 1.25rem);
+    color: var(--color-black);
+    font-size: clamp(1rem, 1.2vw, 1.13rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.35;
+    cursor: pointer;
+  }
+
+  .faq-detail summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-detail summary::marker {
+    content: "";
+  }
+
+  .faq-detail summary:focus-visible {
+    outline: 3px solid rgb(249 115 22 / 28%);
+    outline-offset: -3px;
+  }
+
+  .faq-detail__indicator {
+    position: relative;
+    display: inline-grid;
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    place-items: center;
+    border-radius: var(--radius-sm);
+    background: var(--color-orange-50);
+  }
+
+  .faq-detail__indicator::before,
+  .faq-detail__indicator::after {
+    content: "";
+    position: absolute;
+    width: 0.85rem;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--color-orange-700);
+    transition: transform var(--transition-fast);
+  }
+
+  .faq-detail__indicator::after {
+    transform: rotate(90deg);
+  }
+
+  .faq-detail[open] .faq-detail__indicator::after {
+    transform: rotate(0deg);
+  }
+
+  .faq-detail__answer {
+    border-top: 1px solid rgb(17 17 17 / 8%);
+    padding: 0 clamp(1rem, 2vw, 1.25rem) clamp(1rem, 2vw, 1.25rem);
+  }
+
+  .faq-detail__answer p {
+    max-width: 64rem;
+    margin: 0;
+    padding-top: var(--space-4);
+    color: var(--color-gray-700);
+    font-size: clamp(0.96rem, 1.05vw, 1.05rem);
+    line-height: 1.72;
+  }
+
+  .faq-empty {
+    border: 1px solid rgb(249 115 22 / 26%);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: var(--color-orange-50);
+  }
+
+  .faq-empty[hidden],
+  .faq-category[hidden],
+  .faq-detail[hidden] {
+    display: none;
+  }
+
+  .faq-links {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    background: var(--color-gray-50);
+  }
+
+  .faq-links__inner {
+    display: grid;
+    grid-template-columns: minmax(13rem, 0.35fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
+  }
+
+  .faq-links nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .faq-final {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .faq-final__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .faq-final h2,
+  .faq-final p {
+    color: var(--color-white);
+  }
+
+  .faq-final p {
+    max-width: 45rem;
+    color: rgb(255 255 255 / 78%);
+  }
+
+  @media (max-width: 72rem) {
+    .faq-tools__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .faq-index {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 64rem) {
+    .faq-tools {
+      position: static;
+    }
+
+    .faq-category,
+    .faq-links__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .faq-category {
+      scroll-margin-top: var(--space-8);
+    }
+
+    .faq-category__head {
+      position: static;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .faq-hero h1 {
+      max-width: 100%;
+      font-size: clamp(2.25rem, 13vw, 3.2rem);
+    }
+
+    .faq-hero__meta span,
+    .faq-links a {
+      width: 100%;
+    }
+
+    .faq-index {
+      grid-template-columns: 1fr;
+    }
+
+    .faq-index a {
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    .faq-detail summary {
+      min-height: 3.6rem;
+      padding: var(--space-4);
+    }
+
+    .faq-detail__answer {
+      padding-inline: var(--space-4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-index a,
+    .faq-links a,
+    .faq-detail,
+    .faq-detail__indicator::before,
+    .faq-detail__indicator::after {
+      transition: none;
+    }
+
+    .faq-index a:hover,
+    .faq-index a:focus-visible,
+    .faq-links a:hover,
+    .faq-links a:focus-visible {
+      transform: none;
+    }
+  }
+</style>

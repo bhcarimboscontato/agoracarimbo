@@ -1,0 +1,76 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import CommercialHubPage from "@components/commercial/CommercialHubPage.astro";
+import CommercialPage from "@components/commercial/CommercialPage.astro";
+import FaqPage from "@components/internal/FaqPage.astro";
+import InternalPage from "@components/internal/InternalPage.astro";
+import LegalPage from "@components/legal/LegalPage.astro";
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import {
+  getCommercialHubPage,
+  getCommercialHubPageSchemas,
+  getCommercialPage,
+  getCommercialPageSchemas
+} from "@data/commercialPages";
+import { getFaqPage, getFaqPageSchemas } from "@data/faqPage";
+import { getRouteByPath, requiredRoutes } from "@data/routes";
+import { getSeo } from "@data/seo";
+import { getInternalPage } from "@data/internalPages";
+import { getLegalPage } from "@data/legalPages";
+import { getWhatsAppUrl } from "@lib/whatsapp";
+
+export function getStaticPaths() {
+  return requiredRoutes
+    .filter((route) => route.path !== "/")
+    .map((route) => ({
+      params: { slug: route.path.replace(/^\/|\/$/g, "") },
+      props: { path: route.path }
+    }));
+}
+
+const { path } = Astro.props;
+const route = getRouteByPath(path);
+
+if (!route) {
+  return Astro.redirect("/");
+}
+
+const seo = getSeo(route.path);
+const legalPage = getLegalPage(route.path);
+const commercialHubPage = getCommercialHubPage(route.path);
+const commercialPage = getCommercialPage(route.path);
+const faqPage = getFaqPage(route.path);
+const internalPage = getInternalPage(route.path);
+const structuredData = commercialHubPage
+  ? getCommercialHubPageSchemas(commercialHubPage)
+  : commercialPage
+    ? getCommercialPageSchemas(commercialPage)
+    : faqPage
+      ? getFaqPageSchemas()
+      : [];
+---
+
+<BaseLayout {...seo} structuredData={structuredData}>
+  {
+    legalPage ? (
+      <LegalPage page={legalPage} />
+    ) : commercialHubPage ? (
+      <CommercialHubPage page={commercialHubPage} />
+    ) : commercialPage ? (
+      <CommercialPage page={commercialPage} />
+    ) : faqPage ? (
+      <FaqPage page={faqPage} />
+    ) : internalPage ? (
+      <InternalPage page={internalPage} />
+    ) : (
+      <section class="container page-shell">
+        <p class="page-shell__eyebrow">Rota configurada</p>
+        <h1>{route.draftTitle}</h1>
+        <p class="page-shell__body">{route.description}</p>
+        <div class="base-panel">
+          <ButtonLink href={getWhatsAppUrl("general")} label="Pedir orçamento" external />
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

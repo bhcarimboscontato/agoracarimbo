@@ -1,0 +1,597 @@
+---
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import type { CommercialHubPage } from "@data/commercialPages";
+import { businessInfo } from "@data/site";
+import { createWhatsAppUrl } from "@lib/whatsapp";
+
+type Props = {
+  page: CommercialHubPage;
+};
+
+const { page } = Astro.props;
+const heroWhatsAppUrl = createWhatsAppUrl(page.whatsappMessage);
+const finalWhatsAppUrl = createWhatsAppUrl(page.finalWhatsappMessage);
+---
+
+<article class="commercial-hub">
+  <nav class="hub-breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Início</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{page.title}</span>
+  </nav>
+
+  <section class="hub-hero">
+    <div class="container hub-hero__grid">
+      <div class="hub-hero__content">
+        <p class="hub-eyebrow">{page.eyebrow}</p>
+        <h1>{page.title}</h1>
+        <p>{page.description}</p>
+
+        <div class="hub-actions">
+          <ButtonLink href={heroWhatsAppUrl} label={page.primaryCta} external>
+            <Icon name="icon-whatsapp" size="sm" />
+          </ButtonLink>
+          <ButtonLink href={page.secondaryCta.href} label={page.secondaryCta.label} variant="secondary" />
+        </div>
+      </div>
+
+      <aside class="hub-trust" aria-label="Sinais de confiança">
+        <strong>Atendimento BH Carimbos</strong>
+        <ul>
+          {page.trustPoints.map((point) => <li>{point}</li>)}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="hub-intro">
+    <div class="container hub-intro__inner">
+      <p class="hub-eyebrow">Orientação comercial</p>
+      <h2>{page.intro.title}</h2>
+      <p>{page.intro.text}</p>
+    </div>
+  </section>
+
+  {
+    page.groups.map((group) => (
+      <section class="hub-section">
+        <div class="container hub-section__inner">
+          <div class="hub-section__head">
+            <p class="hub-eyebrow">Opções por necessidade</p>
+            <h2>{group.title}</h2>
+            <p>{group.description}</p>
+          </div>
+
+          <div class="hub-card-grid">
+            {
+              group.items.map((item) => (
+                <article class="hub-card">
+                  {item.tag && <span>{item.tag}</span>}
+                  <h3>{item.label}</h3>
+                  <p>{item.description}</p>
+                  <a href={item.href}>Ver página</a>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="hub-section hub-section--dark">
+    <div class="container hub-guide">
+      <div>
+        <p class="hub-eyebrow">Como escolher</p>
+        <h2>Como escolher o carimbo certo</h2>
+        <p>
+          A escolha depende do uso, volume de informação e frequência. Use estas referências como
+          ponto de partida e confirme o modelo pelo WhatsApp.
+        </p>
+      </div>
+
+      <ul>
+        {page.choiceGuide.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="container hub-two-columns">
+      <div class="hub-panel">
+        <p class="hub-eyebrow">Pedido pelo WhatsApp</p>
+        <h2>Como pedir sem precisar saber o modelo exato</h2>
+        <ol>
+          {page.process.map((item) => <li>{item}</li>)}
+        </ol>
+        <a class="hub-inline-link" href="/como-pedir/">Ver passo a passo completo</a>
+      </div>
+
+      <div class="hub-panel hub-panel--accent">
+        <p class="hub-eyebrow">Prazos e entrega</p>
+        <h2>Retirada em Venda Nova ou motoboy em BH</h2>
+        <p>{page.delivery}</p>
+        <p class="hub-address">
+          {businessInfo.address.street}, Bairro {businessInfo.address.neighborhood}, {businessInfo.address.region}, {businessInfo.address.city}/{businessInfo.address.state}
+        </p>
+        <a class="hub-inline-link" href="/prazos-e-entrega/">Ver prazos e entrega</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hub-section hub-section--muted">
+    <div class="container hub-faq">
+      <div class="hub-section__head">
+        <p class="hub-eyebrow">Perguntas frequentes</p>
+        <h2>Dúvidas sobre carimbos em BH</h2>
+      </div>
+
+      <div class="hub-faq__items">
+        {
+          page.faq.map((item) => (
+            <details>
+              <summary>
+                <span>{item.question}</span>
+                <strong aria-hidden="true">+</strong>
+              </summary>
+              <p>{item.answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="hub-final">
+    <div class="container hub-final__inner">
+      <div>
+        <p class="hub-eyebrow">Próximo passo</p>
+        <h2>Não sabe qual carimbo escolher?</h2>
+        <p>
+          Envie pelo WhatsApp os dados que devem entrar no carimbo ou explique sua necessidade. O
+          atendimento orienta o modelo mais adequado conforme uso, prazo e disponibilidade.
+        </p>
+      </div>
+
+      <ButtonLink href={finalWhatsAppUrl} label="Falar com atendimento pelo WhatsApp" external>
+        <Icon name="icon-whatsapp" size="sm" />
+      </ButtonLink>
+    </div>
+  </section>
+</article>
+
+<style>
+  .commercial-hub {
+    background: var(--color-white);
+  }
+
+  .hub-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    padding-block: var(--space-4);
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+  }
+
+  .hub-breadcrumb a {
+    color: var(--color-gray-700);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+  }
+
+  .hub-breadcrumb a:hover,
+  .hub-inline-link:hover {
+    color: var(--color-orange-700);
+  }
+
+  .hub-hero {
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-orange-600);
+    padding-block: clamp(3rem, 7vw, 5.25rem);
+    background:
+      linear-gradient(90deg, rgb(17 17 17 / 3%) 1px, transparent 1px) 0 0 / 52px 52px,
+      linear-gradient(180deg, var(--color-white), var(--color-gray-50));
+  }
+
+  .hub-hero__grid {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+
+  .hub-hero__content {
+    max-width: 56rem;
+  }
+
+  .hub-eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .hub-hero h1,
+  .hub-intro h2,
+  .hub-section h2,
+  .hub-final h2 {
+    margin: 0;
+    color: var(--color-black);
+    letter-spacing: 0;
+    line-height: 1.04;
+  }
+
+  .hub-hero h1 {
+    max-width: 15ch;
+    font-size: clamp(2.35rem, 5.4vw, 4.75rem);
+  }
+
+  .hub-hero__content > p:last-of-type {
+    max-width: 50rem;
+    margin: var(--space-5) 0 var(--space-6);
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .hub-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hub-trust,
+  .hub-panel,
+  .hub-card {
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+  }
+
+  .hub-trust {
+    padding: clamp(1rem, 2vw, 1.35rem);
+  }
+
+  .hub-trust strong {
+    display: block;
+    margin-bottom: var(--space-3);
+    color: var(--color-black);
+    font-size: var(--text-lg);
+  }
+
+  .hub-trust ul,
+  .hub-guide ul,
+  .hub-panel ol {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hub-trust li,
+  .hub-guide li {
+    position: relative;
+    padding-left: 1.2rem;
+    color: var(--color-gray-700);
+    line-height: 1.55;
+  }
+
+  .hub-trust li::before,
+  .hub-guide li::before {
+    content: "";
+    position: absolute;
+    top: 0.62em;
+    left: 0;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--color-orange-600);
+  }
+
+  .hub-intro {
+    padding-block: clamp(2.4rem, 5vw, 4rem);
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .hub-intro__inner {
+    max-width: 68rem;
+  }
+
+  .hub-intro h2 {
+    max-width: 18ch;
+    color: var(--color-white);
+    font-size: clamp(2rem, 4vw, 3.45rem);
+  }
+
+  .hub-intro p:last-child,
+  .hub-guide p,
+  .hub-final p {
+    max-width: 58rem;
+    margin: var(--space-4) 0 0;
+    line-height: 1.75;
+  }
+
+  .hub-intro p:last-child,
+  .hub-guide p,
+  .hub-final p {
+    color: rgb(255 255 255 / 82%);
+  }
+
+  .hub-section {
+    padding-block: clamp(2.8rem, 6vw, 5rem);
+  }
+
+  .hub-section:nth-of-type(even),
+  .hub-section--muted {
+    background: var(--color-gray-50);
+  }
+
+  .hub-section--dark {
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .hub-section__inner,
+  .hub-faq {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .hub-section__head {
+    max-width: 58rem;
+  }
+
+  .hub-section__head h2,
+  .hub-guide h2,
+  .hub-panel h2,
+  .hub-final h2 {
+    max-width: 18ch;
+    margin-bottom: var(--space-4);
+    font-size: clamp(1.8rem, 3.4vw, 3rem);
+  }
+
+  .hub-section__head > p:last-child,
+  .hub-panel p {
+    max-width: 46rem;
+    margin: 0;
+    color: var(--color-gray-700);
+    line-height: 1.7;
+  }
+
+  .hub-section--dark h2,
+  .hub-final h2 {
+    color: var(--color-white);
+  }
+
+  .hub-card-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .hub-card {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    padding: clamp(1.1rem, 2vw, 1.5rem);
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .hub-card:hover {
+    border-color: rgb(249 115 22 / 36%);
+    transform: translateY(-2px);
+  }
+
+  .hub-card span {
+    width: max-content;
+    max-width: 100%;
+    border: 1px solid rgb(249 115 22 / 22%);
+    border-radius: var(--radius-sm);
+    padding: 0.28rem 0.48rem;
+    color: var(--color-orange-800);
+    font-size: 0.72rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    background: var(--color-orange-50);
+  }
+
+  .hub-card h3 {
+    margin: 0;
+    color: var(--color-black);
+    font-size: clamp(1.25rem, 2vw, 1.65rem);
+    line-height: 1.08;
+  }
+
+  .hub-card p {
+    margin: 0;
+    color: var(--color-gray-700);
+    line-height: 1.6;
+  }
+
+  .hub-card a,
+  .hub-inline-link {
+    width: max-content;
+    max-width: 100%;
+    color: var(--color-orange-700);
+    font-weight: var(--font-weight-bold);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  .hub-guide {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .hub-guide li {
+    color: rgb(255 255 255 / 82%);
+  }
+
+  .hub-two-columns {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .hub-panel {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .hub-panel--accent {
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .hub-panel--accent h2,
+  .hub-panel--accent p {
+    color: var(--color-white);
+  }
+
+  .hub-panel--accent p {
+    color: rgb(255 255 255 / 82%);
+  }
+
+  .hub-panel ol {
+    counter-reset: hub-process;
+  }
+
+  .hub-panel li {
+    counter-increment: hub-process;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-3);
+    align-items: start;
+    color: var(--color-gray-700);
+    line-height: 1.55;
+  }
+
+  .hub-panel li::before {
+    content: counter(hub-process, decimal-leading-zero);
+    color: var(--color-orange-700);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .hub-address {
+    border-left: 3px solid var(--color-orange-600);
+    padding-left: var(--space-4);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .hub-panel--accent .hub-address {
+    color: var(--color-white);
+  }
+
+  .hub-faq__items {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 62rem;
+  }
+
+  .hub-faq details {
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+  }
+
+  .hub-faq summary {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5);
+    color: var(--color-black);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+  }
+
+  .hub-faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .hub-faq summary::marker {
+    content: "";
+  }
+
+  .hub-faq summary strong {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    place-items: center;
+    border-radius: 999px;
+    color: var(--color-white);
+    background: var(--color-orange-600);
+  }
+
+  .hub-faq details[open] summary strong {
+    color: transparent;
+  }
+
+  .hub-faq details[open] summary strong::before {
+    content: "-";
+    color: var(--color-white);
+  }
+
+  .hub-faq details p {
+    margin: 0;
+    padding: 0 var(--space-5) var(--space-5);
+    color: var(--color-gray-700);
+    line-height: 1.65;
+  }
+
+  .hub-final {
+    padding-block: clamp(2.8rem, 6vw, 5rem);
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .hub-final__inner {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  @media (min-width: 48rem) {
+    .hub-hero__grid,
+    .hub-two-columns,
+    .hub-final__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.48fr);
+    }
+
+    .hub-final__inner {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, auto);
+    }
+
+    .hub-card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .hub-card-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .hub-guide {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .hub-actions :global(.button-link),
+    .hub-final :global(.button-link) {
+      width: 100%;
+    }
+  }
+</style>

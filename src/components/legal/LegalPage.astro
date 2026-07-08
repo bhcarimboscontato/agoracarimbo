@@ -1,0 +1,255 @@
+---
+import type { LegalPage as LegalPageData } from "@data/legalPages";
+
+type Props = {
+  page: LegalPageData;
+};
+
+const { page } = Astro.props;
+---
+
+<article class="legal-page">
+  <header class="legal-hero">
+    <div class="container legal-hero__inner">
+      <p class="legal-eyebrow">{page.eyebrow}</p>
+      <h1>{page.title}</h1>
+      <p>{page.subtitle}</p>
+      <span>Última atualização: {page.updatedAt}</span>
+    </div>
+  </header>
+
+  <div class="container legal-layout">
+    <aside class="legal-index" aria-label="Índice da página">
+      <strong>Nesta página</strong>
+      <nav>
+        {page.sections.map((section) => <a href={`#${section.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`}>{section.title}</a>)}
+      </nav>
+    </aside>
+
+    <div class="legal-content">
+      {
+        page.sections.map((section) => {
+          const id = section.title
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "");
+
+          return (
+            <section id={id} class="legal-section">
+              <h2>{section.title}</h2>
+              {section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
+              {
+                section.bullets && (
+                  <ul>
+                    {section.bullets.map((bullet) => <li>{bullet}</li>)}
+                  </ul>
+                )
+              }
+              {
+                section.table && (
+                  <div class="legal-table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Nome</th>
+                          <th>Finalidade</th>
+                          <th>Tipo</th>
+                          <th>Duração</th>
+                          <th>Responsável</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          section.table.map((row) => (
+                            <tr>
+                              <td>{row.name}</td>
+                              <td>{row.purpose}</td>
+                              <td>{row.type}</td>
+                              <td>{row.duration ?? "Conforme aplicação"}</td>
+                              <td>{row.owner ?? "BH Carimbos / Agora Carimbos"}</td>
+                            </tr>
+                          ))
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                )
+              }
+            </section>
+          );
+        })
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .legal-page {
+    color: var(--color-ink);
+    background: var(--color-gray-50);
+  }
+
+  .legal-hero {
+    border-bottom: 3px solid var(--color-orange-600);
+    padding-block: clamp(3rem, 6vw, 5rem);
+    background: var(--color-white);
+  }
+
+  .legal-hero__inner {
+    max-width: 58rem;
+  }
+
+  .legal-eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .legal-hero h1 {
+    max-width: 16ch;
+    margin-bottom: var(--space-4);
+    color: var(--color-black);
+  }
+
+  .legal-hero p {
+    max-width: 48rem;
+    margin-bottom: var(--space-4);
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.3vw, 1.18rem);
+    line-height: 1.65;
+  }
+
+  .legal-hero span {
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .legal-layout {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .legal-index {
+    display: none;
+  }
+
+  .legal-content {
+    display: grid;
+    gap: var(--space-5);
+    max-width: 52rem;
+  }
+
+  .legal-section {
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    background: var(--color-white);
+  }
+
+  .legal-section h2 {
+    margin-bottom: var(--space-4);
+    color: var(--color-black);
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+  }
+
+  .legal-section p {
+    margin-bottom: var(--space-4);
+    color: var(--color-gray-700);
+    line-height: 1.75;
+  }
+
+  .legal-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-section ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--color-gray-700);
+    line-height: 1.65;
+  }
+
+  .legal-table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-sm);
+  }
+
+  .legal-table-wrap + p,
+  .legal-table-wrap + ul {
+    margin-top: var(--space-4);
+  }
+
+  .legal-section table {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+
+  .legal-section th,
+  .legal-section td {
+    border-bottom: 1px solid rgb(17 17 17 / 8%);
+    padding: var(--space-3);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .legal-section th {
+    color: var(--color-black);
+    font-weight: var(--font-weight-bold);
+    background: var(--color-orange-50);
+  }
+
+  .legal-section td {
+    color: var(--color-gray-700);
+  }
+
+  @media (min-width: 64rem) {
+    .legal-layout {
+      grid-template-columns: minmax(13rem, 0.32fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .legal-index {
+      position: sticky;
+      top: calc(var(--header-height) + 1.5rem);
+      display: grid;
+      gap: var(--space-3);
+      border-left: 3px solid var(--color-orange-600);
+      padding-left: var(--space-4);
+    }
+
+    .legal-index strong {
+      color: var(--color-black);
+      font-size: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .legal-index nav {
+      display: grid;
+      gap: var(--space-2);
+    }
+
+    .legal-index a {
+      color: var(--color-gray-700);
+      font-size: var(--text-sm);
+      text-decoration: none;
+    }
+
+    .legal-index a:hover {
+      color: var(--color-orange-700);
+    }
+  }
+</style>

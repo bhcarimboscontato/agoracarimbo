@@ -1,0 +1,556 @@
+---
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import type { CommercialPage } from "@data/commercialPages";
+import { businessInfo } from "@data/site";
+import { createWhatsAppUrl } from "@lib/whatsapp";
+
+type Props = {
+  page: CommercialPage;
+};
+
+const { page } = Astro.props;
+const whatsappUrl = createWhatsAppUrl(page.whatsappMessage);
+---
+
+<article class="commercial-page">
+  <nav class="commercial-breadcrumb container" aria-label="Breadcrumb">
+    <a href="/">Início</a>
+    <span aria-hidden="true">/</span>
+    <a href="/carimbos-bh/">Carimbos em BH</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page">{page.title}</span>
+  </nav>
+
+  <section class="commercial-hero">
+    <div class="container commercial-hero__grid">
+      <div class="commercial-hero__content">
+        <p class="commercial-eyebrow">{page.eyebrow}</p>
+        <h1>{page.title}</h1>
+        <p>{page.description}</p>
+
+        <div class="commercial-actions">
+          <ButtonLink href={whatsappUrl} label={page.primaryCta} external>
+            <Icon name="icon-whatsapp" size="sm" />
+          </ButtonLink>
+          <ButtonLink href={page.secondaryCta.href} label={page.secondaryCta.label} variant="secondary" />
+        </div>
+      </div>
+
+      <aside class="commercial-hero__panel" aria-label="Informações de confiança">
+        <strong>Atendimento BH Carimbos</strong>
+        <ul>
+          {page.trustPoints.map((point) => <li>{point}</li>)}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="commercial-intro">
+    <div class="container commercial-intro__inner">
+      <p class="commercial-eyebrow">Entenda o serviço</p>
+      <h2>{page.intro.title}</h2>
+      <p>{page.intro.text}</p>
+    </div>
+  </section>
+
+  <section class="commercial-section">
+    <div class="container commercial-two-columns">
+      <div class="commercial-block">
+        <p class="commercial-eyebrow">Indicado para</p>
+        <h2>Quem costuma pedir este tipo de carimbo</h2>
+        <ul class="commercial-check-list">
+          {page.indicatedFor.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+
+      <div class="commercial-block commercial-block--dark">
+        <p class="commercial-eyebrow">Dados do carimbo</p>
+        <h2>O que pode ir no carimbo</h2>
+        <ul class="commercial-check-list">
+          {page.stampData.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="commercial-section commercial-section--muted">
+    <div class="container commercial-process">
+      <div class="commercial-section__head">
+        <p class="commercial-eyebrow">Pedido orientado</p>
+        <h2>Como pedir pelo WhatsApp</h2>
+      </div>
+
+      <ol>
+        {page.process.map((item) => <li>{item}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="commercial-section">
+    <div class="container commercial-info-grid">
+      <div class="commercial-info">
+        <p class="commercial-eyebrow">Prazo e entrega</p>
+        <h2>Produção, retirada e motoboy</h2>
+        <p>{page.delivery}</p>
+      </div>
+
+      <div class="commercial-info">
+        <p class="commercial-eyebrow">Atendimento local</p>
+        <h2>Localização e região atendida</h2>
+        <p>{page.serviceArea}</p>
+        <p class="commercial-address">
+          {businessInfo.address.street}, Bairro {businessInfo.address.neighborhood}, {businessInfo.address.region}, {businessInfo.address.city}/{businessInfo.address.state}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="commercial-section commercial-section--links">
+    <div class="container commercial-links">
+      <div>
+        <p class="commercial-eyebrow">Continue navegando</p>
+        <h2>Páginas relacionadas</h2>
+      </div>
+      <div class="commercial-links__list">
+        {page.relatedLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="commercial-section commercial-section--muted">
+    <div class="container commercial-faq">
+      <div class="commercial-section__head">
+        <p class="commercial-eyebrow">Perguntas frequentes</p>
+        <h2>Dúvidas sobre {page.eyebrow.toLowerCase()}</h2>
+      </div>
+
+      <div class="commercial-faq__items">
+        {
+          page.faq.map((item) => (
+            <details>
+              <summary>
+                <span>{item.question}</span>
+                <strong aria-hidden="true">+</strong>
+              </summary>
+              <p>{item.answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="commercial-final">
+    <div class="container commercial-final__inner">
+      <div>
+        <p class="commercial-eyebrow">Próximo passo</p>
+        <h2>Quer pedir sem complicar?</h2>
+        <p>Chame no WhatsApp, envie os dados do carimbo e receba orientação para confirmar modelo, arte, prazo e forma de retirada ou entrega.</p>
+      </div>
+      <ButtonLink href={whatsappUrl} label={page.primaryCta} external>
+        <Icon name="icon-whatsapp" size="sm" />
+      </ButtonLink>
+    </div>
+  </section>
+</article>
+
+<style>
+  .commercial-page {
+    background: var(--color-white);
+  }
+
+  .commercial-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    padding-block: var(--space-4);
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+  }
+
+  .commercial-breadcrumb a {
+    color: var(--color-gray-700);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+  }
+
+  .commercial-breadcrumb a:hover {
+    color: var(--color-orange-700);
+  }
+
+  .commercial-hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-orange-600);
+    padding-block: clamp(3rem, 7vw, 5.25rem);
+    background:
+      linear-gradient(90deg, rgb(17 17 17 / 3%) 1px, transparent 1px) 0 0 / 52px 52px,
+      linear-gradient(180deg, var(--color-white), var(--color-gray-50));
+  }
+
+  .commercial-hero__grid {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+  }
+
+  .commercial-hero__content {
+    max-width: 54rem;
+  }
+
+  .commercial-eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .commercial-hero h1,
+  .commercial-intro h2,
+  .commercial-section h2,
+  .commercial-final h2 {
+    margin: 0;
+    color: var(--color-black);
+    letter-spacing: 0;
+    line-height: 1.04;
+  }
+
+  .commercial-hero h1 {
+    max-width: 14ch;
+    font-size: clamp(2.35rem, 5.4vw, 4.75rem);
+  }
+
+  .commercial-hero__content > p:last-of-type {
+    max-width: 48rem;
+    margin: var(--space-5) 0 var(--space-6);
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .commercial-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .commercial-hero__panel {
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    padding: clamp(1rem, 2vw, 1.35rem);
+    background: var(--color-white);
+  }
+
+  .commercial-hero__panel strong {
+    display: block;
+    margin-bottom: var(--space-3);
+    color: var(--color-black);
+    font-size: var(--text-lg);
+  }
+
+  .commercial-hero__panel ul,
+  .commercial-check-list,
+  .commercial-process ol {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .commercial-hero__panel li,
+  .commercial-check-list li {
+    position: relative;
+    padding-left: 1.2rem;
+    color: var(--color-gray-700);
+    line-height: 1.55;
+  }
+
+  .commercial-hero__panel li::before,
+  .commercial-check-list li::before {
+    content: "";
+    position: absolute;
+    top: 0.62em;
+    left: 0;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--color-orange-600);
+  }
+
+  .commercial-intro {
+    padding-block: clamp(2.4rem, 5vw, 4rem);
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .commercial-intro__inner {
+    max-width: 66rem;
+  }
+
+  .commercial-intro h2 {
+    max-width: 18ch;
+    color: var(--color-white);
+    font-size: clamp(2rem, 4vw, 3.45rem);
+  }
+
+  .commercial-intro p:last-child {
+    max-width: 58rem;
+    margin: var(--space-4) 0 0;
+    color: rgb(255 255 255 / 84%);
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.75;
+  }
+
+  .commercial-section {
+    padding-block: clamp(2.8rem, 6vw, 5rem);
+  }
+
+  .commercial-section--muted {
+    background: var(--color-gray-50);
+  }
+
+  .commercial-two-columns,
+  .commercial-info-grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .commercial-block,
+  .commercial-info {
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    background: var(--color-white);
+  }
+
+  .commercial-block--dark {
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .commercial-block h2,
+  .commercial-info h2,
+  .commercial-section__head h2,
+  .commercial-links h2,
+  .commercial-final h2 {
+    max-width: 18ch;
+    margin-bottom: var(--space-5);
+    font-size: clamp(1.8rem, 3.4vw, 3rem);
+  }
+
+  .commercial-block--dark h2,
+  .commercial-block--dark li {
+    color: var(--color-white);
+  }
+
+  .commercial-block--dark li {
+    color: rgb(255 255 255 / 82%);
+  }
+
+  .commercial-process {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .commercial-process ol {
+    counter-reset: commercial-steps;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .commercial-process li {
+    counter-increment: commercial-steps;
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    color: var(--color-gray-700);
+    line-height: 1.6;
+    background: var(--color-white);
+  }
+
+  .commercial-process li::before {
+    content: counter(commercial-steps, decimal-leading-zero);
+    display: block;
+    margin-bottom: var(--space-3);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.16em;
+  }
+
+  .commercial-info p {
+    margin: 0;
+    color: var(--color-gray-700);
+    line-height: 1.7;
+  }
+
+  .commercial-info p + p {
+    margin-top: var(--space-4);
+  }
+
+  .commercial-address {
+    border-left: 3px solid var(--color-orange-600);
+    padding-left: var(--space-4);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .commercial-section--links {
+    padding-block: clamp(2rem, 4vw, 3rem);
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .commercial-links {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .commercial-links h2 {
+    color: var(--color-white);
+  }
+
+  .commercial-links__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .commercial-links__list a {
+    border: 1px solid rgb(255 255 255 / 18%);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 0.9rem;
+    color: var(--color-white);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    transition:
+      border-color var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+
+  .commercial-links__list a:hover {
+    border-color: var(--color-orange-600);
+    background: rgb(249 115 22 / 16%);
+  }
+
+  .commercial-faq {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .commercial-faq__items {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 58rem;
+  }
+
+  .commercial-faq details {
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+  }
+
+  .commercial-faq summary {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5);
+    color: var(--color-black);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+  }
+
+  .commercial-faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .commercial-faq summary::marker {
+    content: "";
+  }
+
+  .commercial-faq summary strong {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 2rem;
+    place-items: center;
+    border-radius: 999px;
+    color: var(--color-white);
+    background: var(--color-orange-600);
+  }
+
+  .commercial-faq details[open] summary strong {
+    color: transparent;
+  }
+
+  .commercial-faq details[open] summary strong::before {
+    content: "-";
+    color: var(--color-white);
+  }
+
+  .commercial-faq details p {
+    margin: 0;
+    padding: 0 var(--space-5) var(--space-5);
+    color: var(--color-gray-700);
+    line-height: 1.65;
+  }
+
+  .commercial-final {
+    padding-block: clamp(2.8rem, 6vw, 5rem);
+    color: var(--color-white);
+    background: var(--color-black);
+  }
+
+  .commercial-final__inner {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .commercial-final h2 {
+    color: var(--color-white);
+  }
+
+  .commercial-final p:last-child {
+    max-width: 48rem;
+    margin: 0;
+    color: rgb(255 255 255 / 80%);
+    line-height: 1.7;
+  }
+
+  @media (min-width: 48rem) {
+    .commercial-hero__grid,
+    .commercial-two-columns,
+    .commercial-info-grid,
+    .commercial-links,
+    .commercial-final__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.48fr);
+    }
+
+    .commercial-links,
+    .commercial-final__inner {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .commercial-process ol {
+      grid-template-columns: 1fr;
+    }
+
+    .commercial-actions :global(.button-link),
+    .commercial-final :global(.button-link) {
+      width: 100%;
+    }
+
+    .commercial-links__list {
+      display: grid;
+    }
+  }
+</style>

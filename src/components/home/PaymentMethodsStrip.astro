@@ -1,0 +1,241 @@
+---
+import Icon from "@components/ui/Icon.astro";
+import type { paymentMethods } from "@data/home";
+
+type Props = typeof paymentMethods;
+
+const { title, description, icon, note, logos } = Astro.props;
+---
+
+<aside class="payment-strip" aria-label="Formas de pagamento">
+  <div class="payment-strip__summary">
+    <span class="payment-strip__icon"><Icon name={icon} size="lg" /></span>
+    <div>
+      <h3>{title}</h3>
+      <p>{description}</p>
+    </div>
+  </div>
+  <div class="payment-strip__logos" aria-label="Principais meios e bandeiras de pagamento">
+    <div class="payment-strip__logo-row">
+      {
+        logos.map((logo) => (
+          <span class="payment-logo">
+            <img
+              src={logo.src}
+              width={logo.width}
+              height={logo.height}
+              loading="lazy"
+              decoding="async"
+              alt={`Logo ${logo.name}`}
+              onerror="this.classList.add('is-missing');"
+            />
+            <span class="payment-logo__fallback" aria-hidden="true">{logo.name}</span>
+          </span>
+        ))
+      }
+    </div>
+    <p class="payment-strip__note">
+      <span style="margin-bottom: -4px" aria-hidden="true">🔒︎</span>
+      {note}
+    </p>
+  </div>
+</aside>
+
+<style>
+  .payment-strip {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.68fr) minmax(0, 1.32fr);
+    gap: var(--space-7);
+    align-items: center;
+    border: 1px solid rgb(249 115 22 / 22%);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    overflow: hidden;
+    background:
+      linear-gradient(90deg, rgb(249 115 22 / 5%), transparent 42%),
+      linear-gradient(180deg, var(--color-white), rgb(255 247 237 / 54%));
+    box-shadow: 0 18px 46px rgb(17 17 17 / 5%);
+  }
+
+  .payment-strip::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(90deg, rgb(17 17 17 / 2%) 1px, transparent 1px),
+      linear-gradient(180deg, rgb(17 17 17 / 1.6%) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  }
+
+  .payment-strip__summary,
+  .payment-strip__logos {
+    position: relative;
+    z-index: 1;
+  }
+
+  .payment-strip__summary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .payment-strip__icon {
+    display: grid;
+    width: 74px;
+    height: 74px;
+    place-items: center;
+    border: 1px solid rgb(249 115 22 / 42%);
+    border-radius: var(--radius-md);
+    color: var(--color-black);
+    background: var(--color-white);
+  }
+
+  .payment-strip__icon :global(.site-icon) {
+    filter: brightness(0);
+  }
+
+  .payment-strip h3 {
+    margin: 0 0 var(--space-2);
+    font-size: clamp(1.35rem, 2vw, 1.85rem);
+    line-height: 1.12;
+  }
+
+  .payment-strip p {
+    margin: 0;
+    color: var(--color-gray-700);
+  }
+
+  .payment-strip__logos {
+    display: grid;
+    gap: var(--space-4);
+    border-left: 1px solid rgb(17 17 17 / 8%);
+    padding-left: var(--space-8);
+  }
+
+  .payment-strip__logo-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .payment-logo {
+    display: inline-grid;
+    gap: 0.25rem;
+    min-width: 72px;
+    min-height: 44px;
+    place-items: center;
+    border-right: 1px solid rgb(17 17 17 / 10%);
+    padding-right: var(--space-4);
+  }
+
+  .payment-logo:last-child {
+    border-right: 0;
+    padding-right: 0;
+  }
+
+  .payment-logo img {
+    display: block;
+    width: auto;
+    max-width: 104px;
+    height: auto;
+    max-height: 38px;
+    object-fit: contain;
+  }
+
+  .payment-logo img.is-missing {
+    display: none;
+  }
+
+  .payment-logo__fallback {
+    display: none;
+    border: 1px solid rgb(17 17 17 / 18%);
+    padding: 0.45rem 0.65rem;
+    color: var(--color-gray-900);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+  }
+
+  .payment-logo img.is-missing + .payment-logo__fallback {
+    display: inline-flex;
+  }
+
+  .payment-strip__note {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-sm);
+  }
+
+  .payment-strip__note span {
+    color: var(--color-gray-400);
+    font-size: 0.65rem;
+  }
+
+  @media (max-width: 63.99rem) {
+    .payment-strip {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      padding: var(--space-6);
+    }
+
+    .payment-strip__logos {
+      border-left: 0;
+      border-top: 1px solid rgb(17 17 17 / 14%);
+      padding-top: var(--space-6);
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .payment-strip {
+      padding: var(--space-5);
+    }
+
+    .payment-strip__summary {
+      grid-template-columns: 1fr;
+    }
+
+    .payment-strip__icon {
+      width: 58px;
+      height: 58px;
+    }
+
+    .payment-strip__logo-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+
+    .payment-logo {
+      min-width: 0;
+      min-height: 52px;
+      border: 1px solid rgb(17 17 17 / 10%);
+      padding-right: 0;
+      background: rgb(255 255 255 / 46%);
+    }
+
+    .payment-logo img {
+      max-width: 86px;
+      max-height: 30px;
+    }
+
+    .payment-logo__fallback {
+      display: inline-flex;
+      border: 0;
+      padding: 0;
+      font-size: 0.68rem;
+    }
+
+    .payment-strip__note {
+      justify-content: flex-start;
+    }
+  }
+</style>

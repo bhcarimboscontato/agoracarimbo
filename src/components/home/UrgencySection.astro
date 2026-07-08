@@ -1,0 +1,161 @@
+---
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import { getWhatsAppUrl } from "@lib/whatsapp";
+---
+
+<section class="urgency-section" aria-labelledby="urgencia-title">
+  <div class="container urgency-section__inner">
+    <div class="urgency-section__copy">
+      <p class="urgency-section__eyebrow">Precisa com urgência?</p>
+
+      <h2 id="urgencia-title">Produção rápida, conforme modelo e demanda</h2>
+
+      <p>
+        Produção rápida, com possibilidade de atendimento no mesmo dia conforme o modelo e a demanda.
+        Em alguns casos, a produção pode ser feita em até 60 minutos. Consulte disponibilidade pelo WhatsApp.
+      </p>
+    </div>
+
+    <div class="urgency-section__action">
+  <ButtonLink href={getWhatsAppUrl("urgent")} label="Consultar disponibilidade pelo WhatsApp" external>
+    <Icon name="icon-whatsapp" size="sm" />
+  </ButtonLink>
+</div>
+  </div>
+</section>
+
+<style>
+  .urgency-section {
+    position: relative;
+    overflow: hidden;
+padding-block: clamp(2.25rem, 4vw, 3.35rem);
+    color: var(--color-white);
+    background:
+      radial-gradient(circle at 8% 42%, rgb(249 115 22 / 24%), transparent 18rem),
+      linear-gradient(90deg, rgb(249 115 22 / 9%), transparent 34%),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 5%) 0 1px, transparent 1px 28px),
+      var(--color-black);
+  }
+
+  .urgency-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 4%), transparent 28%, transparent 72%, rgb(0 0 0 / 18%));
+    opacity: 0.7;
+  }
+
+  .urgency-section__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: center;
+}
+
+  .urgency-section__copy {
+    max-width: 52rem;
+  }
+
+  .urgency-section__eyebrow {
+    margin: 0 0 var(--space-2);
+    color: var(--color-orange-100);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .urgency-section h2 {
+    max-width: 34ch;
+    margin: 0 0 var(--space-3);
+    color: var(--color-white);
+    font-size: clamp(1.75rem, 2.35vw, 2.65rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+  }
+
+  .urgency-section__copy p:last-child {
+    max-width: 63ch;
+    margin: 0;
+    color: rgb(255 255 255 / 82%);
+    font-size: clamp(1rem, 1.05vw, 1.12rem);
+    line-height: 1.65;
+  }
+
+
+
+  .urgency-section__icon :global(.site-icon) {
+    filter: brightness(0) invert(100%);
+  }
+
+  .urgency-section__panel p {
+    max-width: 26rem;
+    margin: 0;
+    color: rgb(255 255 255 / 88%);
+    font-size: clamp(1rem, 1.05vw, 1.08rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.55;
+  }
+
+.urgency-section__action {
+  width: 100%;
+}
+
+.urgency-section__action :global(.button) {
+  width: 100%;
+  min-height: 3.35rem;
+  justify-content: center;
+  font-size: 0.82rem;
+}
+
+  @media (min-width: 64rem) {
+  .urgency-section__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .urgency-section__action {
+    justify-content: flex-end;
+  }
+
+  .urgency-section__action :global(.button) {
+    min-width: 18rem;
+  }
+}
+
+  @media (max-width: 63.99rem) {
+    .urgency-section {
+      padding-block: clamp(2.5rem, 7vw, 3.75rem);
+    }
+
+    .urgency-section__copy {
+  max-width: 42rem;
+}
+  }
+
+  @media (max-width: 47.99rem) {
+    .urgency-section {
+      padding-block: var(--space-10);
+    }
+
+    .urgency-section h2 {
+      font-size: clamp(1.65rem, 7vw, 2.15rem);
+    }
+
+    .urgency-section__copy p:last-child {
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    
+
+    .urgency-section__action :global(.button) {
+      min-height: 3.35rem;
+      font-size: 0.82rem;
+    }
+  }
+</style>

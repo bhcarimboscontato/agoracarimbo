@@ -1,0 +1,98 @@
+---
+import { brandAssets } from "@data/site";
+import { mainNavigation } from "@data/navigation";
+import { getWhatsAppUrl } from "@lib/whatsapp";
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+
+const currentPath = Astro.url.pathname;
+const whatsappUrl = getWhatsAppUrl("general");
+---
+
+<header class="site-header">
+  <div class="site-header__bar" aria-label="Informações rápidas">
+    <div class="container site-header__bar-inner">
+      <span class="site-header__bar-location">Atendimento em Belo Horizonte e região</span>
+      <a class="site-header__bar-link" href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+        Pedido rápido pelo WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <div class="site-header__main">
+    <div class="container site-header__inner">
+      <a class="site-header__brand" href="/" aria-label="Página inicial da BH Carimbos">
+        <img
+          class="brand-logo brand-logo--header"
+          src={brandAssets.logoHorizontal}
+          alt="BH Carimbos"
+          width="150"
+          height="54"
+        />
+      </a>
+
+      <nav class="site-header__nav" aria-label="Menu principal">
+        {
+          mainNavigation.map((item) => (
+            <a
+              href={item.href}
+              class:list={[
+                "site-header__nav-link",
+                currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href))
+                  ? "site-header__nav-link--active"
+                  : "",
+              ]}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="site-header__actions">
+        <ButtonLink href={whatsappUrl} label="Pedir orçamento" external>
+          <Icon name="icon-whatsapp" size="sm" />
+        </ButtonLink>
+
+        <details class="mobile-menu">
+          <summary aria-label="Abrir menu">
+            <span class="mobile-menu__icon mobile-menu__icon--open">
+              <Icon name="icon-menu" size="md" />
+            </span>
+            <span class="mobile-menu__icon mobile-menu__icon--close">
+              <Icon name="icon-close" size="md" />
+            </span>
+          </summary>
+
+          <nav class="mobile-menu__panel" aria-label="Menu mobile">
+            <div class="mobile-menu__head">
+              <span>Menu</span>
+              <small>BH Carimbos</small>
+            </div>
+
+            {
+              mainNavigation.map((item) => (
+                <a
+                  href={item.href}
+                  class:list={[
+                    "mobile-menu__link",
+                    currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href))
+                      ? "mobile-menu__link--active"
+                      : "",
+                  ]}
+                >
+                  {item.label}
+                </a>
+              ))
+            }
+
+            <a class="mobile-menu__cta" href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+              <Icon name="icon-whatsapp" size="sm" />
+              Pedir orçamento
+            </a>
+          </nav>
+        </details>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,477 @@
+---
+import { businessInfo, brandAssets } from "@data/site";
+import { mainNavigation } from "@data/navigation";
+import Icon from "@components/ui/Icon.astro";
+
+const legalLinks = [
+  { label: "Aviso Legal", href: "/aviso-legal/" },
+  { label: "Cookies", href: "/cookies/" },
+  { label: "Política de privacidade", href: "/politica-de-privacidade/" },
+  { label: "Termos de uso", href: "/termos-de-uso/" }
+];
+
+const siteLinks = mainNavigation.filter((item) =>
+  ["Início", "Produtos", "Serviços"].includes(item.label)
+);
+const footerSiteLinks = [...siteLinks, { label: "Carimbos em BH", href: "/carimbos-bh/" }];
+
+const serviceLinks = mainNavigation.filter((item) =>
+  ["Como pedir", "Prazos e entrega", "Quem somos", "Contato"].includes(item.label)
+);
+const footerServiceLinks = [
+  ...serviceLinks,
+  { label: "Perguntas frequentes", href: "/perguntas-frequentes/" }
+];
+
+const developerWhatsAppNumber = "5531999656778";
+const developerMessage = encodeURIComponent(
+  "Olá, vim pelo site da Agora Carimbos e queria saber mais sobre o seu trabalho!"
+);
+const developerWhatsAppUrl = `https://wa.me/${developerWhatsAppNumber}?text=${developerMessage}`;
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <section class="site-footer__brand" aria-label="BH Carimbos">
+      <a class="site-footer__logo-link" href="/" aria-label="Página inicial da BH Carimbos">
+        <span class="site-footer__logo-frame">
+          <img
+            class="brand-logo brand-logo--footer"
+            src={brandAssets.logoPrincipal}
+            alt="BH Carimbos"
+            width="52"
+            height="52"
+          />
+        </span>
+      </a>
+
+      <p class="site-footer__description">
+        Carimbos personalizados em Belo Horizonte com atendimento prático, produção local e pedido
+        rápido pelo WhatsApp.
+      </p>
+    </section>
+
+    <section class="site-footer__section site-footer__contact" aria-labelledby="footer-contact-title">
+      <h2 id="footer-contact-title">Contato</h2>
+
+      <ul class="site-footer__list">
+        <li>
+          <span class="site-footer__icon" aria-hidden="true">
+            <Icon name="icon-whatsapp" size="sm" />
+          </span>
+          <a
+            href={`tel:${businessInfo.whatsappDisplay.replace(/\D/g, "")}`}
+            data-event="contact_click"
+            data-conversion="phone"
+          >
+            {businessInfo.whatsappDisplay}
+          </a>
+        </li>
+
+        <li>
+          <span class="site-footer__icon" aria-hidden="true">
+            <Icon name="icon-email" size="sm" />
+          </span>
+          <a href={`mailto:${businessInfo.email}`} data-event="contact_click" data-conversion="email">{businessInfo.email}</a>
+        </li>
+
+        <li>
+          <span class="site-footer__icon" aria-hidden="true">
+            <Icon name="icon-map-pin" size="sm" />
+          </span>
+          <span>
+            {businessInfo.address.street}
+            <small>{businessInfo.address.city}/{businessInfo.address.state}</small>
+          </span>
+        </li>
+
+        <li>
+          <span class="site-footer__icon" aria-hidden="true">
+            <Icon name="icon-clock" size="sm" />
+          </span>
+          <span>
+            {businessInfo.openingHours.weekdays}
+            <small>{businessInfo.openingHours.saturday}</small>
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="site-footer__section site-footer__navigation" aria-labelledby="footer-nav-title">
+      <h2 id="footer-nav-title">Links</h2>
+
+      <div class="site-footer__nav-columns">
+        <nav class="site-footer__nav" aria-label="Links principais do rodapé">
+          <h3>Site</h3>
+          {footerSiteLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+        </nav>
+
+        <nav class="site-footer__nav" aria-label="Links de atendimento do rodapé">
+          <h3>Atendimento</h3>
+          {footerServiceLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+        </nav>
+
+        <nav class="site-footer__nav" aria-label="Links legais do rodapé">
+          <h3>Legal</h3>
+          {legalLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+          <button class="site-footer__cookie-button" type="button" data-cookie-preferences>
+            Preferências de cookies
+          </button>
+        </nav>
+      </div>
+    </section>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>© {new Date().getFullYear()} BH Carimbos. Todos os direitos reservados.</p>
+
+    <a
+      class="site-footer__credit"
+      href={developerWhatsAppUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Falar com Andreh Malheiros pelo WhatsApp"
+    >
+      Desenvolvido por <strong>Andreh Malheiros</strong>
+    </a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    overflow: hidden;
+    border-top: 5px solid var(--color-orange-600);
+    padding-block: clamp(1.75rem, 3vw, 2.6rem) 0;
+    color: var(--color-white);
+    background:
+      radial-gradient(circle at 10% 10%, rgb(249 115 22 / 11%), transparent 15rem),
+      linear-gradient(90deg, rgb(255 255 255 / 3%) 1px, transparent 1px) 0 0 / 48px 48px,
+      var(--color-black);
+  }
+
+  .site-footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgb(255 255 255 / 3%), transparent 24%);
+  }
+
+  .site-footer__grid,
+  .site-footer__bottom {
+    position: relative;
+    z-index: 1;
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: clamp(1.35rem, 2.6vw, 2.5rem);
+    align-items: start;
+  }
+
+  .site-footer__brand {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 23rem;
+  }
+
+  .site-footer__logo-link {
+    display: grid;
+    width: max-content;
+    place-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+
+  .site-footer__logo-frame {
+    display: grid;
+    width: 4.1rem;
+    height: 4.1rem;
+    place-items: center;
+    align-items: center;
+    justify-content: center;
+    border: 0px;
+    border-radius: 3%;
+    overflow: hidden;
+    background: rgb(255 255 255 / 100%);
+  }
+
+  .site-footer__logo-frame img {
+    display: block;
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+  }
+
+  .site-footer__description {
+    max-width: 30ch;
+    margin: 0;
+    color: rgb(255 255 255 / 76%);
+    font-size: clamp(0.9rem, 0.95vw, 0.98rem);
+    line-height: 1.5;
+  }
+
+  .site-footer__section {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .site-footer h2 {
+    position: relative;
+    margin: 0;
+    color: var(--color-white);
+    font-size: clamp(0.92rem, 1vw, 1.05rem);
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .site-footer h2::after {
+    content: "";
+    display: block;
+    width: 1.8rem;
+    height: 3px;
+    margin-top: var(--space-2);
+    border-radius: 999px;
+    background: var(--color-orange-600);
+  }
+
+  .site-footer__list {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-3);
+    align-items: start;
+    color: rgb(255 255 255 / 84%);
+    line-height: 1.32;
+  }
+
+  .site-footer__icon {
+    display: grid;
+    width: 1.8rem;
+    height: 1.8rem;
+    place-items: center;
+    border: 1px solid rgb(249 115 22 / 24%);
+    border-radius: var(--radius-sm);
+    color: var(--color-orange-600);
+    background: rgb(249 115 22 / 8%);
+  }
+
+  .site-footer__icon :global(.site-icon) {
+    filter: brightness(0) saturate(100%) invert(46%) sepia(89%) saturate(1554%) hue-rotate(352deg)
+      brightness(97%) contrast(91%);
+  }
+
+  .site-footer__list a,
+  .site-footer__list span {
+    color: rgb(255 255 255 / 84%);
+    font-size: 0.94rem;
+    text-decoration: none;
+  }
+
+  .site-footer__list a:hover {
+    color: var(--color-orange-100);
+  }
+
+  .site-footer__list small {
+    display: block;
+    margin-top: 0.08rem;
+    color: rgb(255 255 255 / 58%);
+    font-size: 0.88em;
+    line-height: 1.28;
+  }
+
+  .site-footer__nav-columns {
+    display: grid;
+    gap: clamp(3.5rem, 2vw, 1.7rem);
+  }
+
+  .site-footer__nav {
+    display: grid;
+    align-content: start;
+    gap: 0.8rem;
+  }
+
+  .site-footer__nav h3 {
+    margin: 0 0 0.3rem;
+    color: rgb(255 255 255 / 60%);
+    font-size: 0.72rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .site-footer__nav a {
+    position: relative;
+    width: max-content;
+    max-width: 100%;
+    color: rgb(255 255 255 / 82%);
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.25;
+    text-decoration: none;
+    transition:
+      color 140ms ease,
+      transform 140ms ease;
+  }
+
+  .site-footer__cookie-button {
+    width: max-content;
+    max-width: 100%;
+    border: 0;
+    padding: 0;
+    color: rgb(255 255 255 / 82%);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.25;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    background: transparent;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .site-footer__cookie-button:hover {
+    color: var(--color-orange-100);
+  }
+
+  .site-footer__nav a::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -0.75rem;
+    width: 0.28rem;
+    height: 0.28rem;
+    border-radius: 999px;
+    opacity: 0;
+    background: var(--color-orange-600);
+    transform: translateY(-50%);
+    transition: opacity 140ms ease;
+  }
+
+  .site-footer__nav a:hover {
+    color: var(--color-orange-100);
+    transform: translateX(0.18rem);
+  }
+
+  .site-footer__nav a:hover::before {
+    opacity: 1;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: clamp(1.25rem, 2.3vw, 2rem);
+    border-top: 1px solid rgb(255 255 255 / 10%);
+    padding-block: var(--space-3);
+  }
+
+  .site-footer__bottom p {
+    margin: 0;
+    color: rgb(255 255 255 / 56%);
+    font-size: 0.82rem;
+  }
+
+  .site-footer__credit {
+    color: rgb(255 255 255 / 62%);
+    font-size: 0.82rem;
+    text-decoration: none;
+    transition: color 140ms ease;
+  }
+
+  .site-footer__credit strong {
+    color: rgb(255 255 255 / 82%);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .site-footer__credit:hover,
+  .site-footer__credit:hover strong {
+    color: var(--color-orange-100);
+  }
+
+  @media (min-width: 72rem) {
+    .site-footer__grid {
+      grid-template-columns: minmax(15rem, 0.8fr) minmax(21rem, 0.9fr) minmax(32rem, 1.3fr);
+    }
+
+    .site-footer__nav-columns {
+      grid-template-columns: minmax(6.8rem, 0.7fr) minmax(9rem, 0.9fr) minmax(13rem, 1.1fr);
+      align-items: start;
+    }
+  }
+
+  @media (min-width: 48rem) and (max-width: 71.99rem) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .site-footer__brand {
+      margin-top: var(--space-4);
+      grid-column: 1 / -1;
+      max-width: 100%;
+    }
+
+    .site-footer__navigation {
+      grid-column: 1 / -1;
+    }
+
+    .site-footer__nav-columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .site-footer {
+      padding-top: var(--space-7);
+
+    }
+
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .site-footer__brand {
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+
+    }
+
+    .site-footer__description {
+      max-width: 100%;
+    }
+
+    .site-footer__nav-columns {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+    }
+
+    .site-footer__bottom {
+      align-items: flex-start;
+      flex-direction: column;
+      margin-top: var(--space-6);
+    }
+  }
+
+  @media (max-width: 25rem) {
+    .site-footer__nav-columns {
+      grid-template-columns: 1fr;
+    }
+
+    
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getSeo } from "@data/seo";
+import { homeFaqs } from "@data/home";
+import { getFaqPageSchema } from "@lib/seo";
+import HomeHero from "@components/home/HomeHero.astro";
+import BenefitsSection from "@components/home/BenefitsSection.astro";
+import ProductsSection from "@components/home/ProductsSection.astro";
+import ProcessSection from "@components/home/ProcessSection.astro";
+import UrgencySection from "@components/home/UrgencySection.astro";
+import LocationSection from "@components/home/LocationSection.astro";
+import TrustSection from "@components/home/TrustSection.astro";
+import FaqSection from "@components/home/FaqSection.astro";
+import FinalCta from "@components/home/FinalCta.astro";
+
+const seo = getSeo("/");
+const faqSchema = getFaqPageSchema(homeFaqs);
+---
+
+<BaseLayout {...seo} structuredData={[faqSchema]}>
+  <HomeHero />
+  <BenefitsSection />
+  <ProductsSection />
+  <ProcessSection />
+  <UrgencySection />
+  <LocationSection />
+  <TrustSection />
+  <FaqSection />
+  <FinalCta />
+</BaseLayout>

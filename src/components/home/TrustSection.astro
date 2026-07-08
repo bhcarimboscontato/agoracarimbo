@@ -1,0 +1,337 @@
+---
+import { trustItems } from "@data/home";
+
+const marqueeItems = trustItems.slice(0, 4).map((item, index) => ({
+  number: String(index + 1).padStart(2, "0"),
+  label: item
+}));
+
+const marketHighlight = "Mais de 40 anos de mercado";
+const brandHighlight = "Trabalhamos com marcas como";
+const brandHighlight1 = "Colop, Nykon e similares";
+
+---
+
+<section class="trust-section" aria-labelledby="trust-title">
+  <div class="trust-marquee" aria-label="Diferenciais da BH Carimbos">
+    <div class="trust-marquee__track">
+      <div class="trust-marquee__group">
+        {
+          marqueeItems.map((item) => (
+            <span class="trust-marquee__item">
+              <strong>{item.number}</strong>
+              <span>{item.label}</span>
+            </span>
+          ))
+        }
+      </div>
+
+      <div class="trust-marquee__group" aria-hidden="true">
+        {
+          marqueeItems.map((item) => (
+            <span class="trust-marquee__item">
+              <strong>{item.number}</strong>
+              <span>{item.label}</span>
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-core">
+    <div class="container trust-core__inner">
+      <p class="trust-core__eyebrow">Confiança</p>
+
+      <h2 id="trust-title">
+        <span class="trust-core__market">{marketHighlight}</span>
+        <span class="trust-core__divider" aria-hidden="true"></span>
+        <span class="trust-core__brands">{brandHighlight}</span>
+        <span class="trust-core__brands trust-core__brands_1" style="font-size: 4rem;">{brandHighlight1}</span>
+                <span class="trust-core__divider" aria-hidden="true"></span>
+
+        
+      </h2>
+    </div>
+  </div>
+
+  <div class="trust-marquee trust-marquee--reverse" aria-label="Diferenciais da BH Carimbos">
+    <div class="trust-marquee__track">
+      <div class="trust-marquee__group">
+        {
+          marqueeItems.map((item) => (
+            <span class="trust-marquee__item">
+              <strong>{item.number}</strong>
+              <span>{item.label}</span>
+            </span>
+          ))
+        }
+      </div>
+
+      <div class="trust-marquee__group" aria-hidden="true">
+        {
+          marqueeItems.map((item) => (
+            <span class="trust-marquee__item">
+              <strong>{item.number}</strong>
+              <span>{item.label}</span>
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .trust-section {
+    overflow: hidden;
+    background: var(--color-white);
+  }
+
+  .trust-marquee {
+    width: 100%;
+    overflow: hidden;
+    color: var(--color-white);
+    background:
+      linear-gradient(90deg, rgb(249 115 22 / 10%), transparent 18%, transparent 82%, rgb(249 115 22 / 10%)),
+      var(--color-black);
+    border-block: 1px solid rgb(249 115 22 / 32%);
+  }
+
+  .trust-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: trust-marquee 34s linear infinite;
+    will-change: transform;
+  }
+
+  .trust-marquee--reverse .trust-marquee__track {
+    animation-direction: reverse;
+  }
+
+  .trust-marquee__group {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: clamp(1.1rem, 3vw, 2.65rem);
+    padding: clamp(0.55rem, 0.9vw, 0.78rem) clamp(1.1rem, 3vw, 2.65rem);
+  }
+
+  .trust-marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: rgb(255 255 255 / 88%);
+    font-size: clamp(0.72rem, 0.92vw, 0.88rem);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.15;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .trust-marquee__item::after {
+    content: "";
+    width: 0.36rem;
+    height: 0.36rem;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: var(--color-orange-600);
+  }
+
+  .trust-marquee__item strong {
+    color: var(--color-orange-600);
+    font-size: 0.84em;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.08em;
+  }
+
+  .trust-core {
+    position: relative;
+    overflow: hidden;
+    color: var(--color-black);
+    background:
+      radial-gradient(circle at 50% 50%, rgb(249 115 22 / 7%), transparent 17rem),
+      linear-gradient(90deg, rgb(249 115 22 / 5%) 0 1px, transparent 1px) 0 0 / 44px 44px,
+      linear-gradient(180deg, var(--color-white), rgb(255 247 237 / 42%));
+  }
+
+  .trust-core::before,
+  .trust-core::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    border-radius: 999px;
+    transform: translate(-50%, -50%);
+  }
+
+  .trust-core::before {
+    width: min(34rem, 70vw);
+    height: min(34rem, 70vw);
+    border: 1px solid rgb(249 115 22 / 10%);
+  }
+
+  .trust-core::after {
+    width: min(22rem, 54vw);
+    height: min(22rem, 54vw);
+    border: 1px solid rgb(17 17 17 / 5%);
+  }
+
+  .trust-core__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    padding-block: clamp(2rem, 4vw, 3.1rem);
+    text-align: center;
+  }
+
+  .trust-core__divider {
+  display: block;
+  width: min(50rem, 80vw);
+  height: 3px;
+  margin-block: clamp(0.35rem, 0.8vw, 0.65rem);
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(249 115 22 / 0.22) 12%,
+    var(--color-orange-600) 50%,
+    rgb(249 115 22 / 0.22) 88%,
+    transparent 100%
+  );
+}
+
+.trust-core__brands-label {
+  display: block;
+  max-width: 26ch;
+  color: var(--color-orange-700);
+  font-size: clamp(1.1rem, 2vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+  .trust-core__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 var(--space-3);
+    border: 1px solid rgb(249 115 22 / 22%);
+    border-radius: var(--radius-sm);
+    padding: 0.38rem 0.72rem;
+    color: var(--color-orange-700);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    background: rgb(255 255 255 / 78%);
+    box-shadow: 0 10px 26px rgb(17 17 17 / 4%);
+  }
+
+  .trust-core h2 {
+    display: grid;
+    justify-items: center;
+    gap: clamp(0.45rem, 1vw, 0.7rem);
+    max-width: 50ch;
+    margin: 0;
+    color: var(--color-black);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  .trust-core trust-core__brands_1{
+    max-width: 70ch;
+  }
+
+  .trust-core__market {
+    display: block;
+    max-width: 13ch;
+    font-size: clamp(2.2rem, 5.2vw, 4.6rem);
+  }
+
+  .trust-core__brands {
+    display: block;
+    max-width: 40ch;
+    font-weight: 500;
+    margin: 1rem 0px -1.3rem 0px;
+    color: var(--color-orange-600);
+    font-size: clamp(1.1rem, 2.05vw, 2.05rem);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+  }
+
+  .trust-core__brands_1{
+    color: var(--color-orange-700);
+    font-style: italic;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+
+  @keyframes trust-marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .trust-marquee__track {
+      animation-duration: 42s;
+    }
+
+    .trust-marquee__group {
+      gap: 1rem;
+      padding: 0.58rem 1rem;
+    }
+
+    .trust-marquee__item {
+      gap: var(--space-2);
+      font-size: 0.72rem;
+      letter-spacing: 0;
+    }
+
+    .trust-core__inner {
+      padding-block: var(--space-8);
+    }
+
+    .trust-core__eyebrow {
+      margin-bottom: var(--space-3);
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+    }
+
+    .trust-core h2 {
+      max-width: 15ch;
+      gap: var(--space-2);
+    }
+
+    .trust-core__market {
+      max-width: 11ch;
+      font-size: clamp(2rem, 10vw, 3.05rem);
+    }
+
+    .trust-core__brands {
+      max-width: 16ch;
+      font-size: clamp(1.05rem, 5.2vw, 1.45rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trust-marquee__track {
+      animation: none;
+      transform: none;
+    }
+
+    .trust-marquee__group[aria-hidden="true"] {
+      display: none;
+    }
+  }
+</style>

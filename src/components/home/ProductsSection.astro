@@ -1,0 +1,169 @@
+---
+import ProductCard from "@components/home/ProductCard.astro";
+import Icon from "@components/ui/Icon.astro";
+import { featuredProducts } from "@data/home";
+
+const productCategories = [
+  { label: "Empresa", icon: "icon-company", href: "#carimbo-cnpj", active: true },
+  { label: "Profissional", icon: "icon-medical", href: "#carimbo-medico", active: false },
+  { label: "Automático", icon: "icon-stamp", href: "#carimbo-automatico", active: false },
+  { label: "Madeira", icon: "icon-stamp", href: "#carimbo-madeira", active: false },
+  { label: "Personalizado", icon: "icon-stamp", href: "#carimbo-personalizado", active: false }
+] as const;
+---
+
+<section id="produtos" class="home-section products-section">
+  <div class="container">
+    <div class="products-section__header">
+      <p class="section-eyebrow">PRODUTOS MAIS PROCURADOS</p>
+      <h2>Modelos para empresas, profissionais liberais e uso pessoal</h2>
+      <p>Escolha um tipo de carimbo e chame no WhatsApp com a mensagem certa para o atendimento.</p>
+    </div>
+    
+    <div class="products-grid">
+      {featuredProducts.map((product) => <ProductCard {...product} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .products-section {
+    background:
+      radial-gradient(circle at 82% 18%, rgb(249 115 22 / 5%), transparent 24rem),
+      var(--color-white);
+  }
+
+  .products-section__header {
+    max-width: 58rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .products-section__header .section-eyebrow {
+    justify-content: flex-start;
+    margin-bottom: var(--space-3);
+  }
+
+  .products-section__header .section-eyebrow::after {
+    content: "";
+    display: block;
+    width: 42px;
+    height: 2px;
+    margin-top: var(--space-3);
+    background: var(--color-orange-600);
+  }
+
+  .products-section__header h2 {
+    max-width: 20ch;
+    margin-bottom: var(--space-4);
+    color: var(--color-black);
+    font-size: clamp(2.35rem, 5vw, 4.65rem);
+    line-height: 1.04;
+    letter-spacing: 0;
+  }
+
+  .products-section__header p:last-child {
+    max-width: 42rem;
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.3vw, 1.18rem);
+    line-height: 1.55;
+  }
+
+  .product-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+  }
+
+  .product-tab {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: var(--space-2);
+    border: 1px solid rgb(17 17 17 / 14%);
+    border-radius: var(--radius-lg);
+    padding: 0.55rem 1rem;
+    color: var(--color-gray-800);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    background: var(--color-white);
+    transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+  }
+
+  .product-tab :global(.site-icon) {
+    filter: brightness(0);
+  }
+
+  .product-tab:hover,
+  .product-tab--active {
+    border-color: var(--color-orange-600);
+    color: var(--color-orange-800);
+    background: rgb(255 243 231 / 62%);
+  }
+
+  .product-tab:hover :global(.site-icon),
+  .product-tab--active :global(.site-icon) {
+    filter: brightness(0) saturate(100%) invert(46%) sepia(89%) saturate(1554%) hue-rotate(352deg) brightness(97%) contrast(91%);
+  }
+
+  .products-grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .products-grid :global(.product-card--standard) {
+    grid-column: span 2;
+  }
+
+  .products-grid :global(.product-card--featured) {
+    grid-column: span 3;
+  }
+
+  .products-grid :global(.product-card--wide) {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 63.99rem) {
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .products-grid :global(.product-card--standard),
+    .products-grid :global(.product-card--featured) {
+      grid-column: span 1;
+    }
+
+    .products-grid :global(.product-card--wide) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .products-section__header h2 {
+      font-size: clamp(2.05rem, 11vw, 3rem);
+    }
+
+    .product-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .product-tab {
+      justify-content: center;
+      padding-inline: 0.75rem;
+    }
+
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .products-grid :global(.product-card--standard),
+    .products-grid :global(.product-card--featured),
+    .products-grid :global(.product-card--wide) {
+      grid-column: 1;
+    }
+  }
+</style>

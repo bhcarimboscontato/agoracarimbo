@@ -1,0 +1,154 @@
+---
+import { regionOptions, stampTypeOptions } from "@lib/contactValidation";
+---
+
+<form class="contact-form" data-contact-form novalidate>
+  <p class="contact-form__note">Preencha os dados para organizar seu pedido antes do atendimento.</p>
+  <div class="form-field">
+    <label for="name">Nome</label>
+    <input id="name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" required />
+  </div>
+  <div class="form-field">
+    <label for="whatsapp">WhatsApp</label>
+    <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" minlength="10" maxlength="20" required />
+  </div>
+  <div class="form-field">
+    <label for="email">E-mail <span class="form-field__optional">opcional</span></label>
+    <input id="email" name="email" type="email" autocomplete="email" maxlength="120" />
+  </div>
+  <div class="form-field">
+    <label for="stampType">Tipo de carimbo</label>
+    <select id="stampType" name="stampType" required>
+      <option value="">Selecione</option>
+      {stampTypeOptions.map((type) => <option value={type}>{type}</option>)}
+    </select>
+  </div>
+  <div class="form-field">
+    <label for="region">Região</label>
+    <select id="region" name="region" required>
+      <option value="">Selecione</option>
+      {regionOptions.map((region) => <option value={region}>{region}</option>)}
+    </select>
+  </div>
+  <div class="form-field">
+    <label for="message">Detalhes do pedido</label>
+    <textarea id="message" name="message" rows="5" minlength="5" maxlength="1000" required></textarea>
+  </div>
+  <div class="form-field contact-form__honeypot" aria-hidden="true">
+    <label for="website">Site</label>
+    <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="pageUrl" data-page-url />
+  <div class="contact-form__consent">
+    <input id="consent" name="consent" type="checkbox" required />
+    <label for="consent">
+      Autorizo o envio dos dados deste formulário para atendimento da BH Carimbos e li a <a href="/politica-de-privacidade/">Política de Privacidade</a>.
+    </label>
+  </div>
+  <p class="form-status" data-form-status aria-live="polite"></p>
+  <p class="contact-form__privacy">
+    Ao enviar, use apenas dados necessários para o atendimento. Consulte a <a href="/politica-de-privacidade/">Política de Privacidade</a>.
+  </p>
+  <button class="button button--primary" type="submit" data-submit-button>Enviar mensagem</button>
+</form>
+
+<script>
+  import { submitContactForm, type ContactFormPayload } from "@lib/form";
+
+  const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+  const status = document.querySelector<HTMLElement>("[data-form-status]");
+  const submitButton = document.querySelector<HTMLButtonElement>("[data-submit-button]");
+  const pageUrlInput = document.querySelector<HTMLInputElement>("[data-page-url]");
+  const whatsappInput = document.querySelector<HTMLInputElement>("#whatsapp");
+  let isSubmitting = false;
+  let lastSubmissionKey = "";
+
+  if (pageUrlInput) {
+    pageUrlInput.value = window.location.href;
+  }
+
+  function formatWhatsapp(value: string): string {
+    const digits = value.replace(/\D/g, "").slice(0, 13);
+    const localDigits = digits.startsWith("55") && digits.length > 11 ? digits.slice(2) : digits;
+
+    if (localDigits.length <= 2) {
+      return localDigits;
+    }
+
+    if (localDigits.length <= 6) {
+      return `(${localDigits.slice(0, 2)}) ${localDigits.slice(2)}`;
+    }
+
+    if (localDigits.length <= 10) {
+      return `(${localDigits.slice(0, 2)}) ${localDigits.slice(2, 6)}-${localDigits.slice(6)}`;
+    }
+
+    return `(${localDigits.slice(0, 2)}) ${localDigits.slice(2, 7)}-${localDigits.slice(7, 11)}`;
+  }
+
+  whatsappInput?.addEventListener("input", () => {
+    whatsappInput.value = formatWhatsapp(whatsappInput.value);
+  });
+
+  function setStatus(message: string, state: "success" | "error"): void {
+    if (!status) {
+      return;
+    }
+
+    status.textContent = message;
+    status.dataset.state = state;
+  }
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (isSubmitting) {
+      return;
+    }
+
+    const formData = new FormData(form);
+    const payload: ContactFormPayload = {
+      name: String(formData.get("name") ?? ""),
+      whatsapp: String(formData.get("whatsapp") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      stampType: String(formData.get("stampType") ?? ""),
+      message: String(formData.get("message") ?? ""),
+      region: String(formData.get("region") ?? ""),
+      consent: formData.get("consent") === "on",
+      website: String(formData.get("website") ?? ""),
+      pageUrl: String(formData.get("pageUrl") ?? window.location.href)
+    };
+
+    const submissionKey = JSON.stringify({
+      name: payload.name.trim(),
+      whatsapp: payload.whatsapp.replace(/\D/g, ""),
+      email: payload.email.trim().toLowerCase(),
+      stampType: payload.stampType,
+      message: payload.message.trim(),
+      region: payload.region
+    });
+
+    if (submissionKey === lastSubmissionKey) {
+      setStatus("Sua mensagem já foi enviada. Aguarde o retorno da equipe.", "success");
+      return;
+    }
+
+    isSubmitting = true;
+    submitButton?.setAttribute("disabled", "true");
+    setStatus("Enviando mensagem...", "success");
+
+    const result = await submitContactForm(payload);
+    lastSubmissionKey = result.ok ? submissionKey : "";
+    isSubmitting = false;
+    submitButton?.removeAttribute("disabled");
+
+    setStatus(result.message, result.ok ? "success" : "error");
+
+    if (result.ok) {
+      form.reset();
+      if (pageUrlInput) {
+        pageUrlInput.value = window.location.href;
+      }
+    }
+  });
+</script>

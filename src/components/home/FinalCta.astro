@@ -1,0 +1,56 @@
+---
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import { getWhatsAppUrl } from "@lib/whatsapp";
+---
+
+<section class="final-cta" aria-labelledby="final-cta-title">
+  <div class="container final-cta__inner">
+    <h2 id="final-cta-title">Precisa de um carimbo em BH?</h2>
+    <p>Envie seus dados pelo WhatsApp e receba orientação para escolher o modelo ideal.</p>
+    <ButtonLink href={getWhatsAppUrl("general")} label="Pedir orçamento agora" external>
+      <Icon name="icon-whatsapp" size="sm" />
+    </ButtonLink>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--space-16);
+    color: var(--color-white);
+    background:
+      linear-gradient(90deg, rgb(17 17 17 / 94%), rgb(37 37 37 / 88%)),
+      url("/assets/imagens-gerais/banner-header.png") center / cover no-repeat,
+      var(--color-black);
+  }
+
+  .final-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 32px, rgb(255 255 255 / 5%) 32px 33px),
+      linear-gradient(90deg, transparent 0 88%, var(--color-orange-600) 88% 89%, transparent 89%);
+  }
+
+  .final-cta__inner {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .final-cta h2 {
+    margin-bottom: var(--space-3);
+    color: var(--color-white);
+  }
+
+  .final-cta p {
+    max-width: 680px;
+    margin-bottom: var(--space-6);
+    color: rgb(255 255 255 / 86%);
+    font-size: var(--text-lg);
+  }
+</style>

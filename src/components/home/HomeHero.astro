@@ -1,0 +1,409 @@
+---
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import { homeHero } from "@data/home";
+import { getWhatsAppUrl } from "@lib/whatsapp";
+---
+
+<section class="home-hero" aria-labelledby="home-hero-title">
+  <img
+    class="banner-image home-hero__image"
+    src="/assets/imagens-gerais/banner-header.png"
+    alt=""
+    width="1672"
+    height="941"
+    aria-hidden="true"
+    fetchpriority="high"
+  />
+
+  <div class="home-hero__overlay">
+    <div class="container home-hero__inner">
+      <div class="home-hero__content">
+        <p class="home-hero__eyebrow">{homeHero.eyebrow}</p>
+
+        <h1 id="home-hero-title">{homeHero.title}</h1>
+
+        <p class="home-hero__subtitle">{homeHero.subtitle}</p>
+
+        <p class="home-hero__support">{homeHero.support}</p>
+
+        <div class="home-hero__actions">
+          <ButtonLink href={getWhatsAppUrl(homeHero.primaryCta.message)} label={homeHero.primaryCta.label} external>
+            <Icon name="icon-whatsapp" size="sm" />
+          </ButtonLink>
+
+          <ButtonLink href={homeHero.secondaryCta.href} label={homeHero.secondaryCta.label} variant="secondary">
+            <span class="home-hero__arrow" aria-hidden="true">→</span>
+          </ButtonLink>
+        </div>
+
+        <ul class="home-hero__bullets" aria-label="Diferenciais rápidos">
+          {
+            homeHero.bullets.map((bullet, index) => {
+              const icons = ["icon-whatsapp", "icon-check", "icon-delivery", "icon-file-invoice"];
+
+              return (
+                <li>
+                  <Icon name={icons[index] ?? "icon-check"} size="sm" />
+                  <span>{bullet}</span>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .home-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(500px, calc(100svh - 92px), 660px);
+    overflow: hidden;
+    color: var(--color-white);
+    background: var(--color-black);
+    border-bottom: 4px solid var(--color-orange-600);
+  }
+
+  .home-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    z-index: -1;
+    height: 100%;
+    border: 1px solid rgb(249 115 22 / 18%);
+    border-bottom: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    pointer-events: none;
+  }
+
+  :global(.home-hero__image) {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    object-position: 64% center;
+  }
+
+  .home-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      linear-gradient(
+        90deg,
+        rgb(8 8 8 / 96%) 0%,
+        rgb(8 8 8 / 90%) 31%,
+        rgb(8 8 8 / 58%) 50%,
+        rgb(8 8 8 / 20%) 72%,
+        rgb(8 8 8 / 34%) 100%
+      ),
+      radial-gradient(circle at 20% 82%, rgb(249 115 22 / 10%), transparent 20rem),
+      linear-gradient(0deg, rgb(0 0 0 / 34%) 0%, transparent 42%);
+  }
+
+  .home-hero__overlay {
+    min-height: inherit;
+    display: grid;
+    align-items: center;
+    padding-block: clamp(1.75rem, 3.6vw, 3rem);
+    background:
+      linear-gradient(108deg, transparent 0 88%, rgb(249 115 22 / 78%) 88.2% 89%, transparent 89.2%),
+      linear-gradient(74deg, transparent 0 18%, rgb(249 115 22 / 13%) 18.2% 18.6%, transparent 18.8%),
+      radial-gradient(circle at 87% 18%, rgb(249 115 22 / 8%) 0 1px, transparent 2px) 0 0 / 18px 18px;
+  }
+
+  .home-hero__inner {
+    display: grid;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .home-hero__content {
+    position: relative;
+    max-width: min(46rem, 58%);
+    padding: clamp(0.45rem, 1vw, 0.85rem) 0;
+  }
+
+  .home-hero__content::before {
+    content: "";
+    position: absolute;
+    top: -0.35rem;
+    left: -1.15rem;
+    width: 72px;
+    height: 28px;
+    border-top: 2px solid var(--color-orange-600);
+    border-left: 2px solid var(--color-orange-600);
+    pointer-events: none;
+  }
+
+  .home-hero__content::after {
+    content: "";
+    position: absolute;
+    bottom: -1.55rem;
+    left: 0.1rem;
+    width: 46px;
+    height: 14px;
+    background: repeating-linear-gradient(135deg, var(--color-orange-600) 0 3px, transparent 3px 12px);
+    opacity: 0.72;
+  }
+
+  .home-hero__eyebrow {
+    margin-bottom: var(--space-3);
+    padding-left: var(--space-4);
+    color: var(--color-orange-100);
+    font-size: clamp(0.72rem, 0.82vw, 0.84rem);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .home-hero h1 {
+    max-width: 12.5ch;
+    color: var(--color-white);
+    font-size: clamp(2.65rem, 4.35vw, 4.15rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .home-hero__subtitle {
+    max-width: 39rem;
+    color: rgb(255 255 255 / 90%);
+    font-size: clamp(0.94rem, 1.06vw, 1.08rem);
+    line-height: 1.42;
+  }
+
+  .home-hero__support {
+    display: flex;
+    max-width: 39rem;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+    color: rgb(255 226 194 / 96%);
+    font-size: clamp(0.88rem, 0.98vw, 1rem);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.32;
+  }
+
+  .home-hero__support::before {
+    content: "✓";
+    display: inline-grid;
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+    place-items: center;
+    border: 2px solid var(--color-orange-600);
+    border-radius: 50%;
+    color: var(--color-orange-600);
+    font-size: 0.72rem;
+    line-height: 1;
+  }
+
+  .home-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-3);
+  }
+
+  .home-hero__actions :global(.button) {
+    min-height: 48px;
+    border-radius: var(--radius-sm);
+    padding-inline: clamp(0.95rem, 1.55vw, 1.35rem);
+    font-size: clamp(0.74rem, 0.82vw, 0.86rem);
+  }
+
+  .home-hero__actions :global(.button--primary) {
+    box-shadow: 0 12px 24px rgb(249 115 22 / 15%);
+  }
+
+  .home-hero__actions :global(.button--secondary) {
+    color: var(--color-white);
+    border-color: rgb(255 255 255 / 42%);
+    background: rgb(17 17 17 / 34%);
+    backdrop-filter: blur(3px);
+  }
+
+  .home-hero__actions :global(.button--secondary:hover) {
+    border-color: var(--color-orange-600);
+    background: rgb(17 17 17 / 62%);
+  }
+
+  .home-hero__arrow {
+    margin-right: var(--space-2);
+    color: var(--color-orange-600);
+    font-size: 1.12rem;
+    line-height: 1;
+  }
+
+  .home-hero__bullets {
+    display: grid;
+    width: min(100%, 43rem);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .home-hero__bullets li {
+    display: inline-flex;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    border: 1px solid rgb(255 255 255 / 20%);
+    border-radius: var(--radius-md);
+    padding: 0.55rem 0.65rem;
+    color: rgb(255 255 255 / 94%);
+    font-size: clamp(0.72rem, 0.78vw, 0.82rem);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.22;
+    text-align: center;
+    background: rgb(17 17 17 / 36%);
+    backdrop-filter: blur(4px);
+    transition:
+      border-color 140ms ease,
+      background-color 140ms ease,
+      transform 140ms ease;
+  }
+
+  .home-hero__bullets li:hover {
+    border-color: rgb(249 115 22 / 58%);
+    background: rgb(17 17 17 / 54%);
+    transform: translateY(-1px);
+  }
+
+  .home-hero__bullets :global(.site-icon) {
+    flex: 0 0 auto;
+    filter: brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(1684%) hue-rotate(349deg) brightness(99%) contrast(96%);
+  }
+
+  @media (max-width: 72rem) {
+    .home-hero {
+      min-height: clamp(520px, calc(100svh - 86px), 660px);
+    }
+
+    .home-hero__content {
+      max-width: min(44rem, 68%);
+    }
+
+    .home-hero h1 {
+      font-size: clamp(2.45rem, 5.5vw, 3.9rem);
+    }
+
+    .home-hero__bullets {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: min(100%, 34rem);
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .home-hero {
+      min-height: auto;
+    }
+
+    :global(.home-hero__image) {
+      object-position: 68% center;
+    }
+
+    .home-hero::before {
+      background:
+        linear-gradient(180deg, rgb(8 8 8 / 96%) 0%, rgb(8 8 8 / 93%) 58%, rgb(8 8 8 / 84%) 100%),
+        linear-gradient(0deg, rgb(249 115 22 / 14%), transparent 45%);
+    }
+
+    .home-hero__overlay {
+      padding-block: 2rem 2.6rem;
+    }
+
+    .home-hero__content {
+      max-width: 100%;
+      padding-top: var(--space-4);
+    }
+
+    .home-hero__content::before {
+      left: 0;
+      width: 58px;
+      height: 24px;
+    }
+
+    .home-hero__content::after {
+      display: none;
+    }
+
+    .home-hero__eyebrow {
+      margin-bottom: var(--space-3);
+      padding-left: var(--space-4);
+      letter-spacing: 0.14em;
+    }
+
+    .home-hero h1 {
+      max-width: 12ch;
+      margin-bottom: var(--space-4);
+      font-size: clamp(2.05rem, 10vw, 2.85rem);
+    }
+
+    .home-hero__subtitle {
+      font-size: 0.96rem;
+    }
+
+    .home-hero__support {
+      align-items: flex-start;
+      margin-bottom: var(--space-5);
+      font-size: 0.92rem;
+    }
+
+    .home-hero__actions {
+      width: 100%;
+      gap: var(--space-3);
+    }
+
+    .home-hero__actions :global(.button) {
+      width: 100%;
+      min-height: 50px;
+    }
+
+    .home-hero__bullets {
+      display: grid;
+      width: 100%;
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+      margin-top: var(--space-4);
+    }
+
+    .home-hero__bullets li {
+      justify-content: flex-start;
+      min-height: 44px;
+      padding: 0.55rem 0.75rem;
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 23.75rem) {
+    .home-hero__overlay {
+      padding-block: 1.75rem 2.4rem;
+    }
+
+    .home-hero h1 {
+      font-size: 1.82rem;
+    }
+
+    .home-hero__subtitle {
+      font-size: 0.9rem;
+    }
+
+    .home-hero__support {
+      font-size: 0.88rem;
+    }
+  }
+</style>
