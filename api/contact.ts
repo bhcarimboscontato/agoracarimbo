@@ -4,7 +4,6 @@ import {
   type ContactFormPayload,
   type SanitizedContactPayload
 } from "../src/lib/contactValidation";
-import { appendContactLead, hasGoogleSheetsConfig } from "../src/lib/googleSheets";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -40,12 +39,15 @@ function parsePositiveInteger(value: string | undefined, fallback: number): numb
 }
 
 function isAllowedOrigin(origin: string): boolean {
+  const normalizedOrigin = origin.replace(/\/$/, "");
   const allowedOrigins = [
     process.env.CONTACT_FORM_ALLOWED_ORIGIN,
     process.env.CONTACT_FORM_PRODUCTION_ORIGIN
-  ].filter(Boolean);
+  ]
+    .filter(Boolean)
+    .map((allowedOrigin) => allowedOrigin?.replace(/\/$/, ""));
 
-  return Boolean(origin && allowedOrigins.includes(origin));
+  return Boolean(normalizedOrigin && allowedOrigins.includes(normalizedOrigin));
 }
 
 function createPayload(body: unknown): ContactFormPayload | null {
@@ -139,16 +141,16 @@ function isRateLimited(payload: SanitizedContactPayload, now: number): boolean {
 }
 
 async function isDuplicate(payload: SanitizedContactPayload, now: number): Promise<boolean> {
-  const duplicateWindowSeconds = parsePositiveInteger(process.env.CONTACT_FORM_DUPLICATE_WINDOW_SECONDS, 120);
   const key = await getSubmissionKey(payload);
   const currentExpiresAt = duplicateStore.get(key);
 
-  if (currentExpiresAt && currentExpiresAt > now) {
-    return true;
-  }
+  return Boolean(currentExpiresAt && currentExpiresAt > now);
+}
 
+async function markDuplicate(payload: SanitizedContactPayload, now: number): Promise<void> {
+  const duplicateWindowSeconds = parsePositiveInteger(process.env.CONTACT_FORM_DUPLICATE_WINDOW_SECONDS, 120);
+  const key = await getSubmissionKey(payload);
   duplicateStore.set(key, now + duplicateWindowSeconds * 1000);
-  return false;
 }
 
 function sendError(res: VercelResponse, statusCode: number): void {
@@ -177,12 +179,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const origin = getHeader(req, "origin");
   if (!isAllowedOrigin(origin)) {
     sendError(res, 403);
-    return;
-  }
-
-  if (!hasGoogleSheetsConfig()) {
-    console.error("Contact form Google Sheets configuration is missing.");
-    sendError(res, 500);
     return;
   }
 
@@ -231,12 +227,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const submittedAt = new Date(now);
 
   try {
+    const { appendContactLead, hasGoogleSheetsConfig } = await import("../src/lib/googleSheets");
+
+    if (!hasGoogleSheetsConfig()) {
+      console.error("Contact form Google Sheets configuration is missing.");
+      sendError(res, 500);
+      return;
+    }
+
     await appendContactLead({
       ...sanitizedPayload,
       submittedAtIso: submittedAt.toISOString(),
       submittedAtBrazil: getBrazilDateTime(submittedAt),
       status: "novo"
     });
+    await markDuplicate(sanitizedPayload, now);
 
     res.status(200).json({
       ok: true,
@@ -247,4 +252,3 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     sendError(res, 500);
   }
 }
-
