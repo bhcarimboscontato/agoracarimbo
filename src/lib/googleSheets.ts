@@ -1,4 +1,4 @@
-import type { SanitizedContactPayload } from "./contactValidation";
+import type { SanitizedContactPayload } from "./contactValidation.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
