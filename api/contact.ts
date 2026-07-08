@@ -3,7 +3,7 @@ import {
   validateContactForm,
   type ContactFormPayload,
   type SanitizedContactPayload
-} from "../src/lib/contactValidation";
+} from "../src/lib/contactValidation.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -227,7 +227,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const submittedAt = new Date(now);
 
   try {
-    const { appendContactLead, hasGoogleSheetsConfig } = await import("../src/lib/googleSheets");
+    const { appendContactLead, hasGoogleSheetsConfig } = await import("../src/lib/googleSheets.js");
 
     if (!hasGoogleSheetsConfig()) {
       console.error("Contact form Google Sheets configuration is missing.");
