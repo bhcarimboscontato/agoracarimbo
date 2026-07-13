@@ -2,6 +2,7 @@
 import Header from "@components/layout/Header.astro";
 import Footer from "@components/layout/Footer.astro";
 import Analytics from '@vercel/analytics/astro'
+import SpeedInsights from '@vercel/speed-insights/astro'
 import CookieConsent from "@components/ui/CookieConsent.astro";
 import SeoHead from "@components/seo/SeoHead.astro";
 import { brandAssets } from "@data/site";
@@ -57,5 +58,7 @@ const schemas = [organizationSchema, webSiteSchema, localBusinessSchema, webPage
     </main>
     <Footer />
     <CookieConsent />
+    <Analytics />
+    <SpeedInsights />
   </body>
 </html>
