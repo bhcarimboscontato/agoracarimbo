@@ -1,0 +1,338 @@
+---
+import Icon from "@components/ui/Icon.astro";
+import { createWhatsAppUrl } from "@lib/whatsapp";
+
+const products = [
+  {
+    title: "Colop Pocket azul",
+    images: ["/assets/hero-produtos/colop-azul.jpeg", "/assets/hero-produtos/colop-azul-1.jpeg"],
+    message: "Olá! Gostaria de consultar o valor, prazo e personalização do carimbo Colop Pocket azul que vi no site."
+  },
+  {
+    title: "Colop Pocket branco",
+    images: ["/assets/hero-produtos/colop-branco.jpeg", "/assets/hero-produtos/colop-branco-1.jpeg"],
+    message: "Olá! Gostaria de consultar o valor, prazo e personalização do carimbo Colop Pocket branco que vi no site."
+  },
+  {
+    title: "Colop Pocket rosa",
+    images: ["/assets/hero-produtos/colop-rosa.jpeg", "/assets/hero-produtos/colop-rosa-1.jpeg"],
+    message: "Olá! Gostaria de consultar o valor, prazo e personalização do carimbo Colop Pocket rosa que vi no site."
+  },
+  {
+    title: "Trodat automático bege",
+    images: ["/assets/hero-produtos/trodat-bege.jpeg"],
+    message: "Olá! Gostaria de consultar o valor, prazo e personalização do carimbo automático Trodat bege que vi no site."
+  },
+  {
+    title: "Trodat automático cinza",
+    images: ["/assets/hero-produtos/trodat-cinza.jpeg"],
+    message: "Olá! Gostaria de consultar o valor, prazo e personalização do carimbo automático Trodat cinza que vi no site."
+  },
+  {
+    title: "Trodat automático preto",
+    images: ["/assets/hero-produtos/trodat-preto.jpeg"],
+    message: "Olá! Gostaria de consultar o valor, prazo e personalização do carimbo automático Trodat preto que vi no site."
+  },
+  {
+    title: "Trodat automático rosa",
+    images: ["/assets/hero-produtos/trodat-rosa.jpeg"],
+    message: "Olá! Gostaria de consultar o valor, prazo e personalização do carimbo automático Trodat rosa que vi no site."
+  },
+  {
+    title: "Carimbo para sacola kraft",
+    images: ["/assets/hero-produtos/sacola-kraft.jpeg"],
+    message: "Olá! Gostaria de informações sobre carimbos personalizados para sacolas kraft que vi no site."
+  }
+] as const;
+---
+
+<section class="quick-products" aria-labelledby="quick-products-title">
+  <div class="container">
+    <div class="quick-products__header">
+      <p class="section-eyebrow">MODELOS MAIS PROCURADOS</p>
+      <h2 id="quick-products-title">Escolha o modelo do seu carimbo</h2>
+      <p>Veja algumas opções disponíveis e clique no modelo para consultar personalização, prazo e valor pelo WhatsApp.</p>
+    </div>
+
+    <div class="quick-products__scroller" aria-label="Modelos mais procurados">
+      {
+        products.map((product) => (
+          <a
+            class={`quick-product-card ${product.images.length > 1 ? "quick-product-card--double" : ""}`}
+            href={createWhatsAppUrl(product.message)}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-event="cta_click"
+            data-conversion="whatsapp"
+            aria-label={`Consultar ${product.title} pelo WhatsApp`}
+          >
+            <span class="quick-product-card__media">
+              <img
+                class="quick-product-card__image quick-product-card__image--primary"
+                src={product.images[0]}
+                alt={product.title}
+                width="360"
+                height="280"
+                loading="eager"
+                decoding="async"
+              />
+              {
+                product.images[1] && (
+                  <img
+                    class="quick-product-card__image quick-product-card__image--secondary"
+                    src={product.images[1]}
+                    alt={`${product.title} em outra vista`}
+                    width="220"
+                    height="180"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )
+              }
+            </span>
+            <span class="quick-product-card__body">
+              <strong>{product.title}</strong>
+              <span class="quick-product-card__cta">
+                <Icon name="icon-whatsapp" size="sm" />
+                Consultar pelo WhatsApp
+              </span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="quick-products__footer">
+      <p>Não encontrou o modelo ideal? Veja todas as opções disponíveis.</p>
+      <a class="quick-products__catalog-link" href="/nossos-produtos/">Ver catálogo completo</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quick-products {
+    overflow: hidden;
+    border-bottom: 1px solid rgb(17 17 17 / 8%);
+    padding-block: clamp(2.25rem, 5vw, 4.5rem);
+    background: var(--color-white);
+  }
+
+  .quick-products__header {
+    max-width: 48rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .quick-products__header .section-eyebrow {
+    justify-content: flex-start;
+    margin-bottom: var(--space-3);
+  }
+
+  .quick-products__header .section-eyebrow::after {
+    content: "";
+    display: block;
+    width: 42px;
+    height: 2px;
+    margin-top: var(--space-3);
+    background: var(--color-orange-600);
+  }
+
+  .quick-products__header h2 {
+    max-width: 15ch;
+    margin: 0 0 var(--space-3);
+    color: var(--color-black);
+    font-size: clamp(2rem, 4vw, 3.75rem);
+    letter-spacing: 0;
+    line-height: 1.05;
+  }
+
+  .quick-products__header p:last-child {
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.2vw, 1.12rem);
+    line-height: 1.55;
+  }
+
+  .quick-products__scroller {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .quick-product-card {
+    display: grid;
+    min-height: 20.5rem;
+    grid-template-rows: minmax(12rem, 1fr) auto;
+    overflow: hidden;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    color: var(--color-black);
+    text-decoration: none;
+    background: var(--color-white);
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .quick-product-card__media {
+    position: relative;
+    display: grid;
+    min-height: 13.25rem;
+    place-items: center;
+    padding: var(--space-4);
+    background: var(--color-white);
+  }
+
+  .quick-product-card__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .quick-product-card__image--primary {
+    max-width: 12.5rem;
+    max-height: 10.5rem;
+  }
+
+  .quick-product-card__image--secondary {
+    position: absolute;
+    right: clamp(0.75rem, 8%, 1.25rem);
+    bottom: var(--space-3);
+    width: min(42%, 5.75rem);
+    max-height: 5.1rem;
+    padding: 0.25rem;
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+  }
+
+  .quick-product-card--double .quick-product-card__image--primary {
+    width: 72%;
+    justify-self: start;
+  }
+
+  .quick-product-card__body {
+    display: grid;
+    gap: var(--space-3);
+    border-top: 1px solid var(--color-gray-200);
+    padding: var(--space-4);
+  }
+
+  .quick-product-card__body strong {
+    min-height: 2.6rem;
+    font-size: var(--text-base);
+    line-height: 1.25;
+  }
+
+  .quick-product-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-success);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+  }
+
+  .quick-products__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .quick-products__footer p {
+    margin: 0;
+    color: var(--color-gray-700);
+    line-height: 1.5;
+  }
+
+  .quick-products__catalog-link {
+    display: inline-flex;
+    min-height: var(--button-height);
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    color: var(--color-black);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.15;
+    text-decoration: none;
+    white-space: nowrap;
+    background: var(--color-white);
+    transition:
+      border-color var(--transition-fast),
+      color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  @media (hover: hover) {
+    .quick-product-card:hover,
+    .quick-products__catalog-link:hover {
+      border-color: var(--color-orange-600);
+      transform: translateY(-2px);
+    }
+
+    .quick-products__catalog-link:hover {
+      color: var(--color-orange-800);
+    }
+  }
+
+  @media (max-width: 63.99rem) {
+    .quick-products__scroller {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .quick-products {
+      padding-block: var(--space-10);
+    }
+
+    .quick-products .container {
+      padding-right: 0;
+    }
+
+    .quick-products__header,
+    .quick-products__footer {
+      padding-right: var(--container-padding);
+    }
+
+    .quick-products__header h2 {
+      font-size: clamp(2rem, 10vw, 2.75rem);
+    }
+
+    .quick-products__scroller {
+      display: flex;
+      gap: var(--space-4);
+      overflow-x: auto;
+      padding-right: var(--container-padding);
+      scroll-padding-left: var(--container-padding);
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .quick-products__scroller::-webkit-scrollbar {
+      display: none;
+    }
+
+    .quick-product-card {
+      width: 82vw;
+      min-width: 82vw;
+      scroll-snap-align: start;
+    }
+
+    .quick-products__footer {
+      display: grid;
+      justify-items: start;
+    }
+
+    .quick-products__catalog-link {
+      width: min(100%, 18rem);
+    }
+  }
+</style>
