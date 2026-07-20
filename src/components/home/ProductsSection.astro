@@ -2,14 +2,6 @@
 import ProductCard from "@components/home/ProductCard.astro";
 import Icon from "@components/ui/Icon.astro";
 import { featuredProducts } from "@data/home";
-
-const productCategories = [
-  { label: "Empresa", icon: "icon-company", href: "#carimbo-cnpj", active: true },
-  { label: "Profissional", icon: "icon-medical", href: "#carimbo-medico", active: false },
-  { label: "Automático", icon: "icon-stamp", href: "#carimbo-automatico", active: false },
-  { label: "Madeira", icon: "icon-stamp", href: "#carimbo-madeira", active: false },
-  { label: "Personalizado", icon: "icon-stamp", href: "#carimbo-personalizado", active: false }
-] as const;
 ---
 
 <section id="produtos" class="home-section products-section">
@@ -19,6 +11,20 @@ const productCategories = [
       <h2>Modelos para empresas, profissionais liberais e uso pessoal</h2>
       <p>Escolha um tipo de carimbo e chame no WhatsApp com a mensagem certa para o atendimento.</p>
     </div>
+
+    <a class="products-catalog-callout" href="/nossos-produtos/">
+      <span class="products-catalog-callout__media" aria-hidden="true">
+        <img src="/assets/carimbos-produtos/Trodat-4911-Preto.jpeg" alt="" width="180" height="140" loading="lazy" decoding="async" />
+      </span>
+      <span class="products-catalog-callout__copy">
+        <strong>Veja todos os modelos antes de pedir</strong>
+        <span>Confira fotos, variações e detalhes dos carimbos automáticos, de madeira, profissionais, CNPJ e aplicações personalizadas.</span>
+      </span>
+      <span class="products-catalog-callout__cta">
+        <Icon name="icon-stamp" size="sm" />
+        Ver catálogo de produtos
+      </span>
+    </a>
     
     <div class="products-grid">
       {featuredProducts.map((product) => <ProductCard {...product} />)}
@@ -69,43 +75,77 @@ const productCategories = [
     line-height: 1.55;
   }
 
-  .product-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-bottom: var(--space-8);
+  .products-catalog-callout {
+    display: grid;
+    grid-template-columns: minmax(6rem, 9rem) minmax(0, 1fr) auto;
+    gap: clamp(0.9rem, 2.5vw, 1.5rem);
+    align-items: center;
+    margin: 0 0 var(--space-6);
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-left: 4px solid var(--color-orange-600);
+    border-radius: var(--radius-md);
+    padding: clamp(0.85rem, 2vw, 1.15rem);
+    color: var(--color-black);
+    text-decoration: none;
+    background:
+      linear-gradient(90deg, rgb(255 247 237 / 86%), var(--color-white)),
+      var(--color-white);
+    box-shadow: 0 14px 34px rgb(17 17 17 / 5%);
+    transition:
+      border-color 160ms ease,
+      transform 160ms ease,
+      box-shadow 160ms ease;
   }
 
-  .product-tab {
+  .products-catalog-callout__media {
+    display: grid;
+    min-height: 6.5rem;
+    place-items: center;
+    border-radius: var(--radius-sm);
+    background: rgb(244 244 245 / 90%);
+  }
+
+  .products-catalog-callout__media img {
+    width: min(100%, 8rem);
+    max-height: 6rem;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  .products-catalog-callout__copy {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .products-catalog-callout__copy strong {
+    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+    line-height: 1.15;
+  }
+
+  .products-catalog-callout__copy span {
+    max-width: 58rem;
+    color: var(--color-gray-700);
+    line-height: 1.5;
+  }
+
+  .products-catalog-callout__cta {
     display: inline-flex;
     min-height: 44px;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
-    border: 1px solid rgb(17 17 17 / 14%);
-    border-radius: var(--radius-lg);
-    padding: 0.55rem 1rem;
-    color: var(--color-gray-800);
+    border-radius: var(--radius-sm);
+    padding: 0.7rem 0.9rem;
+    color: var(--color-white);
     font-size: var(--text-sm);
-    font-weight: var(--font-weight-semibold);
-    text-decoration: none;
-    background: var(--color-white);
-    transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.15;
+    white-space: nowrap;
+    background: var(--color-orange-600);
   }
 
-  .product-tab :global(.site-icon) {
-    filter: brightness(0);
-  }
-
-  .product-tab:hover,
-  .product-tab--active {
-    border-color: var(--color-orange-600);
-    color: var(--color-orange-800);
-    background: rgb(255 243 231 / 62%);
-  }
-
-  .product-tab:hover :global(.site-icon),
-  .product-tab--active :global(.site-icon) {
-    filter: brightness(0) saturate(100%) invert(46%) sepia(89%) saturate(1554%) hue-rotate(352deg) brightness(97%) contrast(91%);
+  .products-catalog-callout__cta :global(.site-icon) {
+    filter: brightness(0) invert(1);
   }
 
   .products-grid {
@@ -127,6 +167,15 @@ const productCategories = [
   }
 
   @media (max-width: 63.99rem) {
+    .products-catalog-callout {
+      grid-template-columns: minmax(5rem, 7rem) minmax(0, 1fr);
+    }
+
+    .products-catalog-callout__cta {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+
     .products-grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -146,14 +195,16 @@ const productCategories = [
       font-size: clamp(2.05rem, 11vw, 3rem);
     }
 
-    .product-tabs {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .products-catalog-callout {
+      grid-template-columns: 1fr;
     }
 
-    .product-tab {
-      justify-content: center;
-      padding-inline: 0.75rem;
+    .products-catalog-callout__media {
+      min-height: 5.5rem;
+    }
+
+    .products-catalog-callout__cta {
+      width: 100%;
     }
 
     .products-grid {
