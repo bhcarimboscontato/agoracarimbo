@@ -4,17 +4,17 @@ export const homeHero = {
   eyebrow: "Carimbos em Belo Horizonte",
   title: "Carimbos personalizados em BH com pedido rápido pelo WhatsApp",
   subtitle:
-    "Envie os dados do seu carimbo, aprove o layout e escolha retirada no local ou entrega por motoboy em Belo Horizonte e região.",
-  support: "Atendimento local, produção rápida e suporte direto pelo WhatsApp.",
+    "Pedido online pelo WhatsApp para clientes de BH e região, com retirada em Venda Nova ou entrega por motoboy conforme disponibilidade.",
+  support: "Atendimento online, produção rápida e suporte direto pelo WhatsApp.",
   primaryCta: {
     label: "Pedir orçamento pelo WhatsApp",
     message: "general" satisfies WhatsAppMessageKey
   },
   secondaryCta: {
     label: "Ver modelos de carimbo",
-    href: "#produtos"
+    href: "/nossos-produtos/"
   },
-  bullets: ["Pedido pelo WhatsApp", "Aprovação da arte", "Retirada ou entrega em BH", "Nota fiscal"]
+  bullets: ["Pedido online pelo WhatsApp", "Aprovação da arte", "BH e região", "Nota fiscal"]
 } as const;
 
 export const benefits = [
@@ -30,7 +30,7 @@ export const benefits = [
   },
   {
     title: "Entrega por motoboy",
-    description: "Retirada no local ou entrega em Belo Horizonte e região.",
+    description: "Retirada em Venda Nova ou entrega em BH e região, conforme disponibilidade.",
     icon: "icon-delivery"
   },
   {
@@ -46,8 +46,8 @@ export const benefits = [
 ] as const;
 
 export const paymentMethods = {
-  title: "Pix, crédito ou débito",
-  description: "Formas de pagamento práticas para pedidos comerciais e profissionais.",
+  title: "Pix ou link de pagamento no cartão",
+  description: "Pagamento por Pix ou link de pagamento no cartão, conforme orientação do atendimento.",
   icon: "icon-card",
   note: "Transações seguras e protegidas.",
   logos: [
@@ -197,7 +197,7 @@ export const processSteps = [
   {
     icon: "icon-delivery",
     title: "Retire ou receba por motoboy",
-    description: "Escolha retirada na loja em Venda Nova ou consulte entrega em BH e região."
+    description: "Escolha retirada em Venda Nova ou consulte entrega por motoboy em BH e região."
   }
 ] as const;
 
@@ -219,16 +219,18 @@ export const processAssurances = [
   },
   {
     icon: "icon-map-pin",
-    title: "Retirada em Venda Nova",
-    description: "Ou entrega em BH e região."
+    title: "Atendimento para BH e região",
+    description: "Retirada em Venda Nova ou entrega sob consulta."
   }
 ] as const;
 
 export const trustItems = [
-  "Atendimento local em Belo Horizonte",
+  "Pedido online pelo WhatsApp",
+  "Atendimento para BH e região",
+  "Entrega por motoboy sob consulta",
   "Aprovação da arte antes da produção",
   "Emite nota fiscal",
-  "Aceita Pix, crédito e débito",
+  "Aceita Pix ou link de pagamento no cartão",
   "Trabalha com marcas como Trodat, Colop, Nykon ou similares",
   "Mais de 40 anos de mercado"
 ] as const;
@@ -247,7 +249,7 @@ export const homeFaqs = [
   {
     question: "Vocês entregam em Belo Horizonte?",
     answer:
-      "Sim. A BH Carimbos trabalha com retirada no local e entrega por motoboy em Belo Horizonte e região, mediante consulta."
+      "Sim. A BH Carimbos atende online pelo WhatsApp clientes de BH e região, com retirada em Venda Nova ou entrega por motoboy conforme disponibilidade."
   },
   {
     question: "Posso aprovar a arte antes da produção?",
@@ -259,7 +261,7 @@ export const homeFaqs = [
   },
   {
     question: "Quais formas de pagamento?",
-    answer: "As formas informadas são Pix, cartão de crédito e cartão de débito."
+    answer: "As formas informadas são Pix ou link de pagamento no cartão."
   },
   {
     question: "Vocês emitem nota fiscal?",

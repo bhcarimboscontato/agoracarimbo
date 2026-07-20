@@ -5,6 +5,7 @@ import CommercialPage from "@components/commercial/CommercialPage.astro";
 import FaqPage from "@components/internal/FaqPage.astro";
 import InternalPage from "@components/internal/InternalPage.astro";
 import LegalPage from "@components/legal/LegalPage.astro";
+import ProductCatalogPage from "@components/products/ProductCatalogPage.astro";
 import ButtonLink from "@components/ui/ButtonLink.astro";
 import {
   getCommercialHubPage,
@@ -60,6 +61,8 @@ const structuredData = commercialHubPage
       <CommercialPage page={commercialPage} />
     ) : faqPage ? (
       <FaqPage page={faqPage} />
+    ) : path === "/nossos-produtos/" ? (
+      <ProductCatalogPage />
     ) : internalPage ? (
       <InternalPage page={internalPage} />
     ) : (

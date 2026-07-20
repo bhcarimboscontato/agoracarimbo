@@ -41,6 +41,61 @@ const schemas = [organizationSchema, webSiteSchema, localBusinessSchema, webPage
       canonicalPath={canonicalPath}
       noindex={noindex}
     />
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11538800483"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "AW-11538800483");
+</script>
+
+<script is:inline>
+  window.gtag_report_conversion = function (url) {
+    const callback = function () {
+      if (typeof url !== "undefined") {
+        window.location = url;
+      }
+    };
+
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "conversion", {
+        send_to: "AW-11538800483/GKFtCMKMvb4aEOO-kP4q",
+        value: 2.0,
+        currency: "BRL",
+        event_callback: callback
+      });
+
+      setTimeout(callback, 800);
+      return false;
+    }
+
+    callback();
+    return false;
+  };
+
+  document.addEventListener("click", function (event) {
+    const target = event.target;
+    const link = target instanceof Element ? target.closest("a") : null;
+
+    if (!link) return;
+
+    const href = link.getAttribute("href") || "";
+    const isWhatsAppLink =
+      href.includes("wa.me/") ||
+      href.includes("api.whatsapp.com") ||
+      href.includes("web.whatsapp.com") ||
+      link.dataset.conversion === "whatsapp";
+
+    if (!isWhatsAppLink) return;
+
+    event.preventDefault();
+    window.gtag_report_conversion(link.href);
+  });
+</script>
+
     <link rel="icon" href={brandAssets.favicon} sizes="any" />
     <link rel="apple-touch-icon" href={brandAssets.appleTouchIcon} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

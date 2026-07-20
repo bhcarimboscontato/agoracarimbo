@@ -1,0 +1,1063 @@
+---
+import Icon from "@components/ui/Icon.astro";
+import { productCatalogItems, productCatalogSections, productFilters } from "@data/productCatalog";
+import { createWhatsAppUrl } from "@lib/whatsapp";
+
+const productById = new Map(productCatalogItems.map((product) => [product.id, product]));
+const heroWhatsappUrl = createWhatsAppUrl("Olá! Vim pelo site e quero ajuda para escolher um modelo de carimbo.");
+const medicalWhatsappUrl = createWhatsAppUrl("Olá! Vim pelo site e quero informações sobre carimbo médico pelo fluxo do CRM-MG.");
+const catalogJson = JSON.stringify(
+  productCatalogItems.map((product) => ({
+    ...product,
+    modal: {
+      ...product.modal,
+      whatsappUrl: createWhatsAppUrl(product.modal.whatsappMessage)
+    }
+  }))
+);
+---
+
+<article class="catalog-page">
+  <section class="catalog-hero">
+    <div class="container catalog-hero__grid">
+      <div class="catalog-hero__content">
+        <p class="catalog-eyebrow">Produtos e modelos</p>
+        <h1>Modelos de carimbos para pedir pelo WhatsApp</h1>
+        <p>
+          Explore opções automáticas, madeira, CNPJ, profissionais, médicos e embalagens. O pedido
+          é online pelo WhatsApp para BH e região, com retirada em Venda Nova/Maria Helena ou
+          entrega por motoboy conforme disponibilidade.
+        </p>
+        <div class="catalog-actions">
+          <a class="catalog-button catalog-button--primary" href={heroWhatsappUrl} target="_blank" rel="noopener noreferrer">
+            <Icon name="icon-whatsapp" size="sm" />
+            <span>Pedir orientação pelo WhatsApp</span>
+          </a>
+          <a class="catalog-button catalog-button--secondary" href="#modelos">Ver modelos</a>
+        </div>
+      </div>
+
+      <div class="catalog-hero__visual" aria-hidden="true">
+        <img src="/assets/carimbos-produtos/Nykon-302.jpeg" alt="" width="620" height="460" loading="eager" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <section class="catalog-crm">
+    <div class="container catalog-crm__inner">
+      <div class="catalog-crm__logo" aria-label="CRM-MG">
+        <img src="/assets/logo/crm-logo.png" alt="CRM-MG" width="220" height="86" loading="lazy" decoding="async" />
+      </div>
+      <div>
+        <p class="catalog-eyebrow">Diferencial para médicos</p>
+        <h2>Credenciada no Controle Eletrônico de Carimbo do CRM-MG</h2>
+        <p>
+          A BH Carimbos oferece atendimento preparado para médicos que solicitam carimbo
+          profissional pelo fluxo do CRM-MG. O pedido pode ser orientado pelo WhatsApp, com produção
+          conforme os dados informados e disponibilidade.
+        </p>
+        <ul class="catalog-crm__bullets">
+          <li>Fluxo conhecido por médicos regularmente inscritos</li>
+          <li>Orientação pelo WhatsApp</li>
+          <li>Modelos profissionais para rotina de consultórios e clínicas</li>
+          <li>Retirada em Venda Nova/Maria Helena ou entrega sob consulta</li>
+        </ul>
+      </div>
+      <div class="catalog-crm__actions">
+        <a href="/carimbo-medico-bh/">Ver carimbo médico</a>
+        <a href={medicalWhatsappUrl} target="_blank" rel="noopener noreferrer">Sou médico e quero orientação</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="modelos" class="catalog-search" aria-labelledby="catalog-search-title">
+    <div class="container">
+      <div class="catalog-search__head">
+        <p class="catalog-eyebrow">Busca e filtros</p>
+        <h2 id="catalog-search-title">Encontre por modelo, uso ou categoria</h2>
+      </div>
+
+      <div class="catalog-toolbar" data-catalog-toolbar>
+        <label class="catalog-searchbox">
+          <span>Buscar modelo</span>
+          <input data-catalog-search type="search" placeholder="Ex.: CNPJ, médico, CRM, embalagem, assinatura" autocomplete="off" />
+        </label>
+
+        <div class="catalog-filters" aria-label="Filtrar produtos">
+          {
+            productFilters.map((filter, index) => (
+              <button type="button" data-catalog-filter={filter.id} aria-pressed={index === 0 ? "true" : "false"}>
+                {filter.label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <p class="catalog-empty" data-catalog-empty hidden>
+        Nenhum modelo encontrado com esses termos. Tente buscar por CNPJ, médico, CRM, automático,
+        madeira, embalagem ou assinatura, ou <a href={heroWhatsappUrl} target="_blank" rel="noopener noreferrer">chame no WhatsApp</a>.
+      </p>
+    </div>
+  </section>
+
+  {
+    productCatalogSections.map((section) => (
+      <section class="catalog-section" aria-labelledby={`${section.id}-title`} data-catalog-section>
+        <div class="container catalog-section__inner">
+          <div class="catalog-section__head">
+            <div>
+              <p class="catalog-eyebrow">Categoria</p>
+              <h2 id={`${section.id}-title`}>{section.title}</h2>
+              <p>{section.description}</p>
+            </div>
+            <div class="catalog-carousel__controls">
+              <button type="button" data-carousel-prev aria-label={`Ver produtos anteriores em ${section.title}`}>‹</button>
+              <button type="button" data-carousel-next aria-label={`Ver próximos produtos em ${section.title}`}>›</button>
+            </div>
+          </div>
+
+          <div class="catalog-carousel" data-carousel>
+            {
+              section.productIds.map((productId) => {
+                const product = productById.get(productId);
+                if (!product) return null;
+
+                return (
+                  <article
+                    class="catalog-card"
+                    data-product-card
+                    data-product-id={product.id}
+                    data-categories={product.categoryIds.join(" ")}
+                    data-search={[product.title, product.model, product.category, product.summary, ...product.tags, ...product.searchTerms].join(" ").toLowerCase()}
+                  >
+                    <div class="catalog-card__image">
+                      <img src={product.image} alt={product.alt} width="420" height="320" loading="lazy" decoding="async" />
+                    </div>
+                    <div class="catalog-card__body">
+                      <p>{product.model}</p>
+                      <h3>{product.title}</h3>
+                      <span>{product.summary}</span>
+                      <div class="catalog-card__tags" aria-label={`Características de ${product.title}`}>
+                        {product.tags.map((tag) => <small>{tag}</small>)}
+                      </div>
+                      {
+                        product.variations && (
+                          <div class="catalog-swatches" aria-label={`Variações de ${product.title}`}>
+                            {product.variations.slice(0, 8).map((variation) => (
+                              <span title={variation.label} style={`--swatch:${variation.color ?? "#e5e7eb"}`}></span>
+                            ))}
+                          </div>
+                        )
+                      }
+                      <button type="button" data-open-product={product.id} aria-label={`Ver detalhes de ${product.title}`}>
+                        Ver detalhes
+                      </button>
+                    </div>
+                  </article>
+                );
+              })
+            }
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <div class="catalog-modal" data-product-modal hidden>
+    <div class="catalog-modal__overlay" data-modal-close></div>
+    <section class="catalog-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="product-modal-title" tabindex="-1">
+      <button class="catalog-modal__close" type="button" data-modal-close aria-label="Fechar detalhes">×</button>
+      <div class="catalog-modal__grid">
+        <div class="catalog-modal__media">
+          <img data-modal-image src="/assets/carimbos-produtos/Nykon-302.jpeg" alt="" width="620" height="460" loading="lazy" decoding="async" />
+          <div class="catalog-modal__thumbs" data-modal-thumbs></div>
+        </div>
+        <div class="catalog-modal__content">
+          <p class="catalog-eyebrow" data-modal-model></p>
+          <h2 id="product-modal-title" data-modal-title></h2>
+          <p data-modal-summary></p>
+          <div class="catalog-modal__tags" data-modal-tags></div>
+
+          <div class="catalog-modal__blocks" data-modal-blocks></div>
+
+          <a class="catalog-button catalog-button--primary catalog-modal__cta" data-modal-whatsapp href={heroWhatsappUrl} target="_blank" rel="noopener noreferrer">
+            <Icon name="icon-whatsapp" size="sm" />
+            <span>Chamar no WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</article>
+
+<script type="application/json" id="catalog-products-json" is:inline set:html={catalogJson}></script>
+
+<script>
+  // @ts-nocheck
+  const productsElement = document.getElementById("catalog-products-json");
+  const products = productsElement ? JSON.parse(productsElement.textContent || "[]") : [];
+  const productsById = new Map(products.map((product) => [product.id, product]));
+  const searchInput = document.querySelector("[data-catalog-search]");
+  const filterButtons = Array.from(document.querySelectorAll("[data-catalog-filter]"));
+  const cards = Array.from(document.querySelectorAll("[data-product-card]"));
+  const sections = Array.from(document.querySelectorAll("[data-catalog-section]"));
+  const emptyState = document.querySelector("[data-catalog-empty]");
+  const modal = document.querySelector("[data-product-modal]");
+  const dialog = modal?.querySelector(".catalog-modal__dialog");
+  const modalImage = modal?.querySelector("[data-modal-image]");
+  const modalThumbs = modal?.querySelector("[data-modal-thumbs]");
+  const modalModel = modal?.querySelector("[data-modal-model]");
+  const modalTitle = modal?.querySelector("[data-modal-title]");
+  const modalSummary = modal?.querySelector("[data-modal-summary]");
+  const modalTags = modal?.querySelector("[data-modal-tags]");
+  const modalBlocks = modal?.querySelector("[data-modal-blocks]");
+  const modalWhatsapp = modal?.querySelector("[data-modal-whatsapp]");
+  let activeFilter = "todos";
+  let lastFocused = null;
+
+  function normalize(value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  }
+
+  function applyFilters() {
+    const query = normalize(searchInput?.value || "");
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const categoryMatch = activeFilter === "todos" || card.dataset.categories?.split(" ").includes(activeFilter);
+      const searchMatch = !query || normalize(card.dataset.search).includes(query);
+      const isVisible = Boolean(categoryMatch && searchMatch);
+      card.hidden = !isVisible;
+      if (isVisible) visibleCount += 1;
+    });
+
+    sections.forEach((section) => {
+      const hasVisibleCard = Array.from(section.querySelectorAll("[data-product-card]")).some((card) => !card.hidden);
+      section.hidden = !hasVisibleCard;
+    });
+
+    if (emptyState) emptyState.hidden = visibleCount > 0;
+  }
+
+  searchInput?.addEventListener("input", applyFilters);
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeFilter = button.dataset.catalogFilter || "todos";
+      filterButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+    const section = carousel.closest("[data-catalog-section]");
+    section?.querySelector("[data-carousel-prev]")?.addEventListener("click", () => {
+      carousel.scrollBy({ left: -carousel.clientWidth, behavior: "smooth" });
+    });
+    section?.querySelector("[data-carousel-next]")?.addEventListener("click", () => {
+      carousel.scrollBy({ left: carousel.clientWidth, behavior: "smooth" });
+    });
+  });
+
+  function createList(title, items) {
+    if (!items?.length) return "";
+    return `<section class="catalog-modal__block"><h3>${title}</h3><ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul></section>`;
+  }
+
+  function setModalImage(src, alt) {
+    if (!modalImage) return;
+    modalImage.setAttribute("src", src);
+    modalImage.setAttribute("alt", alt);
+  }
+
+  function openProduct(productId, trigger) {
+    const product = productsById.get(productId);
+    if (!product || !modal) return;
+
+    lastFocused = trigger;
+    setModalImage(product.image, product.alt);
+    if (modalModel) modalModel.textContent = product.model;
+    if (modalTitle) modalTitle.textContent = product.modal.title;
+    if (modalSummary) modalSummary.textContent = product.modal.summary;
+    if (modalTags) modalTags.innerHTML = product.tags.map((tag) => `<span>${tag}</span>`).join("");
+    if (modalWhatsapp) {
+      modalWhatsapp.setAttribute("href", product.modal.whatsappUrl);
+    }
+
+    const gallery = [{ label: product.title, image: product.image }, ...(product.variations || [])];
+    if (modalThumbs) {
+      modalThumbs.innerHTML = gallery
+        .map(
+          (item, index) => `
+            <button type="button" aria-label="Ver imagem ${item.label}" data-modal-thumb="${item.image}" data-modal-thumb-alt="${item.label}" aria-pressed="${index === 0}">
+              <img src="${item.image}" alt="" width="72" height="56" loading="lazy" decoding="async" />
+            </button>
+          `
+        )
+        .join("");
+      modalThumbs.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          setModalImage(button.dataset.modalThumb, button.dataset.modalThumbAlt || product.alt);
+          modalThumbs.querySelectorAll("button").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        });
+      });
+    }
+
+    if (modalBlocks) {
+      modalBlocks.innerHTML = [
+        createList("Benefícios", product.modal.benefits),
+        createList("Indicado para", product.modal.indicatedFor),
+        createList("Aplicações", product.modal.applications),
+        createList("O que pode personalizar", product.modal.personalization),
+        createList("Como enviar os dados", product.modal.dataInstructions),
+        createList("Como funciona a produção", product.modal.production),
+        `<section class="catalog-modal__block"><h3>Prazo</h3><p>${product.modal.prazo}</p></section>`,
+        `<section class="catalog-modal__block"><h3>Material e estrutura</h3><p>${product.modal.structure}</p></section>`,
+        `<section class="catalog-modal__block"><h3>Qualidade da impressão</h3><p>${product.modal.printQuality}</p></section>`,
+        `<section class="catalog-modal__block"><h3>Marca/modelo</h3><p>${product.modal.modelInfo}</p></section>`,
+        createList("Diferenciais", product.modal.differentials)
+      ].join("");
+    }
+
+    modal.hidden = false;
+    document.body.classList.add("catalog-modal-open");
+    dialog?.focus();
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.hidden = true;
+    document.body.classList.remove("catalog-modal-open");
+    lastFocused?.focus?.();
+  }
+
+  document.querySelectorAll("[data-open-product]").forEach((button) => {
+    button.addEventListener("click", () => openProduct(button.dataset.openProduct, button));
+  });
+
+  modal?.querySelectorAll("[data-modal-close]").forEach((button) => {
+    button.addEventListener("click", closeModal);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal && !modal.hidden) closeModal();
+  });
+</script>
+
+<style>
+  .catalog-page {
+    color: var(--color-black);
+    background: var(--color-white);
+  }
+
+  .catalog-hero {
+    overflow: hidden;
+    border-bottom: 4px solid var(--color-orange-600);
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+    background:
+      linear-gradient(90deg, rgb(17 17 17 / 3%) 1px, transparent 1px) 0 0 / 52px 52px,
+      linear-gradient(180deg, var(--color-white), var(--color-gray-50));
+  }
+
+  .catalog-hero__grid,
+  .catalog-crm__inner {
+    display: grid;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .catalog-hero__grid {
+    grid-template-columns: minmax(0, 1.04fr) minmax(18rem, 0.76fr);
+  }
+
+  .catalog-crm__inner {
+    grid-template-columns: minmax(10rem, 0.26fr) minmax(0, 1fr) minmax(15rem, 0.34fr);
+  }
+
+  .catalog-hero__content {
+    max-width: 54rem;
+  }
+
+  .catalog-eyebrow {
+    margin: 0 0 var(--space-3);
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .catalog-hero h1,
+  .catalog-crm h2,
+  .catalog-search h2,
+  .catalog-section h2,
+  .catalog-modal h2 {
+    margin: 0;
+    letter-spacing: 0;
+    line-height: 1.04;
+  }
+
+  .catalog-hero h1 {
+    max-width: 13ch;
+    font-size: clamp(2.45rem, 5.6vw, 5rem);
+  }
+
+  .catalog-hero p {
+    max-width: 50rem;
+    margin: var(--space-5) 0 var(--space-6);
+    color: var(--color-gray-700);
+    font-size: clamp(1rem, 1.2vw, 1.18rem);
+    line-height: 1.65;
+  }
+
+  .catalog-actions,
+  .catalog-crm__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .catalog-button,
+  .catalog-crm__actions a {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    border-radius: var(--radius-sm);
+    padding: 0.82rem 1rem;
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.15;
+    text-decoration: none;
+    transition:
+      transform 140ms ease,
+      border-color 140ms ease,
+      background-color 140ms ease;
+  }
+
+  .catalog-button--primary,
+  .catalog-crm__actions a:last-child {
+    border: 1px solid var(--color-orange-600);
+    color: var(--color-white);
+    background: var(--color-orange-600);
+  }
+
+  .catalog-button--secondary,
+  .catalog-crm__actions a:first-child {
+    border: 1px solid rgb(17 17 17 / 14%);
+    color: var(--color-black);
+    background: var(--color-white);
+  }
+
+  .catalog-hero__visual {
+    display: grid;
+    min-height: 22rem;
+    place-items: center;
+  }
+
+  .catalog-hero__visual img {
+    width: min(100%, 34rem);
+    height: auto;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  .catalog-crm {
+    min-height: clamp(14rem, 30vh, 20rem);
+    display: grid;
+    align-items: center;
+    padding-block: clamp(1.5rem, 3.5vw, 2.5rem);
+    background: var(--color-black);
+    color: var(--color-white);
+  }
+
+  .catalog-crm__logo {
+    display: grid;
+    min-height: 8rem;
+    place-items: center;
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    background: rgb(255 255 255 / 95%);
+  }
+
+  .catalog-crm__logo img {
+    width: min(100%, 13rem);
+    height: auto;
+    object-fit: contain;
+  }
+
+  .catalog-crm h2 {
+    max-width: 24ch;
+    color: var(--color-white);
+    font-size: clamp(1.75rem, 3vw, 2.8rem);
+  }
+
+  .catalog-crm p:not(.catalog-eyebrow) {
+    max-width: 54rem;
+    color: rgb(255 255 255 / 82%);
+    line-height: 1.65;
+  }
+
+  .catalog-crm__actions {
+    align-content: center;
+    justify-content: flex-start;
+  }
+
+  .catalog-crm__bullets {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .catalog-crm__bullets li {
+    display: flex;
+    gap: var(--space-2);
+    color: rgb(255 255 255 / 84%);
+    font-size: var(--text-sm);
+    line-height: 1.35;
+  }
+
+  .catalog-crm__bullets li::before {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    flex: 0 0 auto;
+    margin-top: 0.42rem;
+    border-radius: 999px;
+    background: var(--color-orange-600);
+  }
+
+  .catalog-search,
+  .catalog-section {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .catalog-search__head,
+  .catalog-section__head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .catalog-search h2,
+  .catalog-section h2 {
+    max-width: 18ch;
+    font-size: clamp(1.8rem, 3.2vw, 3rem);
+  }
+
+  .catalog-section__head p:not(.catalog-eyebrow) {
+    max-width: 46rem;
+    color: var(--color-gray-600);
+    line-height: 1.6;
+  }
+
+  .catalog-toolbar {
+    display: grid;
+    gap: var(--space-5);
+    border: 1px solid rgb(17 17 17 / 10%);
+    border-radius: var(--radius-md);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+    background:
+      linear-gradient(90deg, var(--color-white), rgb(255 247 237 / 56%)),
+      var(--color-gray-50);
+  }
+
+  .catalog-searchbox {
+    display: grid;
+    gap: var(--space-2);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .catalog-searchbox span {
+    font-size: var(--text-sm);
+  }
+
+  .catalog-searchbox input {
+    min-height: 54px;
+    border: 1px solid rgb(17 17 17 / 16%);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1rem;
+    color: var(--color-black);
+    font: inherit;
+    background: var(--color-white);
+  }
+
+  .catalog-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .catalog-filters button,
+  .catalog-carousel__controls button {
+    min-height: 44px;
+    border: 1px solid rgb(17 17 17 / 14%);
+    border-radius: var(--radius-sm);
+    color: var(--color-black);
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    background: var(--color-white);
+    cursor: pointer;
+  }
+
+  .catalog-filters button {
+    padding: 0.68rem 0.9rem;
+  }
+
+  .catalog-filters button[data-catalog-filter="medicos"] {
+    border-color: rgb(249 115 22 / 46%);
+    color: var(--color-orange-800);
+    background: rgb(255 247 237 / 78%);
+  }
+
+  .catalog-filters button[aria-pressed="true"] {
+    border-color: var(--color-orange-600);
+    color: var(--color-white);
+    background: var(--color-orange-600);
+  }
+
+  .catalog-empty {
+    margin: var(--space-5) 0 0;
+    color: var(--color-gray-700);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .catalog-empty a {
+    color: var(--color-orange-700);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+
+  .catalog-section:nth-of-type(odd) {
+    background: var(--color-gray-50);
+  }
+
+  .catalog-carousel__controls {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .catalog-carousel__controls button {
+    width: 46px;
+    padding: 0;
+    font-size: 1.65rem;
+    line-height: 1;
+  }
+
+  .catalog-carousel {
+    display: grid;
+    grid-auto-columns: calc((100% - 2rem) / 3);
+    grid-auto-flow: column;
+    gap: clamp(1rem, 2vw, 1.35rem);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: 0;
+    scroll-snap-type: inline mandatory;
+    scrollbar-width: thin;
+    padding-block: var(--space-1) var(--space-4);
+  }
+
+  .catalog-card {
+    display: grid;
+    grid-template-rows: minmax(19rem, auto) 1fr;
+    min-height: 39rem;
+    border: 1px solid rgb(17 17 17 / 8%);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    scroll-snap-align: start;
+    background:
+      linear-gradient(180deg, var(--color-white), rgb(250 250 249 / 72%)),
+      var(--color-white);
+    box-shadow: 0 16px 38px rgb(17 17 17 / 5%);
+    transition:
+      border-color 160ms ease,
+      transform 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .catalog-card[hidden],
+  .catalog-section[hidden] {
+    display: none;
+  }
+
+  .catalog-card__image {
+    display: grid;
+    min-height: 20rem;
+    place-items: center;
+    padding: clamp(1.25rem, 3vw, 2.35rem);
+    background: #f4f4f5;
+  }
+
+  .catalog-card__image img {
+    width: 100%;
+    max-height: 18rem;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  .catalog-card__body {
+    display: grid;
+    align-content: start;
+    gap: 0.85rem;
+    padding: clamp(1rem, 2vw, 1.35rem);
+  }
+
+  .catalog-card__body > p {
+    margin: 0;
+    color: var(--color-orange-700);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .catalog-card h3 {
+    min-height: 2.45em;
+    margin: 0;
+    color: var(--color-black);
+    font-size: clamp(1.16rem, 1.35vw, 1.36rem);
+    line-height: 1.28;
+  }
+
+  .catalog-card__body > span {
+    min-height: 3.6em;
+    color: var(--color-gray-600);
+    line-height: 1.45;
+  }
+
+  .catalog-card__tags,
+  .catalog-modal__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .catalog-card__tags small,
+  .catalog-modal__tags span {
+    border: 1px solid rgb(249 115 22 / 22%);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.55rem;
+    color: var(--color-orange-700);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    background: rgb(255 247 237 / 70%);
+  }
+
+  .catalog-swatches {
+    display: flex;
+    gap: 0.45rem;
+    min-height: 1.08rem;
+  }
+
+  .catalog-swatches span {
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid rgb(17 17 17 / 18%);
+    border-radius: 999px;
+    background: var(--swatch);
+  }
+
+  .catalog-card button[data-open-product] {
+    justify-self: start;
+    border: 0;
+    border-bottom: 2px solid var(--color-orange-600);
+    margin-top: var(--space-1);
+    padding: 0.15rem 0 0.22rem;
+    color: var(--color-black);
+    font: inherit;
+    font-weight: var(--font-weight-bold);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  @media (hover: hover) {
+    .catalog-card:hover {
+      border-color: rgb(249 115 22 / 28%);
+      box-shadow: 0 18px 48px rgb(17 17 17 / 8%);
+      transform: translateY(-2px);
+    }
+  }
+
+  .catalog-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+  }
+
+  .catalog-modal[hidden] {
+    display: none;
+  }
+
+  .catalog-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 58%);
+  }
+
+  .catalog-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 76rem);
+    max-height: min(88svh, 56rem);
+    overflow: auto;
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 28%);
+  }
+
+  .catalog-modal__close {
+    position: sticky;
+    top: var(--space-3);
+    left: calc(100% - 3.5rem);
+    z-index: 2;
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid rgb(17 17 17 / 12%);
+    border-radius: var(--radius-sm);
+    color: var(--color-black);
+    font: inherit;
+    font-size: 1.5rem;
+    background: var(--color-white);
+    cursor: pointer;
+  }
+
+  .catalog-modal__grid {
+    display: grid;
+    grid-template-columns: minmax(20rem, 0.82fr) minmax(0, 1fr);
+    gap: clamp(1rem, 3vw, 2rem);
+    padding: 0 clamp(1rem, 3vw, 2rem) clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .catalog-modal__media {
+    position: sticky;
+    top: 4.25rem;
+    align-self: start;
+  }
+
+  .catalog-modal__media > img {
+    width: 100%;
+    max-height: 27rem;
+    border-radius: var(--radius-md);
+    padding: clamp(1rem, 3vw, 2rem);
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    background: #f4f4f5;
+  }
+
+  .catalog-modal__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .catalog-modal__thumbs button {
+    width: 4.5rem;
+    height: 3.5rem;
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 0.2rem;
+    background: var(--color-gray-50);
+    cursor: pointer;
+  }
+
+  .catalog-modal__thumbs button[aria-pressed="true"] {
+    border-color: var(--color-orange-600);
+  }
+
+  .catalog-modal__thumbs img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  .catalog-modal__content {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+  }
+
+  .catalog-modal h2 {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+  }
+
+  .catalog-modal__content > p:not(.catalog-eyebrow) {
+    color: var(--color-gray-700);
+    line-height: 1.6;
+  }
+
+  .catalog-modal__blocks {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .catalog-modal__block {
+    border: 1px solid rgb(17 17 17 / 9%);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
+    background: var(--color-gray-50);
+  }
+
+  .catalog-modal__blocks h3 {
+    margin: 0 0 var(--space-2);
+    color: var(--color-black);
+    font-size: 1.02rem;
+    line-height: 1.18;
+  }
+
+  .catalog-modal__blocks ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--color-gray-700);
+    line-height: 1.5;
+  }
+
+  .catalog-modal__blocks p {
+    margin: 0;
+    color: var(--color-gray-700);
+    line-height: 1.55;
+  }
+
+  .catalog-modal__cta {
+    position: sticky;
+    bottom: var(--space-3);
+    justify-self: stretch;
+    box-shadow: 0 16px 34px rgb(249 115 22 / 22%);
+  }
+
+  :global(body.catalog-modal-open) {
+    overflow: hidden;
+  }
+
+  @media (hover: hover) {
+    .catalog-button:hover,
+    .catalog-crm__actions a:hover,
+    .catalog-filters button:hover,
+    .catalog-carousel__controls button:hover,
+    .catalog-card button[data-open-product]:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  @media (max-width: 62rem) {
+    .catalog-hero__grid,
+    .catalog-modal__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog-crm__inner {
+      grid-template-columns: minmax(8rem, 0.32fr) minmax(0, 1fr);
+    }
+
+    .catalog-crm__actions {
+      grid-column: 1 / -1;
+    }
+
+    .catalog-carousel {
+      grid-auto-columns: calc((100% - 1rem) / 2);
+    }
+
+    .catalog-modal__blocks {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog-modal__media {
+      position: static;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .catalog-hero__visual {
+      min-height: auto;
+    }
+
+    .catalog-crm {
+      min-height: auto;
+    }
+
+    .catalog-actions,
+    .catalog-crm__actions,
+    .catalog-search__head,
+    .catalog-section__head {
+      display: grid;
+      align-items: start;
+    }
+
+    .catalog-crm__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog-crm__logo {
+      min-height: 6.25rem;
+    }
+
+    .catalog-crm__bullets {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog-button,
+    .catalog-crm__actions a {
+      width: 100%;
+    }
+
+    .catalog-carousel__controls {
+      justify-content: end;
+    }
+
+    .catalog-carousel {
+      grid-auto-columns: min(88vw, 24rem);
+    }
+
+    .catalog-card {
+      min-height: 36rem;
+    }
+
+    .catalog-card__image {
+      min-height: 17rem;
+    }
+
+    .catalog-modal {
+      align-items: end;
+      padding: 0;
+    }
+
+    .catalog-modal__dialog {
+      width: 100%;
+      max-height: 92svh;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+
+    .catalog-modal__close {
+      top: var(--space-2);
+    }
+
+    .catalog-modal__grid {
+      padding-inline: var(--space-4);
+    }
+
+    .catalog-modal__cta {
+      width: 100%;
+    }
+  }
+</style>

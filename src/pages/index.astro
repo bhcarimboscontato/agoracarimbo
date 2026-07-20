@@ -3,7 +3,9 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import { getSeo } from "@data/seo";
 import { homeFaqs } from "@data/home";
 import { getFaqPageSchema } from "@lib/seo";
+import QuickProductShowcase from "@components/home/QuickProductShowcase.astro";
 import HomeHero from "@components/home/HomeHero.astro";
+import CrmHighlight from "@components/home/CrmHighlight.astro";
 import BenefitsSection from "@components/home/BenefitsSection.astro";
 import ProductsSection from "@components/home/ProductsSection.astro";
 import ProcessSection from "@components/home/ProcessSection.astro";
@@ -18,7 +20,9 @@ const faqSchema = getFaqPageSchema(homeFaqs);
 ---
 
 <BaseLayout {...seo} structuredData={[faqSchema]}>
+  <QuickProductShowcase />
   <HomeHero />
+  <CrmHighlight />
   <BenefitsSection />
   <ProductsSection />
   <ProcessSection />
