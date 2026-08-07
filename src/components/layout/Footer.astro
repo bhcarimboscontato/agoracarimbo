@@ -23,7 +23,7 @@ const footerServiceLinks = [
   { label: "Perguntas frequentes", href: "/perguntas-frequentes/" }
 ];
 
-const developerWhatsAppNumber = "5531999656778";
+const developerWhatsAppNumber = "5531985415964";
 const developerMessage = encodeURIComponent(
   "Olá, vim pelo site da Agora Carimbos e queria saber mais sobre o seu trabalho!"
 );
@@ -49,6 +49,23 @@ const developerWhatsAppUrl = `https://wa.me/${developerWhatsAppNumber}?text=${de
         Carimbos personalizados em Belo Horizonte com atendimento prático, produção local e pedido
         rápido pelo WhatsApp.
       </p>
+
+      <a
+        class="site-footer__security-seal"
+        href="https://postimg.cc/NLvdhyNg"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Site seguro"
+      >
+        <img
+          src="https://i.postimg.cc/NLvdhyNg/site-seguro-google-1.png"
+          alt="Site seguro"
+          width="180"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
     </section>
 
     <section class="site-footer__section site-footer__contact" aria-labelledby="footer-contact-title">
@@ -210,6 +227,22 @@ const developerWhatsAppUrl = `https://wa.me/${developerWhatsAppNumber}?text=${de
     color: rgb(255 255 255 / 76%);
     font-size: clamp(0.9rem, 0.95vw, 0.98rem);
     line-height: 1.5;
+  }
+
+  .site-footer__security-seal {
+    display: inline-flex;
+    width: min(100%, 11.25rem);
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+  }
+
+  .site-footer__security-seal img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
   }
 
   .site-footer__section {
