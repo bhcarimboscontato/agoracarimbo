@@ -54,6 +54,7 @@ import { regionOptions, stampTypeOptions } from "@lib/contactValidation";
 
 <script>
   import { submitContactForm, type ContactFormPayload } from "@lib/form";
+  import { describeVisitOrigin } from "@lib/tracking";
 
   const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
   const status = document.querySelector<HTMLElement>("[data-form-status]");
@@ -64,7 +65,7 @@ import { regionOptions, stampTypeOptions } from "@lib/contactValidation";
   let lastSubmissionKey = "";
 
   if (pageUrlInput) {
-    pageUrlInput.value = window.location.href;
+    pageUrlInput.value = describeVisitOrigin();
   }
 
   function formatWhatsapp(value: string): string {
@@ -116,7 +117,7 @@ import { regionOptions, stampTypeOptions } from "@lib/contactValidation";
       region: String(formData.get("region") ?? ""),
       consent: formData.get("consent") === "on",
       website: String(formData.get("website") ?? ""),
-      pageUrl: String(formData.get("pageUrl") ?? window.location.href)
+      pageUrl: String(formData.get("pageUrl") || describeVisitOrigin())
     };
 
     const submissionKey = JSON.stringify({
@@ -147,8 +148,9 @@ import { regionOptions, stampTypeOptions } from "@lib/contactValidation";
     if (result.ok) {
       form.reset();
       if (pageUrlInput) {
-        pageUrlInput.value = window.location.href;
+        pageUrlInput.value = describeVisitOrigin();
       }
+      document.dispatchEvent(new CustomEvent("bh:lead"));
     }
   });
 </script>

@@ -102,14 +102,14 @@ export const legalPages = [
     eyebrow: "Privacidade",
     title: "Política de Cookies",
     subtitle:
-      "Entenda como o site BH Carimbos utiliza cookies necessários, preferências e possíveis cookies de medição.",
+      "Entenda quais cookies o site BH Carimbos usa, para que servem e como mudar sua escolha.",
     seo: {
       title: "Política de Cookies",
       description:
-        "Entenda como o site BH Carimbos utiliza cookies necessários, preferências e possíveis cookies de medição para melhorar a navegação.",
+        "Entenda quais cookies o site BH Carimbos usa (necessários, Google Analytics e Google Ads), para que servem e como mudar sua escolha.",
       canonicalPath: "/cookies/"
     },
-    updatedAt: "Julho de 2026",
+    updatedAt: "Outubro de 2026",
     sections: [
       {
         title: "O que são cookies",
@@ -119,13 +119,11 @@ export const legalPages = [
       },
       {
         title: "Como usamos cookies",
-        paragraphs: ["O site pode utilizar cookies para:"],
+        paragraphs: ["O site usa cookies para:"],
         bullets: [
-          "funcionamento técnico do site;",
-          "segurança e prevenção de falhas;",
-          "lembrar preferências de consentimento;",
-          "melhorar a experiência de navegação;",
-          "medir desempenho e uso do site, somente quando houver ferramenta ativa e consentimento aplicável."
+          "funcionamento técnico do site e registro da sua escolha sobre cookies;",
+          "contar visitas e páginas vistas (Google Analytics), somente se você autorizar a categoria Estatística;",
+          "medir se quem chegou por um anúncio do Google pediu orçamento pelo WhatsApp (Google Ads), somente se você autorizar a categoria Marketing."
         ]
       },
       {
@@ -139,36 +137,52 @@ export const legalPages = [
           },
           {
             name: "Cookies de preferências",
-            purpose: "Podem lembrar escolhas do usuário, quando aplicável.",
+            purpose: "Hoje o site não usa cookies desta categoria.",
             type: "Opcional"
           },
           {
             name: "Cookies de estatística/medição",
             purpose:
-              "Podem ser usados para entender visitas e desempenho, somente se ferramentas de medição forem implementadas.",
+              "Google Analytics: mostra quantas pessoas visitaram o site e quais páginas foram vistas, de forma agregada.",
             type: "Opcional"
           },
           {
             name: "Cookies de marketing",
             purpose:
-              "O site não utiliza cookies de marketing no momento, salvo se futuramente forem integradas campanhas ou ferramentas que exijam consentimento específico.",
+              "Google Ads: mede o resultado dos anúncios, por exemplo, se um clique no anúncio terminou em contato pelo WhatsApp.",
             type: "Opcional"
           }
         ]
       },
       {
-        title: "Cookies atualmente previstos",
+        title: "Cookies usados",
         table: [
           {
             name: "bhcarimbos_cookie_consent",
             purpose: "Armazenar a escolha do visitante sobre cookies.",
-            type: "Necessário/preferência",
+            type: "Necessário",
             duration: "180 dias",
             owner: siteName
+          },
+          {
+            name: "_ga, _ga_*",
+            purpose: "Diferenciar visitantes e sessões para estatísticas de visitas (Google Analytics).",
+            type: "Estatística",
+            duration: "até 2 anos",
+            owner: "Google"
+          },
+          {
+            name: "_gcl_au",
+            purpose: "Relacionar cliques em anúncios do Google com pedidos de orçamento (Google Ads).",
+            type: "Marketing",
+            duration: "até 90 dias",
+            owner: "Google"
           }
         ],
         paragraphs: [
-          "No momento, este site não ativa cookies de estatística, marketing ou publicidade por conta própria. Caso ferramentas de medição ou publicidade sejam adicionadas futuramente, esta política será atualizada e o consentimento será solicitado quando necessário."
+          "Antes da sua escolha, e se você recusar, as ferramentas do Google funcionam no modo de consentimento negado: não gravam esses cookies e enviam apenas sinais sem identificação, conforme as regras do próprio Google.",
+          "As estatísticas de desempenho da hospedagem (Vercel) não usam cookies.",
+          "Os nomes e prazos dos cookies do Google são definidos pelo Google e podem mudar. Esta página será revisada quando isso acontecer."
         ]
       },
       {
@@ -201,7 +215,7 @@ export const legalPages = [
         "Saiba como a BH Carimbos trata dados pessoais enviados pelo site, WhatsApp, e-mail e formulário de contato, conforme a LGPD.",
       canonicalPath: "/politica-de-privacidade/"
     },
-    updatedAt: "Julho de 2026",
+    updatedAt: "Outubro de 2026",
     sections: [
       {
         title: "Quem somos",
@@ -254,7 +268,8 @@ export const legalPages = [
           "serviços de e-mail;",
           "serviços de entrega ou motoboy, quando houver entrega;",
           "sistemas fiscais ou contábeis, quando necessário;",
-          "fornecedores técnicos de hospedagem e infraestrutura."
+          "fornecedores técnicos de hospedagem e infraestrutura;",
+          "Google (Analytics e Ads), apenas dados de navegação e somente quando o visitante autoriza os cookies opcionais."
         ]
       },
       {

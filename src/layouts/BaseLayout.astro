@@ -6,6 +6,7 @@ import SpeedInsights from '@vercel/speed-insights/astro'
 import CookieConsent from "@components/ui/CookieConsent.astro";
 import SeoHead from "@components/seo/SeoHead.astro";
 import { brandAssets } from "@data/site";
+import { consentStorageKey, consentVersion } from "@data/consent";
 import {
   getLocalBusinessSchema,
   getOrganizationSchema,
@@ -28,6 +29,7 @@ const webSiteSchema = getWebSiteSchema();
 const webPageSchema = getWebPageSchema({ title, description, canonicalPath });
 const localBusinessSchema = getLocalBusinessSchema();
 const schemas = [organizationSchema, webSiteSchema, localBusinessSchema, webPageSchema, ...structuredData];
+const ga4MeasurementId = import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? "";
 ---
 
 <!doctype html>
@@ -42,58 +44,61 @@ const schemas = [organizationSchema, webSiteSchema, localBusinessSchema, webPage
       noindex={noindex}
     />
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11538800483"></script>
-<script is:inline>
+<!-- Google tag (gtag.js) com modo de consentimento: nada de cookie de anúncio/medição antes do aceite. -->
+<script is:inline define:vars={{ consentStorageKey, consentVersion, ga4MeasurementId }}>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
+  window.gtag = function gtag(){window.dataLayer.push(arguments);};
+  window.gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    wait_for_update: 500
+  });
 
-  gtag("config", "AW-11538800483");
-</script>
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(consentStorageKey) || "null");
+    if (stored && stored.version === consentVersion) {
+      const marketing = stored.marketing ? "granted" : "denied";
+      window.gtag("consent", "update", {
+        ad_storage: marketing,
+        ad_user_data: marketing,
+        ad_personalization: marketing,
+        analytics_storage: stored.analytics ? "granted" : "denied"
+      });
+    }
+  } catch (error) {
+    // Sem acesso ao localStorage: segue com tudo negado.
+  }
 
-<script is:inline>
+  window.gtag("js", new Date());
+  window.gtag("config", "AW-11538800483");
+  if (ga4MeasurementId) window.gtag("config", ga4MeasurementId);
+
   window.gtag_report_conversion = function (url) {
+    let done = false;
     const callback = function () {
+      if (done) return;
+      done = true;
       if (typeof url !== "undefined") {
         window.location = url;
       }
     };
 
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "conversion", {
-        send_to: "AW-11538800483/GKFtCMKMvb4aEOO-kP4q",
-        value: 2.0,
-        currency: "BRL",
-        event_callback: callback
-      });
+    window.gtag("event", "conversion", {
+      send_to: "AW-11538800483/GKFtCMKMvb4aEOO-kP4q",
+      value: 2.0,
+      currency: "BRL",
+      event_callback: callback
+    });
 
-      setTimeout(callback, 800);
-      return false;
-    }
-
-    callback();
+    setTimeout(callback, 800);
     return false;
   };
-
-  document.addEventListener("click", function (event) {
-    const target = event.target;
-    const link = target instanceof Element ? target.closest("a") : null;
-
-    if (!link) return;
-
-    const href = link.getAttribute("href") || "";
-    const isWhatsAppLink =
-      href.includes("wa.me/") ||
-      href.includes("api.whatsapp.com") ||
-      href.includes("web.whatsapp.com") ||
-      link.dataset.conversion === "whatsapp";
-
-    if (!isWhatsAppLink) return;
-
-    event.preventDefault();
-    window.gtag_report_conversion(link.href);
-  });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11538800483"></script>
+<script>
+  import "@lib/tracking";
 </script>
 
     <link rel="icon" href={brandAssets.favicon} sizes="any" />

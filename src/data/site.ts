@@ -26,6 +26,15 @@ export const businessInfo = {
     weekdays: "Segunda a sexta, das 07:00 às 18:00",
     saturday: "Sábado, das 07:00 às 12:00"
   },
+  /** Mesmo horário em formato de máquina (0 = domingo). Usado no aviso "Aberto agora" do topo. */
+  openingSchedule: {
+    1: [7, 18],
+    2: [7, 18],
+    3: [7, 18],
+    4: [7, 18],
+    5: [7, 18],
+    6: [7, 12]
+  } as Record<number, [number, number]>,
   paymentMethods: ["Cartão de crédito", "Cartão de débito", "Pix"],
   averageProductionTime: "24 horas",
   averageDeliveryTime: "48 horas",
