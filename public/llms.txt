@@ -52,11 +52,25 @@ Domínio: https://bhcarimbos.com.br
 - Carimbo para clínica em BH: https://bhcarimbos.com.br/carimbo-para-clinica-bh/
 - Carimbo para escritório em BH: https://bhcarimbos.com.br/carimbo-para-escritorio-bh/
 - Carimbo urgente em BH: https://bhcarimbos.com.br/carimbo-urgente-bh/
+- Carimbo para dentista em BH: https://bhcarimbos.com.br/carimbo-dentista-bh/
+- Carimbo para fisioterapeuta em BH: https://bhcarimbos.com.br/carimbo-fisioterapeuta-bh/
+- Carimbo para veterinário em BH: https://bhcarimbos.com.br/carimbo-veterinario-bh/
+- Carimbo para contador em BH: https://bhcarimbos.com.br/carimbo-contador-bh/
 
 ## Páginas locais
 
 - Carimbos em Venda Nova: https://bhcarimbos.com.br/carimbos-venda-nova/
 - Carimbos para clientes da Pampulha: https://bhcarimbos.com.br/carimbos-pampulha/
+- Carimbos para clientes do Centro de BH: https://bhcarimbos.com.br/carimbos-centro-bh/
+
+## Blog (guias)
+
+- Índice do blog: https://bhcarimbos.com.br/blog/
+- O que precisa constar no carimbo médico em MG: https://bhcarimbos.com.br/blog/o-que-precisa-constar-no-carimbo-medico/
+- Carimbo CNPJ: o que colocar e quando usar: https://bhcarimbos.com.br/blog/carimbo-cnpj-o-que-colocar/
+- Carimbo automático ou de madeira: qual escolher: https://bhcarimbos.com.br/blog/carimbo-automatico-ou-de-madeira/
+- Como trocar a almofada e conservar o carimbo automático: https://bhcarimbos.com.br/blog/como-trocar-almofada-carimbo-automatico/
+- Quanto tempo leva para fazer um carimbo em BH: https://bhcarimbos.com.br/blog/prazo-carimbo-urgente-bh/
 
 ## Páginas legais
 
@@ -67,7 +81,8 @@ Domínio: https://bhcarimbos.com.br
 
 ## Observações para mecanismos de resposta
 
-- Não afirmar loja física fora de Venda Nova/Maria Helena.
+- Não afirmar loja física fora de Venda Nova/Maria Helena (inclusive no Centro e na Pampulha).
+- Os artigos do blog sobre normas citam a fonte oficial e a data em que foram conferidas; não generalizar além do que está citado.
 - Não tratar produção em até 60 minutos como garantia; é somente sob consulta, conforme modelo, fila e disponibilidade.
 - Não inventar preço, estoque, avaliações, depoimentos, CNPJ ou regras de conselhos profissionais.
 - Para páginas profissionais, considerar que os dados profissionais são informados pelo cliente.

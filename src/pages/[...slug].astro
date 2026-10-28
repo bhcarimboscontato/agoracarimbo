@@ -6,7 +6,10 @@ import FaqPage from "@components/internal/FaqPage.astro";
 import InternalPage from "@components/internal/InternalPage.astro";
 import LegalPage from "@components/legal/LegalPage.astro";
 import ProductCatalogPage from "@components/products/ProductCatalogPage.astro";
+import BlogIndexPage from "@components/blog/BlogIndexPage.astro";
+import BlogPostPage from "@components/blog/BlogPostPage.astro";
 import ButtonLink from "@components/ui/ButtonLink.astro";
+import { getBlogIndexSchemas, getBlogPost, getBlogPostSchemas, isBlogIndex } from "@data/blogPosts";
 import {
   getCommercialHubPage,
   getCommercialHubPageSchemas,
@@ -42,18 +45,28 @@ const commercialHubPage = getCommercialHubPage(route.path);
 const commercialPage = getCommercialPage(route.path);
 const faqPage = getFaqPage(route.path);
 const internalPage = getInternalPage(route.path);
-const structuredData = commercialHubPage
-  ? getCommercialHubPageSchemas(commercialHubPage)
-  : commercialPage
-    ? getCommercialPageSchemas(commercialPage)
-    : faqPage
-      ? getFaqPageSchemas()
-      : [];
+const blogPost = getBlogPost(route.path);
+const blogIndexPage = isBlogIndex(route.path);
+const structuredData = blogPost
+  ? getBlogPostSchemas(blogPost)
+  : blogIndexPage
+    ? getBlogIndexSchemas()
+    : commercialHubPage
+      ? getCommercialHubPageSchemas(commercialHubPage)
+      : commercialPage
+        ? getCommercialPageSchemas(commercialPage)
+        : faqPage
+          ? getFaqPageSchemas()
+          : [];
 ---
 
 <BaseLayout {...seo} structuredData={structuredData}>
   {
-    legalPage ? (
+    blogPost ? (
+      <BlogPostPage post={blogPost} />
+    ) : blogIndexPage ? (
+      <BlogIndexPage />
+    ) : legalPage ? (
       <LegalPage page={legalPage} />
     ) : commercialHubPage ? (
       <CommercialHubPage page={commercialHubPage} />

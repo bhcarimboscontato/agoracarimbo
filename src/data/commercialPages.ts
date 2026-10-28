@@ -274,6 +274,34 @@ export const commercialHubPage = {
           tag: "Atendimento",
           description:
             "Para clínicas, recepções, setores internos e profissionais que atendem dentro da unidade."
+        },
+        {
+          label: "Carimbo para dentista",
+          href: "/carimbo-dentista-bh/",
+          tag: "Odontologia",
+          description:
+            "Para consultórios e clínicas odontológicas, com dados profissionais enviados e conferidos pelo dentista."
+        },
+        {
+          label: "Carimbo para fisioterapeuta",
+          href: "/carimbo-fisioterapeuta-bh/",
+          tag: "Reabilitação",
+          description:
+            "Modelos de mesa e compactos para clínica, estúdio e atendimento domiciliar."
+        },
+        {
+          label: "Carimbo para veterinário",
+          href: "/carimbo-veterinario-bh/",
+          tag: "Veterinária",
+          description:
+            "Para receitas, atestados e carteiras de vacinação em clínicas e atendimento a campo."
+        },
+        {
+          label: "Carimbo para contador",
+          href: "/carimbo-contador-bh/",
+          tag: "Contabilidade",
+          description:
+            "Identificação do contador, dados do escritório e carimbos de controle para protocolo."
         }
       ]
     },
@@ -295,6 +323,13 @@ export const commercialHubPage = {
           tag: "Entrega sob consulta",
           description:
             "Atendimento para clientes da Pampulha via WhatsApp, sem afirmar loja física fora de Venda Nova."
+        },
+        {
+          label: "Carimbos Centro de BH",
+          href: "/carimbos-centro-bh/",
+          tag: "Entrega sob consulta",
+          description:
+            "Pedido pelo WhatsApp para escritórios, clínicas e comércios do Centro e do Hipercentro."
         },
         {
           label: "Carimbo urgente",
@@ -566,7 +601,9 @@ export const commercialPages = [
       { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
       { label: "Como pedir", href: "/como-pedir/" },
       { label: "Prazos e entrega", href: "/prazos-e-entrega/" },
-      { label: "Ver perguntas frequentes", href: "/perguntas-frequentes/" }
+      { label: "Ver perguntas frequentes", href: "/perguntas-frequentes/" },
+      { label: "Carimbo CNPJ: o que colocar e quando usar", href: "/blog/carimbo-cnpj-o-que-colocar/" },
+      { label: "Carimbo para contador em BH", href: "/carimbo-contador-bh/" }
     ],
     faq: [
       {
@@ -640,7 +677,8 @@ export const commercialPages = [
       { label: "Como pedir", href: "/como-pedir/" },
       { label: "Contato", href: "/contato/" },
       { label: "Carimbo em BH", href: "/carimbo-em-bh/" },
-      { label: "Consultar dúvidas sobre prazos e entrega", href: "/perguntas-frequentes/" }
+      { label: "Consultar dúvidas sobre prazos e entrega", href: "/perguntas-frequentes/" },
+      { label: "Quanto tempo leva para fazer um carimbo", href: "/blog/prazo-carimbo-urgente-bh/" }
     ],
     faq: [
       {
@@ -707,7 +745,9 @@ export const commercialPages = [
       { label: "Carimbo personalizado em BH", href: "/carimbo-personalizado-bh/" },
       { label: "Carimbo CNPJ em BH", href: "/carimbo-cnpj-bh/" },
       { label: "Nossos produtos", href: "/nossos-produtos/" },
-      { label: "Como pedir", href: "/como-pedir/" }
+      { label: "Como pedir", href: "/como-pedir/" },
+      { label: "Automático ou de madeira: qual escolher", href: "/blog/carimbo-automatico-ou-de-madeira/" },
+      { label: "Como trocar a almofada do automático", href: "/blog/como-trocar-almofada-carimbo-automatico/" }
     ],
     faq: [
       {
@@ -773,6 +813,8 @@ export const commercialPages = [
       { label: "Conhecer opções de carimbos profissionais", href: "/carimbos-bh/" },
       { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
       { label: "Carimbo para clínica em BH", href: "/carimbo-para-clinica-bh/" },
+      { label: "Carimbo para dentista em BH", href: "/carimbo-dentista-bh/" },
+      { label: "O que precisa constar no carimbo médico", href: "/blog/o-que-precisa-constar-no-carimbo-medico/" },
       { label: "Como pedir", href: "/como-pedir/" },
       { label: "Prazos e entrega", href: "/prazos-e-entrega/" },
       { label: "Tirar dúvidas antes de pedir", href: "/perguntas-frequentes/" }
@@ -842,7 +884,8 @@ export const commercialPages = [
       { label: "Carimbo CNPJ em BH", href: "/carimbo-cnpj-bh/" },
       { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
       { label: "Carimbo para escritório em BH", href: "/carimbo-para-escritorio-bh/" },
-      { label: "Contato", href: "/contato/" }
+      { label: "Contato", href: "/contato/" },
+      { label: "Carimbo CNPJ: o que colocar e quando usar", href: "/blog/carimbo-cnpj-o-que-colocar/" }
     ],
     faq: [
       {
@@ -908,7 +951,8 @@ export const commercialPages = [
       { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
       { label: "Carimbo personalizado em BH", href: "/carimbo-personalizado-bh/" },
       { label: "Nossos produtos", href: "/nossos-produtos/" },
-      { label: "Como pedir", href: "/como-pedir/" }
+      { label: "Como pedir", href: "/como-pedir/" },
+      { label: "Automático ou de madeira: qual escolher", href: "/blog/carimbo-automatico-ou-de-madeira/" }
     ],
     faq: [
       {
@@ -977,7 +1021,8 @@ export const commercialPages = [
       { label: "Prazos e entrega", href: "/prazos-e-entrega/" },
       { label: "Carimbo em BH", href: "/carimbo-em-bh/" },
       { label: "Como pedir", href: "/como-pedir/" },
-      { label: "Entender como funciona o pedido", href: "/perguntas-frequentes/" }
+      { label: "Entender como funciona o pedido", href: "/perguntas-frequentes/" },
+      { label: "Carimbos no Centro de BH", href: "/carimbos-centro-bh/" }
     ],
     faq: [
       {
@@ -1045,7 +1090,8 @@ export const commercialPages = [
       { label: "Carimbo para escritório em BH", href: "/carimbo-para-escritorio-bh/" },
       { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
       { label: "Como pedir", href: "/como-pedir/" },
-      { label: "Prazos e entrega", href: "/prazos-e-entrega/" }
+      { label: "Prazos e entrega", href: "/prazos-e-entrega/" },
+      { label: "Carimbos no Centro de BH", href: "/carimbos-centro-bh/" }
     ],
     faq: [
       {
@@ -1118,7 +1164,8 @@ export const commercialPages = [
       { label: "Carimbo para clínica em BH", href: "/carimbo-para-clinica-bh/" },
       { label: "Carimbo médico em BH", href: "/carimbo-medico-bh/" },
       { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
-      { label: "Como pedir", href: "/como-pedir/" }
+      { label: "Como pedir", href: "/como-pedir/" },
+      { label: "Carimbo para fisioterapeuta em BH", href: "/carimbo-fisioterapeuta-bh/" }
     ],
     faq: [
       {
@@ -1525,6 +1572,9 @@ export const commercialPages = [
       { label: "Conhecer outras opções de carimbos em BH", href: "/carimbos-bh/" },
       { label: "Carimbo médico em BH", href: "/carimbo-medico-bh/" },
       { label: "Carimbo para psicólogo em BH", href: "/carimbo-psicologo-bh/" },
+      { label: "Carimbo para dentista em BH", href: "/carimbo-dentista-bh/" },
+      { label: "Carimbo para fisioterapeuta em BH", href: "/carimbo-fisioterapeuta-bh/" },
+      { label: "Carimbo para veterinário em BH", href: "/carimbo-veterinario-bh/" },
       { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
       { label: "Como pedir", href: "/como-pedir/" }
     ],
@@ -1594,7 +1644,9 @@ export const commercialPages = [
       { label: "Carimbo para empresa em BH", href: "/carimbo-empresa-bh/" },
       { label: "Carimbo CNPJ em BH", href: "/carimbo-cnpj-bh/" },
       { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
-      { label: "Carimbo datador em BH", href: "/carimbo-datador-bh/" }
+      { label: "Carimbo datador em BH", href: "/carimbo-datador-bh/" },
+      { label: "Carimbo para contador em BH", href: "/carimbo-contador-bh/" },
+      { label: "Carimbos no Centro de BH", href: "/carimbos-centro-bh/" }
     ],
     faq: [
       {
@@ -1668,7 +1720,8 @@ export const commercialPages = [
       { label: "Carimbo em BH", href: "/carimbo-em-bh/" },
       { label: "Contato", href: "/contato/" },
       { label: "Prazos e entrega", href: "/prazos-e-entrega/" },
-      { label: "Consultar dúvidas sobre prazos e entrega", href: "/perguntas-frequentes/" }
+      { label: "Consultar dúvidas sobre prazos e entrega", href: "/perguntas-frequentes/" },
+      { label: "Quanto tempo leva para fazer um carimbo", href: "/blog/prazo-carimbo-urgente-bh/" }
     ],
     faq: [
       {
@@ -1737,7 +1790,8 @@ export const commercialPages = [
       { label: "Carimbo personalizado em BH", href: "/carimbo-personalizado-bh/" },
       { label: "Prazos e entrega", href: "/prazos-e-entrega/" },
       { label: "Contato", href: "/contato/" },
-      { label: "Ver dúvidas sobre modelos de carimbo", href: "/perguntas-frequentes/" }
+      { label: "Ver dúvidas sobre modelos de carimbo", href: "/perguntas-frequentes/" },
+      { label: "Carimbos no Centro de BH", href: "/carimbos-centro-bh/" }
     ],
     faq: [
       {
@@ -1759,6 +1813,351 @@ export const commercialPages = [
         question: "Quais tipos de carimbo posso pedir?",
         answer:
           "Você pode solicitar carimbos personalizados, CNPJ, automáticos, profissionais e outros modelos conforme orientação do atendimento."
+      }
+    ]
+  },
+  {
+    path: "/carimbo-dentista-bh/",
+    type: "profissional",
+    eyebrow: "Carimbo para dentista",
+    title: "Carimbo para dentista em BH para consultórios e clínicas odontológicas",
+    description:
+      "Carimbos para cirurgiões-dentistas, consultórios e clínicas odontológicas em Belo Horizonte, com dados profissionais informados pelo cliente e arte aprovada antes da produção.",
+    seo: {
+      title: "Carimbo para Dentista em BH",
+      description:
+        "Peça carimbo para dentista em BH pelo WhatsApp para receitas, atestados e rotina do consultório. Arte aprovada antes da produção, retirada em Venda Nova e entrega em BH.",
+      canonicalPath: "/carimbo-dentista-bh/"
+    },
+    whatsappMessage:
+      "Olá! Vim pelo site e gostaria de pedir um orçamento para carimbo de dentista em BH.",
+    primaryCta: "Pedir carimbo para dentista",
+    secondaryCta: { label: "Ver carimbo para clínica", href: "/carimbo-para-clinica-bh/" },
+    trustPoints: defaultTrustPoints,
+    intro: {
+      title: "Identificação profissional para a rotina do consultório odontológico",
+      text:
+        "No consultório odontológico, o carimbo aparece em receitas, atestados, pedidos de exame, orçamentos, fichas e guias de convênio. Por isso ele precisa ser legível em papel comum e em formulários pequenos. A BH Carimbos ajuda a escolher o tamanho e o modelo para o volume de uso, e produz com os dados profissionais que o próprio dentista envia e confere. A BH Carimbos não define regras do conselho de odontologia: o conteúdo é de responsabilidade de quem pede."
+    },
+    indicatedFor: [
+      "Cirurgiões-dentistas em consultório próprio",
+      "Clínicas odontológicas com vários profissionais",
+      "Recepções que carimbam orçamentos, recibos e guias",
+      "Dentistas que atendem em mais de um endereço"
+    ],
+    stampData: [
+      "Nome profissional como o dentista quer que apareça",
+      "Número de inscrição no conselho, informado pelo cliente",
+      "Especialidade, quando o profissional informar que pode divulgá-la",
+      "Endereço, telefone ou nome da clínica, se couber com boa leitura"
+    ],
+    process: defaultProcess,
+    delivery: defaultDelivery,
+    serviceArea: bhServiceArea,
+    relatedLinks: [
+      { label: "Carimbo para clínica em BH", href: "/carimbo-para-clinica-bh/" },
+      { label: "Carimbo médico em BH", href: "/carimbo-medico-bh/" },
+      { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
+      { label: "Carimbo automático ou de madeira: qual escolher", href: "/blog/carimbo-automatico-ou-de-madeira/" },
+      { label: "Ver todos os carimbos profissionais", href: "/carimbos-bh/" },
+      { label: "Como pedir", href: "/como-pedir/" }
+    ],
+    faq: [
+      {
+        question: "Quais dados entram no carimbo para dentista?",
+        answer:
+          "Entram os dados que o profissional envia, como nome, número de inscrição no conselho e, se ele informar, especialidade e contato. O dentista confere a arte antes da produção."
+      },
+      {
+        question: "Vocês orientam as regras do CRO?",
+        answer:
+          "Não. A BH Carimbos produz com os dados enviados e aprovados pelo cliente. Dúvidas sobre o que o conselho exige devem ser confirmadas diretamente com o CRO."
+      },
+      {
+        question: "Qual modelo é melhor para consultório?",
+        answer:
+          "Para quem carimba várias vezes ao dia, o automático costuma ser mais prático porque já tem a tinta embutida. O atendimento indica o tamanho conforme a quantidade de linhas."
+      },
+      {
+        question: "A clínica pode pedir carimbos para vários dentistas de uma vez?",
+        answer:
+          "Pode. Envie os dados de cada profissional pelo WhatsApp e cada arte é conferida separadamente antes da produção."
+      }
+    ]
+  },
+  {
+    path: "/carimbo-fisioterapeuta-bh/",
+    type: "profissional",
+    eyebrow: "Carimbo para fisioterapeuta",
+    title: "Carimbo para fisioterapeuta em BH para clínicas, estúdios e atendimento domiciliar",
+    description:
+      "Carimbos para fisioterapeutas e clínicas de fisioterapia em Belo Horizonte, com dados profissionais informados pelo cliente e modelos para quem atende na clínica ou em casa.",
+    seo: {
+      title: "Carimbo para Fisioterapeuta em BH",
+      description:
+        "Peça carimbo para fisioterapeuta em BH pelo WhatsApp: modelos automáticos e de bolso para evolução, relatórios e guias. Arte aprovada antes da produção e entrega em BH.",
+      canonicalPath: "/carimbo-fisioterapeuta-bh/"
+    },
+    whatsappMessage:
+      "Olá! Vim pelo site e gostaria de pedir um orçamento para carimbo de fisioterapeuta em BH.",
+    primaryCta: "Pedir carimbo para fisioterapeuta",
+    secondaryCta: { label: "Ver carimbo automático", href: "/carimbo-automatico-bh/" },
+    trustPoints: defaultTrustPoints,
+    intro: {
+      title: "Carimbo que acompanha a rotina de quem atende em vários lugares",
+      text:
+        "Muitos fisioterapeutas dividem a semana entre clínica, estúdio, hospital e atendimento domiciliar. Nesses casos, um carimbo compacto que vai na bolsa sem sujar faz diferença. Para quem fica fixo na clínica, o automático de mesa agiliza fichas de evolução, relatórios e guias de convênio. A BH Carimbos orienta o modelo e produz com os dados enviados pelo profissional, sem definir regras do conselho de fisioterapia."
+    },
+    indicatedFor: [
+      "Fisioterapeutas em clínica ou consultório",
+      "Profissionais que fazem atendimento domiciliar",
+      "Estúdios de pilates e reabilitação",
+      "Clínicas que padronizam carimbos da equipe"
+    ],
+    stampData: [
+      "Nome profissional informado pelo cliente",
+      "Número de inscrição no conselho, enviado pelo profissional",
+      "Área de atuação, quando o profissional informar",
+      "Nome da clínica ou contato, se couber no layout"
+    ],
+    process: defaultProcess,
+    delivery: defaultDelivery,
+    serviceArea: bhServiceArea,
+    relatedLinks: [
+      { label: "Carimbo para clínica em BH", href: "/carimbo-para-clinica-bh/" },
+      { label: "Carimbo automático em BH", href: "/carimbo-automatico-bh/" },
+      { label: "Carimbo para enfermagem em BH", href: "/carimbo-enfermagem-bh/" },
+      { label: "Como trocar a almofada do carimbo automático", href: "/blog/como-trocar-almofada-carimbo-automatico/" },
+      { label: "Ver todos os carimbos profissionais", href: "/carimbos-bh/" },
+      { label: "Prazos e entrega", href: "/prazos-e-entrega/" }
+    ],
+    faq: [
+      {
+        question: "Quais dados entram no carimbo para fisioterapeuta?",
+        answer:
+          "Entram os dados enviados pelo profissional, como nome e número de inscrição no conselho, além de área de atuação ou contato quando ele quiser."
+      },
+      {
+        question: "Vocês orientam as regras do CREFITO?",
+        answer:
+          "Não. A BH Carimbos produz com os dados enviados e aprovados pelo cliente. O que o conselho exige deve ser confirmado diretamente com o CREFITO."
+      },
+      {
+        question: "Tem modelo pequeno para levar no atendimento domiciliar?",
+        answer:
+          "Há modelos automáticos compactos e de bolso. O atendimento indica a opção conforme a quantidade de linhas e a frequência de uso."
+      },
+      {
+        question: "Posso pedir sem ir até a loja?",
+        answer:
+          "Sim. O pedido é feito pelo WhatsApp, com aprovação da arte e retirada em Venda Nova ou entrega por motoboy sob consulta."
+      }
+    ]
+  },
+  {
+    path: "/carimbo-veterinario-bh/",
+    type: "profissional",
+    eyebrow: "Carimbo para veterinário",
+    title: "Carimbo para veterinário em BH para clínicas, pet shops e atendimento a campo",
+    description:
+      "Carimbos para médicos-veterinários, clínicas veterinárias e pet shops em Belo Horizonte, com dados profissionais informados pelo cliente e modelos para uso diário.",
+    seo: {
+      title: "Carimbo para Veterinário em BH",
+      description:
+        "Peça carimbo para veterinário em BH pelo WhatsApp para receitas, atestados e carteiras de vacinação. Arte aprovada antes da produção, retirada em Venda Nova e entrega em BH.",
+      canonicalPath: "/carimbo-veterinario-bh/"
+    },
+    whatsappMessage:
+      "Olá! Vim pelo site e gostaria de pedir um orçamento para carimbo de veterinário em BH.",
+    primaryCta: "Pedir carimbo para veterinário",
+    secondaryCta: { label: "Ver carimbo para clínica", href: "/carimbo-para-clinica-bh/" },
+    trustPoints: defaultTrustPoints,
+    intro: {
+      title: "Carimbo para receitas, atestados e carteiras de vacinação",
+      text:
+        "Na rotina veterinária, o carimbo é usado em receitas, atestados, termos de consentimento e, principalmente, em carteiras de vacinação, que têm espaços pequenos. Um carimbo bem dimensionado evita borrão e mantém os dados legíveis. A BH Carimbos ajuda a escolher o tamanho certo e produz com os dados que o veterinário envia e confere, sem definir regras do conselho de medicina veterinária."
+    },
+    indicatedFor: [
+      "Médicos-veterinários em clínica ou consultório",
+      "Clínicas e hospitais veterinários",
+      "Pet shops com atendimento veterinário",
+      "Veterinários que atendem a domicílio ou em propriedades rurais"
+    ],
+    stampData: [
+      "Nome profissional informado pelo cliente",
+      "Número de inscrição no conselho, enviado pelo profissional",
+      "Nome da clínica ou do estabelecimento, quando houver",
+      "Telefone ou endereço, se couber com boa leitura"
+    ],
+    process: defaultProcess,
+    delivery: defaultDelivery,
+    serviceArea: bhServiceArea,
+    relatedLinks: [
+      { label: "Carimbo para clínica em BH", href: "/carimbo-para-clinica-bh/" },
+      { label: "Carimbo para empresa em BH", href: "/carimbo-empresa-bh/" },
+      { label: "Carimbo CNPJ em BH", href: "/carimbo-cnpj-bh/" },
+      { label: "Carimbo automático ou de madeira: qual escolher", href: "/blog/carimbo-automatico-ou-de-madeira/" },
+      { label: "Ver todos os carimbos profissionais", href: "/carimbos-bh/" },
+      { label: "Como pedir", href: "/como-pedir/" }
+    ],
+    faq: [
+      {
+        question: "Quais dados entram no carimbo para veterinário?",
+        answer:
+          "Entram os dados enviados pelo profissional, como nome e número de inscrição no conselho, além do nome da clínica ou contato quando ele quiser."
+      },
+      {
+        question: "Vocês orientam as regras do CRMV?",
+        answer:
+          "Não. A BH Carimbos produz com os dados enviados e aprovados pelo cliente. O que o conselho exige deve ser confirmado diretamente com o CRMV."
+      },
+      {
+        question: "Dá para fazer um carimbo pequeno para carteira de vacinação?",
+        answer:
+          "Sim. Informe que o uso principal é a carteira de vacinação e o atendimento indica um tamanho compatível com a quantidade de dados."
+      },
+      {
+        question: "A clínica pode ter carimbo com CNPJ e outro para cada veterinário?",
+        answer:
+          "Pode. É comum ter um carimbo da empresa, com CNPJ, e carimbos individuais para os profissionais."
+      }
+    ]
+  },
+  {
+    path: "/carimbo-contador-bh/",
+    type: "profissional",
+    eyebrow: "Carimbo para contador",
+    title: "Carimbo para contador em BH para escritórios de contabilidade",
+    description:
+      "Carimbos para contadores, técnicos em contabilidade e escritórios contábeis em Belo Horizonte, com dados profissionais e da empresa informados pelo cliente.",
+    seo: {
+      title: "Carimbo para Contador em BH",
+      description:
+        "Peça carimbo para contador em BH pelo WhatsApp: identificação profissional, CNPJ do escritório, recebido e datador. Arte aprovada antes da produção e entrega em BH.",
+      canonicalPath: "/carimbo-contador-bh/"
+    },
+    whatsappMessage:
+      "Olá! Vim pelo site e gostaria de pedir um orçamento para carimbo de contador em BH.",
+    primaryCta: "Pedir carimbo para contador",
+    secondaryCta: { label: "Ver carimbo para escritório", href: "/carimbo-para-escritorio-bh/" },
+    trustPoints: defaultTrustPoints,
+    intro: {
+      title: "Um kit de carimbos para a rotina do escritório contábil",
+      text:
+        "O escritório de contabilidade costuma usar mais de um carimbo: um com a identificação do contador responsável, outro com os dados do escritório e CNPJ, e carimbos de controle como recebido, conferido e datador para protocolar documentos de clientes. A BH Carimbos monta esse conjunto com os dados enviados pelo cliente e não define regras do conselho de contabilidade."
+    },
+    indicatedFor: [
+      "Contadores e técnicos em contabilidade",
+      "Escritórios contábeis com equipe",
+      "Departamentos fiscais e financeiros de empresas",
+      "Profissionais que protocolam documentos de clientes"
+    ],
+    stampData: [
+      "Nome profissional e número de registro informados pelo cliente",
+      "Razão social, nome fantasia e CNPJ do escritório",
+      "Textos de controle: recebido, conferido, lançado, arquivado",
+      "Data, com carimbo datador, para protocolo"
+    ],
+    process: defaultProcess,
+    delivery: defaultDelivery,
+    serviceArea: bhServiceArea,
+    relatedLinks: [
+      { label: "Carimbo para escritório em BH", href: "/carimbo-para-escritorio-bh/" },
+      { label: "Carimbo CNPJ em BH", href: "/carimbo-cnpj-bh/" },
+      { label: "Carimbo datador em BH", href: "/carimbo-datador-bh/" },
+      { label: "Carimbo CNPJ: o que colocar e quando usar", href: "/blog/carimbo-cnpj-o-que-colocar/" },
+      { label: "Carimbo para empresa em BH", href: "/carimbo-empresa-bh/" },
+      { label: "Como pedir", href: "/como-pedir/" }
+    ],
+    faq: [
+      {
+        question: "Quais dados entram no carimbo para contador?",
+        answer:
+          "Entram os dados enviados pelo profissional, como nome e número de registro, e, se ele quiser, os dados do escritório."
+      },
+      {
+        question: "Vocês orientam as regras do CRC?",
+        answer:
+          "Não. A BH Carimbos produz com os dados enviados e aprovados pelo cliente. O que o conselho exige deve ser confirmado diretamente com o CRC."
+      },
+      {
+        question: "Dá para pedir o carimbo do contador e o do escritório juntos?",
+        answer:
+          "Sim. O pedido pode incluir vários carimbos, cada um com a arte conferida separadamente antes da produção."
+      },
+      {
+        question: "Vocês fazem carimbo de recebido com data?",
+        answer:
+          "Sim. O carimbo datador pode ter textos como recebido ou conferido junto da data, conforme o modelo."
+      }
+    ]
+  },
+  {
+    path: "/carimbos-centro-bh/",
+    type: "localidade",
+    eyebrow: "Atendimento Centro de BH",
+    title: "Carimbos para empresas e profissionais do Centro de BH com pedido pelo WhatsApp",
+    description:
+      "Atendimento para escritórios, clínicas, comércios e profissionais do Centro e do Hipercentro de Belo Horizonte, com pedido remoto, arte aprovada pelo WhatsApp e entrega por motoboy sob consulta.",
+    seo: {
+      title: "Carimbos no Centro de BH com Entrega sob Consulta",
+      description:
+        "Precisa de carimbo no Centro de BH? Peça pelo WhatsApp, aprove a arte sem sair do escritório e consulte entrega por motoboy. Produção em Venda Nova.",
+      canonicalPath: "/carimbos-centro-bh/"
+    },
+    whatsappMessage:
+      "Olá! Vim pelo site e gostaria de pedir um carimbo com entrega no Centro de BH.",
+    primaryCta: "Consultar carimbo para o Centro",
+    secondaryCta: { label: "Ver prazos e entrega", href: "/prazos-e-entrega/" },
+    trustPoints: ["Pedido pelo WhatsApp", "Arte aprovada antes", "Entrega sob consulta", "Produção em BH"],
+    intro: {
+      title: "Resolva o carimbo sem sair do escritório no Centro",
+      text:
+        "Quem trabalha no Centro de Belo Horizonte normalmente não tem tempo para atravessar a cidade por causa de um carimbo. Por isso o pedido inteiro pode ser feito pelo WhatsApp: você envia os dados, recebe a arte para conferir e consulta a entrega por motoboy no seu endereço. A loja física da BH Carimbos fica em Venda Nova, no bairro Maria Helena. Não há loja no Centro."
+    },
+    indicatedFor: [
+      "Escritórios de advocacia e contabilidade do Centro",
+      "Consultórios e clínicas em prédios comerciais",
+      "Comércios e lojas do Hipercentro",
+      "Profissionais que precisam do carimbo sem se deslocar"
+    ],
+    stampData: [
+      "Nome, empresa, CNPJ ou texto personalizado",
+      "Dados profissionais informados pelo cliente",
+      "Endereço do escritório, sala ou andar, se for entrar no carimbo",
+      "Endereço de entrega e horário em que alguém pode receber"
+    ],
+    process: defaultProcess,
+    delivery: defaultDelivery,
+    serviceArea: locationServiceArea,
+    relatedLinks: [
+      { label: "Central de carimbos em BH", href: "/carimbos-bh/" },
+      { label: "Carimbo urgente em BH", href: "/carimbo-urgente-bh/" },
+      { label: "Carimbo para escritório em BH", href: "/carimbo-para-escritorio-bh/" },
+      { label: "Carimbo para advogado em BH", href: "/carimbo-advogado-bh/" },
+      { label: "Quanto tempo leva para fazer um carimbo", href: "/blog/prazo-carimbo-urgente-bh/" },
+      { label: "Prazos e entrega", href: "/prazos-e-entrega/" }
+    ],
+    faq: [
+      {
+        question: "Vocês têm loja no Centro de BH?",
+        answer:
+          "Não. A loja fica em Venda Nova, no bairro Maria Helena. Para o Centro, o pedido é feito pelo WhatsApp e a entrega por motoboy é consultada com o atendimento."
+      },
+      {
+        question: "A entrega no Centro é garantida?",
+        answer:
+          "A entrega depende de disponibilidade, endereço e horário. O atendimento confirma a possibilidade antes de fechar o pedido."
+      },
+      {
+        question: "Posso receber no prédio comercial ou na portaria?",
+        answer:
+          "Informe o endereço completo, a sala e quem pode receber. O atendimento combina a forma de entrega com você."
+      },
+      {
+        question: "Dá para fazer com urgência para o Centro?",
+        answer:
+          "Produção rápida pode ser possível sob consulta, conforme modelo, fila e disponibilidade. Avise a urgência logo na primeira mensagem."
       }
     ]
   }

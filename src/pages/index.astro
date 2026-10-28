@@ -13,6 +13,7 @@ import UrgencySection from "@components/home/UrgencySection.astro";
 import LocationSection from "@components/home/LocationSection.astro";
 import TrustSection from "@components/home/TrustSection.astro";
 import FaqSection from "@components/home/FaqSection.astro";
+import BlogTeaser from "@components/home/BlogTeaser.astro";
 import FinalCta from "@components/home/FinalCta.astro";
 
 const seo = getSeo("/");
@@ -30,5 +31,6 @@ const faqSchema = getFaqPageSchema(homeFaqs);
   <LocationSection />
   <TrustSection />
   <FaqSection />
+  <BlogTeaser />
   <FinalCta />
 </BaseLayout>

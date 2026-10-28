@@ -1,11 +1,12 @@
-import { requiredRoutes } from "@data/routes";
+import { defaultLastModified, requiredRoutes } from "@data/routes";
 import { siteConfig } from "@data/site";
 
 export function GET() {
   const urls = requiredRoutes
     .map((route) => {
       const loc = new URL(route.path, siteConfig.domain).toString();
-      return `<url><loc>${loc}</loc></url>`;
+      const lastmod = route.lastModified ?? defaultLastModified;
+      return `<url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`;
     })
     .join("");
 

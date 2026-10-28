@@ -1,4 +1,4 @@
-export type RouteKind = "home" | "service" | "location" | "content" | "legal";
+export type RouteKind = "home" | "service" | "location" | "content" | "legal" | "blog";
 
 export type SiteRoute = {
   path: string;
@@ -6,7 +6,15 @@ export type SiteRoute = {
   kind: RouteKind;
   draftTitle: string;
   description: string;
+  /** Data (AAAA-MM-DD) da última alteração relevante do conteúdo. Usada no lastmod do sitemap. */
+  lastModified?: string;
 };
+
+/** Data da última alteração de conteúdo das páginas que não definem lastModified. */
+export const defaultLastModified = "2026-08-07";
+
+/** Data de publicação das páginas novas e do blog (entrega de outubro/novembro de 2026). */
+const contentUpdate = "2026-10-28";
 
 export const requiredRoutes: SiteRoute[] = [
   {
@@ -14,7 +22,8 @@ export const requiredRoutes: SiteRoute[] = [
     label: "Início",
     kind: "home",
     draftTitle: "Página inicial",
-    description: "Página inicial da BH Carimbos."
+    description: "Página inicial da BH Carimbos.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-em-bh/",
@@ -28,7 +37,8 @@ export const requiredRoutes: SiteRoute[] = [
     label: "Carimbos em BH",
     kind: "service",
     draftTitle: "Carimbos em BH",
-    description: "Hub comercial de carimbos em Belo Horizonte."
+    description: "Hub comercial de carimbos em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-personalizado-bh/",
@@ -42,56 +52,64 @@ export const requiredRoutes: SiteRoute[] = [
     label: "Carimbo na hora",
     kind: "service",
     draftTitle: "Carimbo na hora BH",
-    description: "Página de serviço para pedidos com urgência."
+    description: "Página de serviço para pedidos com urgência.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-cnpj-bh/",
     label: "Carimbo CNPJ",
     kind: "service",
     draftTitle: "Carimbo CNPJ BH",
-    description: "Página de serviço para carimbos CNPJ."
+    description: "Página de serviço para carimbos CNPJ.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-automatico-bh/",
     label: "Carimbo automático",
     kind: "service",
     draftTitle: "Carimbo automático BH",
-    description: "Página de serviço para carimbos automáticos."
+    description: "Página de serviço para carimbos automáticos.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-medico-bh/",
     label: "Carimbo médico",
     kind: "service",
     draftTitle: "Carimbo médico BH",
-    description: "Página de serviço para profissionais de saúde."
+    description: "Página de serviço para profissionais de saúde.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-empresa-bh/",
     label: "Carimbo para empresa",
     kind: "service",
     draftTitle: "Carimbo para empresa BH",
-    description: "Página de serviço para empresas."
+    description: "Página de serviço para empresas.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-madeira-bh/",
     label: "Carimbo de madeira",
     kind: "service",
     draftTitle: "Carimbo de madeira BH",
-    description: "Página de serviço para carimbos de madeira."
+    description: "Página de serviço para carimbos de madeira.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-advogado-bh/",
     label: "Carimbo advogado",
     kind: "service",
     draftTitle: "Carimbo para advogado BH",
-    description: "Página comercial para carimbos de advogado em Belo Horizonte."
+    description: "Página comercial para carimbos de advogado em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-psicologo-bh/",
     label: "Carimbo psicólogo",
     kind: "service",
     draftTitle: "Carimbo para psicólogo BH",
-    description: "Página comercial para carimbos de psicólogo em Belo Horizonte."
+    description: "Página comercial para carimbos de psicólogo em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-nutricionista-bh/",
@@ -133,35 +151,80 @@ export const requiredRoutes: SiteRoute[] = [
     label: "Carimbo para clínica",
     kind: "service",
     draftTitle: "Carimbo para clínica BH",
-    description: "Página comercial para carimbos de clínica em Belo Horizonte."
+    description: "Página comercial para carimbos de clínica em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-para-escritorio-bh/",
     label: "Carimbo para escritório",
     kind: "service",
     draftTitle: "Carimbo para escritório BH",
-    description: "Página comercial para carimbos de escritório em Belo Horizonte."
+    description: "Página comercial para carimbos de escritório em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-urgente-bh/",
     label: "Carimbo urgente",
     kind: "service",
     draftTitle: "Carimbo urgente BH",
-    description: "Página comercial para pedidos urgentes de carimbo em Belo Horizonte."
+    description: "Página comercial para pedidos urgentes de carimbo em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbos-pampulha/",
     label: "Pampulha",
     kind: "location",
     draftTitle: "Carimbos Pampulha",
-    description: "Página local para atendimento na região da Pampulha."
+    description: "Página local para atendimento na região da Pampulha.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbos-venda-nova/",
     label: "Venda Nova",
     kind: "location",
     draftTitle: "Carimbos Venda Nova",
-    description: "Página local para atendimento em Venda Nova."
+    description: "Página local para atendimento em Venda Nova.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/carimbo-dentista-bh/",
+    label: "Carimbo dentista",
+    kind: "service",
+    draftTitle: "Carimbo para dentista BH",
+    description: "Página comercial para carimbos de dentista em Belo Horizonte.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/carimbo-fisioterapeuta-bh/",
+    label: "Carimbo fisioterapeuta",
+    kind: "service",
+    draftTitle: "Carimbo para fisioterapeuta BH",
+    description: "Página comercial para carimbos de fisioterapeuta em Belo Horizonte.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/carimbo-veterinario-bh/",
+    label: "Carimbo veterinário",
+    kind: "service",
+    draftTitle: "Carimbo para veterinário BH",
+    description: "Página comercial para carimbos de veterinário em Belo Horizonte.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/carimbo-contador-bh/",
+    label: "Carimbo contador",
+    kind: "service",
+    draftTitle: "Carimbo para contador BH",
+    description: "Página comercial para carimbos de contador em Belo Horizonte.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/carimbos-centro-bh/",
+    label: "Centro de BH",
+    kind: "location",
+    draftTitle: "Carimbos Centro de BH",
+    description: "Página local para atendimento no Centro de Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/servicos/",
@@ -239,6 +302,54 @@ export const requiredRoutes: SiteRoute[] = [
     kind: "content",
     draftTitle: "Quem somos",
     description: "Página institucional."
+  },
+  {
+    path: "/blog/",
+    label: "Blog",
+    kind: "blog",
+    draftTitle: "Blog BH Carimbos",
+    description: "Guias práticos sobre carimbos.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/blog/o-que-precisa-constar-no-carimbo-medico/",
+    label: "O que precisa constar no carimbo médico",
+    kind: "blog",
+    draftTitle: "O que precisa constar no carimbo médico em MG",
+    description: "Artigo do blog.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/blog/carimbo-cnpj-o-que-colocar/",
+    label: "Carimbo CNPJ: o que colocar",
+    kind: "blog",
+    draftTitle: "Carimbo CNPJ: o que colocar e quando usar",
+    description: "Artigo do blog.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/blog/carimbo-automatico-ou-de-madeira/",
+    label: "Automático ou de madeira",
+    kind: "blog",
+    draftTitle: "Carimbo automático ou de madeira: qual escolher",
+    description: "Artigo do blog.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/blog/como-trocar-almofada-carimbo-automatico/",
+    label: "Trocar almofada do automático",
+    kind: "blog",
+    draftTitle: "Como trocar a almofada e conservar o carimbo automático",
+    description: "Artigo do blog.",
+    lastModified: contentUpdate
+  },
+  {
+    path: "/blog/prazo-carimbo-urgente-bh/",
+    label: "Prazo e urgência",
+    kind: "blog",
+    draftTitle: "Quanto tempo leva para fazer um carimbo em BH",
+    description: "Artigo do blog.",
+    lastModified: contentUpdate
   }
 ];
 
