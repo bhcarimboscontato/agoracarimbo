@@ -1,6 +1,7 @@
 export const mainNavigation = [
   { label: "Início", href: "/" },
   { label: "Produtos", href: "/nossos-produtos/" },
+  { label: "Carimbos", href: "/carimbos-bh/" },
   { label: "Serviços", href: "/servicos/" },
   { label: "Como pedir", href: "/como-pedir/" },
   { label: "Prazos e entrega", href: "/prazos-e-entrega/" },

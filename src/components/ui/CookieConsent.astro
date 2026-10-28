@@ -3,8 +3,8 @@
     <div>
       <strong>Preferências de cookies</strong>
       <p>
-        Usamos cookies necessários para funcionamento do site e para lembrar sua escolha. Cookies
-        opcionais só serão usados se ferramentas correspondentes forem implementadas e autorizadas.
+        Usamos cookies necessários para o site funcionar e lembrar sua escolha. Com sua autorização,
+        também usamos cookies do Google para medir visitas e os resultados dos nossos anúncios.
       </p>
       <a href="/cookies/">Ver Política de Cookies</a>
     </div>
@@ -34,8 +34,8 @@
       </div>
 
       <p class="cookie-consent__intro">
-        Cookies necessários permanecem ativos. As demais categorias são opcionais e poderão ser usadas
-        apenas se ferramentas correspondentes forem implementadas.
+        Cookies necessários permanecem ativos. As demais categorias são opcionais e só funcionam se você
+        autorizar. Você pode mudar a escolha a qualquer momento pelo link "Preferências de cookies" no rodapé.
       </p>
 
       <div class="cookie-consent__options">
@@ -50,7 +50,7 @@
         <label class="cookie-option">
           <span>
             <strong>Preferências</strong>
-            <em>Podem lembrar escolhas do visitante, quando aplicável.</em>
+            <em>Hoje o site não usa cookies desta categoria.</em>
           </span>
           <input type="checkbox" data-cookie-toggle="preferences" />
         </label>
@@ -58,7 +58,7 @@
         <label class="cookie-option">
           <span>
             <strong>Estatística/medição</strong>
-            <em>No momento, esta categoria só será usada se ferramentas correspondentes forem implementadas.</em>
+            <em>Google Analytics: conta visitas e páginas vistas, sem identificar você pelo nome.</em>
           </span>
           <input type="checkbox" data-cookie-toggle="analytics" />
         </label>
@@ -66,7 +66,7 @@
         <label class="cookie-option">
           <span>
             <strong>Marketing</strong>
-            <em>No momento, esta categoria só será usada se campanhas ou ferramentas específicas forem implementadas.</em>
+            <em>Google Ads: mede se quem chegou por um anúncio pediu orçamento pelo WhatsApp.</em>
           </span>
           <input type="checkbox" data-cookie-toggle="marketing" />
         </label>
@@ -82,6 +82,8 @@
 </div>
 
 <script>
+  import { consentStorageKey as storageKey, consentVersion as policyVersion } from "@data/consent";
+
   type CookieConsentValue = {
     necessary: true;
     preferences: boolean;
@@ -91,8 +93,6 @@
     version: string;
   };
 
-  const storageKey = "bhcarimbos_cookie_consent";
-  const policyVersion = "2026-07";
   const maxAge = 60 * 60 * 24 * 180;
 
   const root = document.querySelector<HTMLElement>("[data-cookie-consent]");
@@ -133,9 +133,26 @@
       version: policyVersion
     };
 
-    localStorage.setItem(storageKey, JSON.stringify(consent));
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(consent));
+    } catch {
+      // Sem localStorage: a escolha fica só no cookie.
+    }
     setCookie(consent);
+    updateGoogleConsent(consent);
     hideAll();
+  }
+
+  function updateGoogleConsent(consent: CookieConsentValue) {
+    const gtag = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag;
+    if (typeof gtag !== "function") return;
+    const marketing = consent.marketing ? "granted" : "denied";
+    gtag("consent", "update", {
+      ad_storage: marketing,
+      ad_user_data: marketing,
+      ad_personalization: marketing,
+      analytics_storage: consent.analytics ? "granted" : "denied"
+    });
   }
 
   function setToggles(value: Partial<CookieConsentValue>) {

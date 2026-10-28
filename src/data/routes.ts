@@ -13,7 +13,7 @@ export type SiteRoute = {
 /** Data da última alteração de conteúdo das páginas que não definem lastModified. */
 export const defaultLastModified = "2026-08-07";
 
-/** Data de publicação das páginas novas e do blog (entrega de outubro/novembro de 2026). */
+/** Data das páginas novas, do blog e da revisão das páginas antigas e da política de cookies (outubro de 2026). */
 const contentUpdate = "2026-10-28";
 
 export const requiredRoutes: SiteRoute[] = [
@@ -30,7 +30,8 @@ export const requiredRoutes: SiteRoute[] = [
     label: "Carimbo em BH",
     kind: "service",
     draftTitle: "Carimbo em BH",
-    description: "Página principal de SEO local."
+    description: "Página principal de SEO local.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbos-bh/",
@@ -45,7 +46,8 @@ export const requiredRoutes: SiteRoute[] = [
     label: "Carimbo personalizado",
     kind: "service",
     draftTitle: "Carimbo personalizado BH",
-    description: "Página de serviço para carimbos personalizados."
+    description: "Página de serviço para carimbos personalizados.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-na-hora-bh/",
@@ -116,35 +118,40 @@ export const requiredRoutes: SiteRoute[] = [
     label: "Carimbo nutricionista",
     kind: "service",
     draftTitle: "Carimbo para nutricionista BH",
-    description: "Página comercial para carimbos de nutricionista em Belo Horizonte."
+    description: "Página comercial para carimbos de nutricionista em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-enfermagem-bh/",
     label: "Carimbo enfermagem",
     kind: "service",
     draftTitle: "Carimbo para enfermagem BH",
-    description: "Página comercial para carimbos de enfermagem em Belo Horizonte."
+    description: "Página comercial para carimbos de enfermagem em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-assinatura-bh/",
     label: "Carimbo de assinatura",
     kind: "service",
     draftTitle: "Carimbo de assinatura BH",
-    description: "Página comercial para carimbo de assinatura em Belo Horizonte."
+    description: "Página comercial para carimbo de assinatura em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-datador-bh/",
     label: "Carimbo datador",
     kind: "service",
     draftTitle: "Carimbo datador BH",
-    description: "Página comercial para carimbo datador em Belo Horizonte."
+    description: "Página comercial para carimbo datador em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-numerador-bh/",
     label: "Carimbo numerador",
     kind: "service",
     draftTitle: "Carimbo numerador BH",
-    description: "Página comercial para carimbo numerador em Belo Horizonte."
+    description: "Página comercial para carimbo numerador em Belo Horizonte.",
+    lastModified: contentUpdate
   },
   {
     path: "/carimbo-para-clinica-bh/",
@@ -273,14 +280,16 @@ export const requiredRoutes: SiteRoute[] = [
     label: "Cookies",
     kind: "legal",
     draftTitle: "Cookies",
-    description: "Página preparada para informações sobre cookies."
+    description: "Página preparada para informações sobre cookies.",
+    lastModified: contentUpdate
   },
   {
     path: "/politica-de-privacidade/",
     label: "Política de privacidade",
     kind: "legal",
     draftTitle: "Política de privacidade",
-    description: "Página legal com informações de privacidade."
+    description: "Página legal com informações de privacidade.",
+    lastModified: contentUpdate
   },
   {
     path: "/termos-de-uso/",

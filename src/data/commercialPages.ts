@@ -107,6 +107,16 @@ const bhServiceArea =
 const locationServiceArea =
   "A loja física fica em Venda Nova, no bairro Maria Helena. Para outras regiões de Belo Horizonte, o pedido pode ser feito pelo WhatsApp com consulta de entrega por motoboy.";
 
+/** Troca o primeiro passo do processo pelo que é específico de cada tipo de carimbo. */
+function withFirstStep(firstStep: string): string[] {
+  return [firstStep, ...defaultProcess.slice(1)];
+}
+
+/** Acrescenta ao prazo padrão uma observação própria da página. */
+function withDeliveryNote(note: string): string {
+  return `${defaultDelivery} ${note}`;
+}
+
 export const commercialHubPage = {
   path: "/carimbos-bh/",
   eyebrow: "Central de carimbos em BH",
@@ -457,8 +467,12 @@ export const commercialPages = [
       "Logotipo enviado pelo cliente",
       "Telefone, e-mail, setor ou informação de atendimento"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Conte no WhatsApp para que vai usar o carimbo e mande o texto que precisa aparecer. Se ainda não sabe o modelo, o atendimento indica."
+    ),
+    delivery: withDeliveryNote(
+      "Se o pedido tiver mais de um carimbo, mande todos de uma vez para combinar arte e prazo juntos."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Ver todos os tipos de carimbos em BH", href: "/carimbos-bh/" },
@@ -525,8 +539,12 @@ export const commercialPages = [
       "Logotipo em arquivo digital, se houver",
       "Endereço, telefone, e-mail ou mensagem curta"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie o texto e, se houver, o logotipo em arquivo digital (PNG, PDF ou vetor)."
+    ),
+    delivery: withDeliveryNote(
+      "Logotipos com detalhes muito finos podem precisar de ajuste para ficarem legíveis no tamanho do carimbo, e isso aparece na arte antes da produção."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Conhecer outras opções de carimbos em BH", href: "/carimbos-bh/" },
@@ -592,8 +610,12 @@ export const commercialPages = [
       "Endereço, telefone ou e-mail, quando necessário",
       "Setor, departamento ou texto auxiliar"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie razão social ou nome fantasia e o número do CNPJ exatamente como devem sair, conferindo os dígitos antes de mandar."
+    ),
+    delivery: withDeliveryNote(
+      "Um dígito errado no CNPJ obriga a refazer o carimbo, por isso a conferência da arte é a etapa mais importante deste pedido."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Central de carimbos em BH", href: "/carimbos-bh/" },
@@ -669,7 +691,9 @@ export const commercialPages = [
       "Aguarde a confirmação de modelo, prazo possível e arte.",
       "Após aprovação, combine retirada em Venda Nova ou consulte entrega."
     ],
-    delivery: defaultDelivery,
+    delivery: withDeliveryNote(
+      "Para tentar a produção no mesmo dia, mande o texto já revisado e confirme a disponibilidade antes de ir à loja."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Modelos de carimbos em BH", href: "/carimbos-bh/" },
@@ -737,8 +761,12 @@ export const commercialPages = [
       "Logotipo, se a arte permitir boa leitura",
       "Texto curto para protocolos, conferências ou atendimento"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie o texto e diga quantas linhas ele tem. Isso ajuda a indicar o tamanho certo do carimbo automático."
+    ),
+    delivery: withDeliveryNote(
+      "No automático, o tamanho da área de gravação depende do modelo, e textos longos podem pedir um modelo maior."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Ver todos os tipos de carimbos em BH", href: "/carimbos-bh/" },
@@ -806,8 +834,12 @@ export const commercialPages = [
       "Dados profissionais enviados pelo solicitante",
       "Contato ou informação complementar, se couber no layout"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie nome, CRM e especialidade exatamente como devem aparecer, conforme o seu registro."
+    ),
+    delivery: withDeliveryNote(
+      "Confira na arte cada número e sigla do registro: depois de gravado, um erro só se resolve refazendo o carimbo."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Conhecer opções de carimbos profissionais", href: "/carimbos-bh/" },
@@ -876,8 +908,12 @@ export const commercialPages = [
       "Departamento, setor ou função do carimbo",
       "Texto de protocolo, recebido, pago ou conferido"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Diga quais setores vão usar carimbo e envie razão social, CNPJ e o texto de cada um."
+    ),
+    delivery: withDeliveryNote(
+      "Quando a empresa pede vários carimbos, dá para manter o mesmo padrão visual em todos."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Central de carimbos em BH", href: "/carimbos-bh/" },
@@ -943,8 +979,12 @@ export const commercialPages = [
       "Logotipo simples, se houver boa leitura",
       "Tamanho desejado ou referência de uso"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie o texto ou desenho e o tamanho aproximado que você quer no carimbo de madeira."
+    ),
+    delivery: withDeliveryNote(
+      "O carimbo de madeira usa almofada separada. Se ainda não tem uma, avise no pedido."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Modelos de carimbos em BH", href: "/carimbos-bh/" },
@@ -1011,8 +1051,12 @@ export const commercialPages = [
       "Logotipo, quando houver",
       "Modelo desejado ou finalidade de uso"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Mande o texto pelo WhatsApp antes de passar na loja da Rua Tenente Marino Freire, 679, para adiantar a arte."
+    ),
+    delivery: withDeliveryNote(
+      "Para quem está em Venda Nova, retirar na loja evita depender da rota de entrega."
+    ),
     serviceArea:
       "A loja fica na Rua Tenente Marino Freire, 679, Bairro Maria Helena, região de Venda Nova, Belo Horizonte/MG. A retirada deve ser combinada pelo atendimento.",
     relatedLinks: [
@@ -1082,8 +1126,12 @@ export const commercialPages = [
       "Escritório, telefone, e-mail ou endereço, quando necessário",
       "Texto de identificação, protocolo ou atendimento jurídico"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie o nome profissional e, se quiser incluir, o número da OAB com a seccional."
+    ),
+    delivery: withDeliveryNote(
+      "Nome e número de registro são conferidos com você na arte antes de aprovar."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Conhecer outras opções de carimbos em BH", href: "/carimbos-bh/" },
@@ -1156,8 +1204,12 @@ export const commercialPages = [
       "Consultório, clínica ou contato, quando necessário",
       "Informações complementares que caibam com boa leitura"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie o nome profissional e o número do CRP como devem aparecer no carimbo."
+    ),
+    delivery: withDeliveryNote(
+      "O número de registro é conferido com você na arte antes da produção."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Ver carimbos profissionais em BH", href: "/carimbos-bh/" },
@@ -1225,8 +1277,12 @@ export const commercialPages = [
       "Nome da clínica ou consultório, se desejado",
       "Contato, endereço ou informação complementar"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie o nome profissional e o número do CRN, com a região do conselho, como devem aparecer."
+    ),
+    delivery: withDeliveryNote(
+      "Se quiser o nome da clínica ou do consultório junto, mande também para conferir se cabe com boa leitura."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Central de carimbos em BH", href: "/carimbos-bh/" },
@@ -1293,8 +1349,12 @@ export const commercialPages = [
       "Função, setor ou unidade, quando desejado",
       "Contato ou identificação complementar"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie nome, categoria profissional e número do Coren como devem aparecer no carimbo."
+    ),
+    delivery: withDeliveryNote(
+      "Para equipes, mande os dados de cada profissional em lista, na mesma conversa, para conferir tudo de uma vez."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Conhecer carimbos profissionais em BH", href: "/carimbos-bh/" },
@@ -1361,8 +1421,12 @@ export const commercialPages = [
       "Setor, empresa ou texto de apoio",
       "Tamanho e finalidade de uso para orientar o modelo"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Assine em papel branco com caneta preta, fotografe ou escaneie de perto e envie a imagem."
+    ),
+    delivery: withDeliveryNote(
+      "Quanto mais nítida a imagem da assinatura, mais fiel fica a gravação. Se a foto não servir, o atendimento avisa antes de produzir."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Modelos de carimbos em BH", href: "/carimbos-bh/" },
@@ -1429,8 +1493,12 @@ export const commercialPages = [
       "Formato de uso desejado",
       "Informações adicionais que caibam no layout"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Diga o texto que vai junto da data (recebido, pago, protocolado) e com que frequência o carimbo vai ser usado."
+    ),
+    delivery: withDeliveryNote(
+      "No datador, a data é ajustada no próprio carimbo. O que vai na arte é o texto fixo."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Ver opções administrativas de carimbos", href: "/carimbos-bh/" },
@@ -1497,8 +1565,12 @@ export const commercialPages = [
       "Setor, empresa ou identificação interna",
       "Frequência de uso para orientar o modelo"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Conte para que serve a numeração e quantos dígitos ela precisa ter."
+    ),
+    delivery: withDeliveryNote(
+      "A quantidade de dígitos e o texto fixo definem o modelo do numerador."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Central de carimbos em BH", href: "/carimbos-bh/" },
@@ -1565,8 +1637,12 @@ export const commercialPages = [
       "Dados profissionais informados pelo cliente",
       "Textos de atendimento, recebido, conferido ou identificação"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Liste os carimbos da clínica: recepção, setores e os de cada profissional, com os dados de registro de cada um."
+    ),
+    delivery: withDeliveryNote(
+      "Mande os dados de cada profissional por escrito, para que tudo seja conferido na arte antes da produção."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Conhecer outras opções de carimbos em BH", href: "/carimbos-bh/" },
@@ -1636,8 +1712,12 @@ export const commercialPages = [
       "Texto de protocolo, recebido, pago ou conferido",
       "Setor, departamento ou identificação interna"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Diga quais textos de controle o escritório usa (recebido, pago, conferido) e os dados que vão em cada carimbo."
+    ),
+    delivery: withDeliveryNote(
+      "Se a rotina pede a data junto, o carimbo datador evita escrever à mão em cada documento."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Modelos de carimbos em BH", href: "/carimbos-bh/" },
@@ -1712,7 +1792,9 @@ export const commercialPages = [
       "Aguarde confirmação real de prazo, fila e disponibilidade.",
       "Aprove a arte rapidamente para liberar a produção."
     ],
-    delivery: defaultDelivery,
+    delivery: withDeliveryNote(
+      "Em pedido urgente, o prazo só é confirmado depois que o atendimento verifica a produção do dia."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Ver todos os tipos de carimbos em BH", href: "/carimbos-bh/" },
@@ -1781,8 +1863,12 @@ export const commercialPages = [
       "Endereço ou contato, se for entrar no carimbo",
       "Informação sobre retirada ou entrega desejada"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Mande o texto pelo WhatsApp e informe o bairro da Pampulha para consultar a entrega."
+    ),
+    delivery: withDeliveryNote(
+      "Da Pampulha, dá para retirar na loja de Venda Nova ou consultar a entrega por motoboy."
+    ),
     serviceArea: locationServiceArea,
     relatedLinks: [
       { label: "Central de carimbos em BH", href: "/carimbos-bh/" },
@@ -1851,8 +1937,12 @@ export const commercialPages = [
       "Especialidade, quando o profissional informar que pode divulgá-la",
       "Endereço, telefone ou nome da clínica, se couber com boa leitura"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie nome profissional, número do CRO e, se for divulgar, a especialidade, como devem aparecer."
+    ),
+    delivery: withDeliveryNote(
+      "Confira na arte o número do CRO e a especialidade antes de aprovar."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Carimbo para clínica em BH", href: "/carimbo-para-clinica-bh/" },
@@ -1920,8 +2010,12 @@ export const commercialPages = [
       "Área de atuação, quando o profissional informar",
       "Nome da clínica ou contato, se couber no layout"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie o nome profissional e o número do Crefito como devem aparecer no carimbo."
+    ),
+    delivery: withDeliveryNote(
+      "O número de registro é conferido com você na arte antes da produção."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Carimbo para clínica em BH", href: "/carimbo-para-clinica-bh/" },
@@ -1989,8 +2083,12 @@ export const commercialPages = [
       "Nome da clínica ou do estabelecimento, quando houver",
       "Telefone ou endereço, se couber com boa leitura"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie o nome profissional e o número do CRMV como devem aparecer no carimbo."
+    ),
+    delivery: withDeliveryNote(
+      "Se quiser o nome da clínica junto, mande também para conferir se cabe com boa leitura."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Carimbo para clínica em BH", href: "/carimbo-para-clinica-bh/" },
@@ -2058,8 +2156,12 @@ export const commercialPages = [
       "Textos de controle: recebido, conferido, lançado, arquivado",
       "Data, com carimbo datador, para protocolo"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Envie nome, CRC e dados do escritório, e diga quais carimbos de controle a rotina usa."
+    ),
+    delivery: withDeliveryNote(
+      "Se a rotina pede a data junto, o carimbo datador resolve o protocolo sem escrever à mão."
+    ),
     serviceArea: bhServiceArea,
     relatedLinks: [
       { label: "Carimbo para escritório em BH", href: "/carimbo-para-escritorio-bh/" },
@@ -2127,8 +2229,12 @@ export const commercialPages = [
       "Endereço do escritório, sala ou andar, se for entrar no carimbo",
       "Endereço de entrega e horário em que alguém pode receber"
     ],
-    process: defaultProcess,
-    delivery: defaultDelivery,
+    process: withFirstStep(
+      "Mande o texto pelo WhatsApp e o endereço com sala ou andar para consultar a entrega no Centro."
+    ),
+    delivery: withDeliveryNote(
+      "No Centro, informe também o horário em que alguém pode receber, para combinar a entrega."
+    ),
     serviceArea: locationServiceArea,
     relatedLinks: [
       { label: "Central de carimbos em BH", href: "/carimbos-bh/" },
@@ -2189,7 +2295,7 @@ export function getCommercialPageSchemas(page: CommercialPage) {
           "@type": "ListItem",
           position: 2,
           name: "Carimbos em BH",
-          item: getCanonicalUrl("/carimbo-em-bh/")
+          item: getCanonicalUrl("/carimbos-bh/")
         },
         {
           "@type": "ListItem",

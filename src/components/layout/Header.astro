@@ -1,5 +1,5 @@
 ---
-import { brandAssets } from "@data/site";
+import { brandAssets, businessInfo } from "@data/site";
 import { mainNavigation } from "@data/navigation";
 import { getWhatsAppUrl } from "@lib/whatsapp";
 import ButtonLink from "@components/ui/ButtonLink.astro";
@@ -12,8 +12,14 @@ const whatsappUrl = getWhatsAppUrl("general");
 <header class="site-header">
   <div class="site-header__bar" aria-label="Informações rápidas">
     <div class="container site-header__bar-inner">
-      <span class="site-header__bar-location">Atendimento em Belo Horizonte e região</span>
-      <a class="site-header__bar-link" href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+      <span class="site-header__bar-status">
+        <span class="site-header__status" data-open-status hidden>
+          <span class="site-header__status-dot" aria-hidden="true"></span>
+          <span data-open-status-text></span>
+        </span>
+        <span class="site-header__bar-location">Atendimento em Belo Horizonte e região</span>
+      </span>
+      <a class="site-header__bar-link" href={whatsappUrl} target="_blank" rel="noopener noreferrer" data-open-status-link>
         Pedido rápido pelo WhatsApp
       </a>
     </div>
@@ -96,3 +102,56 @@ const whatsappUrl = getWhatsAppUrl("general");
     </div>
   </div>
 </header>
+<script define:vars={{ schedule: businessInfo.openingSchedule }} is:inline>
+  (function () {
+    const status = document.querySelector("[data-open-status]");
+    const text = document.querySelector("[data-open-status-text]");
+    const link = document.querySelector("[data-open-status-link]");
+    if (!status || !text) return;
+
+    const dayNames = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+
+    function nowInBh() {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Sao_Paulo",
+        weekday: "short",
+        hour: "numeric",
+        minute: "numeric",
+        hourCycle: "h23"
+      }).formatToParts(new Date());
+      const get = (type) => parts.find((part) => part.type === type)?.value ?? "";
+      const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(get("weekday"));
+      return { day, minutes: Number(get("hour")) * 60 + Number(get("minute")) };
+    }
+
+    function nextOpening(day, minutes) {
+      for (let offset = 0; offset < 8; offset += 1) {
+        const candidate = (day + offset) % 7;
+        const hours = schedule[candidate];
+        if (!hours) continue;
+        if (offset === 0 && minutes >= hours[0] * 60) continue;
+        const label = offset === 0 ? "hoje" : offset === 1 ? "amanhã" : dayNames[candidate];
+        return `${label} às ${String(hours[0]).padStart(2, "0")}h`;
+      }
+      return "";
+    }
+
+    function render() {
+      const { day, minutes } = nowInBh();
+      const hours = schedule[day];
+      const isOpen = Boolean(hours) && minutes >= hours[0] * 60 && minutes < hours[1] * 60;
+
+      status.dataset.state = isOpen ? "open" : "closed";
+      text.textContent = isOpen
+        ? `Aberto agora · até ${String(hours[1]).padStart(2, "0")}h`
+        : `Fechado agora · abre ${nextOpening(day, minutes)}`;
+      if (link) {
+        link.textContent = isOpen ? "Pedido rápido pelo WhatsApp" : "Deixe sua mensagem no WhatsApp";
+      }
+      status.hidden = false;
+    }
+
+    render();
+    setInterval(render, 60000);
+  })();
+</script>
