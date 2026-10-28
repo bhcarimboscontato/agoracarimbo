@@ -1,0 +1,1083 @@
+---
+import StampMark from "@components/blog/StampMark.astro";
+import ButtonLink from "@components/ui/ButtonLink.astro";
+import Icon from "@components/ui/Icon.astro";
+import { blogIndex, blogPosts, formatBlogDate, type BlogPost } from "@data/blogPosts";
+import { createWhatsAppUrl } from "@lib/whatsapp";
+
+type Props = {
+  post: BlogPost;
+};
+
+const { post } = Astro.props;
+const whatsappUrl = createWhatsAppUrl(post.whatsappMessage);
+const otherPosts = blogPosts.filter((item) => item.path !== post.path).slice(0, 3);
+const calloutLabels = {
+  source: "Fonte oficial",
+  tip: "Dica",
+  warning: "Atenção"
+} as const;
+---
+
+<div class="blog-progress" aria-hidden="true"><span data-blog-progress></span></div>
+
+<article class="blog-post">
+  <header class="blog-hero">
+    <div class="container">
+      <nav class="blog-breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Início</a>
+        <span aria-hidden="true">/</span>
+        <a href={blogIndex.path}>Blog</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{post.category}</span>
+      </nav>
+
+      <div class="blog-hero__grid">
+        <div class="blog-hero__content">
+          <p class="blog-chip">{post.category}</p>
+          <h1>{post.title}</h1>
+          <p class="blog-hero__lead">{post.lead}</p>
+          <p class="blog-meta">
+            <span>Publicado em <time datetime={post.publishedAt}>{formatBlogDate(post.publishedAt)}</time></span>
+            {post.updatedAt !== post.publishedAt && (
+              <span>Atualizado em <time datetime={post.updatedAt}>{formatBlogDate(post.updatedAt)}</time></span>
+            )}
+            <span>{post.readingMinutes} min de leitura</span>
+          </p>
+        </div>
+
+        <div class="blog-hero__stamp">
+          <StampMark text={post.stampMark} />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container blog-layout">
+    <aside class="blog-toc" aria-label="Neste guia">
+      <p class="blog-toc__title">Neste guia</p>
+      <ol>
+        {post.sections.map((section) => (
+          <li><a href={`#${section.id}`} data-toc-link={section.id}>{section.heading}</a></li>
+        ))}
+      </ol>
+      <a class="blog-toc__cta" href={whatsappUrl} target="_blank" rel="noopener noreferrer" data-conversion="whatsapp">
+        <Icon name="icon-whatsapp" size="sm" />
+        <span>Tirar dúvida no WhatsApp</span>
+      </a>
+    </aside>
+
+    <div class="blog-body">
+      {post.sections.map((section) => (
+        <section id={section.id} class="blog-section" data-blog-section>
+          <h2>{section.heading}</h2>
+
+          {section.blocks.map((block) =>
+            block.type === "paragraph" ? (
+              <p>{block.text}</p>
+            ) : block.type === "list" ? (
+              block.ordered ? (
+                <ol class="blog-list blog-list--ordered">{block.items.map((item) => <li>{item}</li>)}</ol>
+              ) : (
+                <ul class="blog-list">{block.items.map((item) => <li>{item}</li>)}</ul>
+              )
+            ) : block.type === "callout" ? (
+              <aside class:list={["blog-callout", `blog-callout--${block.tone}`]}>
+                <p class="blog-callout__label">{calloutLabels[block.tone]}</p>
+                <p class="blog-callout__title">{block.title}</p>
+                <p>{block.text}</p>
+              </aside>
+            ) : block.type === "stampPreview" ? (
+              <figure class="blog-preview">
+                <div class="blog-preview__paper">
+                  <div class="blog-preview__impression">
+                    {block.lines.map((line, index) => (
+                      <span class:list={[index === 0 ? "blog-preview__line--main" : ""]}>{line}</span>
+                    ))}
+                  </div>
+                </div>
+                <figcaption>{block.caption}</figcaption>
+              </figure>
+            ) : block.type === "compare" ? (
+              <div class="blog-compare" role="table" aria-label={`Comparativo: ${block.columns[0]} e ${block.columns[1]}`}>
+                <div class="blog-compare__row blog-compare__row--head" role="row">
+                  <span role="columnheader"><span class="sr-only">Critério</span></span>
+                  <span role="columnheader">{block.columns[0]}</span>
+                  <span role="columnheader">{block.columns[1]}</span>
+                </div>
+                {block.rows.map((row) => (
+                  <div class="blog-compare__row" role="row">
+                    <span role="rowheader">{row.label}</span>
+                    <span role="cell" data-label={block.columns[0]}>{row.values[0]}</span>
+                    <span role="cell" data-label={block.columns[1]}>{row.values[1]}</span>
+                  </div>
+                ))}
+              </div>
+            ) : block.type === "steps" ? (
+              <ol class="blog-steps">
+                {block.items.map((item) => (
+                  <li>
+                    <strong>{item.title}</strong>
+                    <p>{item.text}</p>
+                  </li>
+                ))}
+              </ol>
+            ) : block.type === "checklist" ? (
+              <fieldset class="blog-checklist">
+                <legend>{block.title}</legend>
+                {block.items.map((item) => (
+                  <label>
+                    <input type="checkbox" />
+                    <span>{item}</span>
+                  </label>
+                ))}
+                <p class="blog-checklist__hint">Marque o que você já tem antes de chamar no WhatsApp.</p>
+              </fieldset>
+            ) : block.type === "messageTemplate" ? (
+              <div class="blog-template">
+                <p class="blog-template__title">{block.title}</p>
+                <textarea rows="8" data-template-text aria-label="Mensagem para pedir carimbo com urgência">{block.text}</textarea>
+                <div class="blog-template__actions">
+                  <button type="button" class="button button--secondary" data-template-copy>
+                    <span data-template-copy-label>Copiar mensagem</span>
+                  </button>
+                  <a class="button button--primary" href={createWhatsAppUrl(block.text)} target="_blank" rel="noopener noreferrer" data-template-send data-conversion="whatsapp">
+                    <Icon name="icon-whatsapp" size="sm" />
+                    <span>Enviar no WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+            ) : null
+          )}
+        </section>
+      ))}
+
+      {
+        post.sources.length > 0 && (
+          <section class="blog-sources" aria-labelledby="blog-sources-title">
+            <h2 id="blog-sources-title">Fontes oficiais</h2>
+            {post.sourcesCheckedAt && (
+              <p>Consultadas em <time datetime={post.sourcesCheckedAt}>{formatBlogDate(post.sourcesCheckedAt)}</time>. Normas podem mudar: confira sempre o texto vigente no site do órgão.</p>
+            )}
+            <ul>
+              {post.sources.map((source) => (
+                <li>
+                  <a href={source.href} target="_blank" rel="noopener noreferrer">{source.label}</a>
+                  <span>{source.publisher}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <section class="blog-faq" aria-labelledby="blog-faq-title">
+        <h2 id="blog-faq-title">Perguntas rápidas</h2>
+        {post.faq.map((item) => (
+          <details>
+            <summary>
+              <span>{item.question}</span>
+              <strong aria-hidden="true">+</strong>
+            </summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </section>
+
+      <p class="blog-disclaimer">
+        Este conteúdo é informativo e não substitui orientação do seu conselho profissional, contador ou órgão responsável. A BH Carimbos produz os carimbos com os dados enviados e aprovados pelo cliente.
+      </p>
+
+      <section class="blog-cta">
+        <div>
+          <p class="blog-cta__eyebrow">Próximo passo</p>
+          <h2>{post.ctaTitle}</h2>
+          <p>{post.ctaText}</p>
+        </div>
+        <ButtonLink href={whatsappUrl} label="Chamar no WhatsApp" external>
+          <Icon name="icon-whatsapp" size="sm" />
+        </ButtonLink>
+      </section>
+
+      <nav class="blog-related" aria-labelledby="blog-related-title">
+        <h2 id="blog-related-title">Páginas relacionadas</h2>
+        <div class="blog-related__links">
+          {post.relatedLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <section class="blog-more" aria-labelledby="blog-more-title">
+    <div class="container">
+      <div class="blog-more__head">
+        <h2 id="blog-more-title">Outros guias</h2>
+        <a href={blogIndex.path}>Ver todos</a>
+      </div>
+      <div class="blog-more__grid">
+        {otherPosts.map((item, index) => (
+          <a class="blog-more__card" href={item.path}>
+            <StampMark text={item.stampMark} size="sm" tilt={index % 2 === 0 ? -6 : 5} />
+            <span class="blog-more__category">{item.category}</span>
+            <strong>{item.title}</strong>
+            <span class="blog-more__time">{item.readingMinutes} min de leitura</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</article>
+
+<script>
+  const progress = document.querySelector<HTMLElement>("[data-blog-progress]");
+  const article = document.querySelector<HTMLElement>(".blog-body");
+
+  function updateProgress() {
+    if (!progress || !article) return;
+    const rect = article.getBoundingClientRect();
+    const total = rect.height - window.innerHeight;
+    const ratio = total > 0 ? Math.min(Math.max(-rect.top / total, 0), 1) : 1;
+    progress.style.transform = `scaleX(${ratio})`;
+  }
+
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  window.addEventListener("resize", updateProgress);
+  updateProgress();
+
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
+  const sections = document.querySelectorAll<HTMLElement>("[data-blog-section]");
+
+  if ("IntersectionObserver" in window && tocLinks.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          tocLinks.forEach((link) => {
+            link.toggleAttribute("aria-current", link.dataset.tocLink === entry.target.id);
+          });
+        });
+      },
+      { rootMargin: "-30% 0px -60% 0px" }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  document.querySelectorAll<HTMLElement>(".blog-template").forEach((template) => {
+    const textarea = template.querySelector<HTMLTextAreaElement>("[data-template-text]");
+    const copyButton = template.querySelector<HTMLButtonElement>("[data-template-copy]");
+    const copyLabel = template.querySelector<HTMLElement>("[data-template-copy-label]");
+    const sendLink = template.querySelector<HTMLAnchorElement>("[data-template-send]");
+
+    if (!textarea) return;
+
+    textarea.addEventListener("input", () => {
+      if (!sendLink) return;
+      const url = new URL(sendLink.href);
+      url.searchParams.set("text", textarea.value);
+      sendLink.href = url.toString();
+    });
+
+    copyButton?.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(textarea.value);
+      } catch {
+        textarea.select();
+        document.execCommand("copy");
+      }
+
+      if (copyLabel) {
+        copyLabel.textContent = "Mensagem copiada";
+        window.setTimeout(() => {
+          copyLabel.textContent = "Copiar mensagem";
+        }, 2200);
+      }
+    });
+  });
+</script>
+
+<style>
+  .blog-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    width: 100%;
+    height: 4px;
+    pointer-events: none;
+  }
+
+  .blog-progress span {
+    display: block;
+    height: 100%;
+    background: var(--color-orange-600);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .blog-post {
+    background: var(--color-white);
+  }
+
+  .blog-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(2rem, 5vw, 4rem) clamp(2.5rem, 6vw, 4.5rem);
+    color: var(--color-white);
+    background:
+      radial-gradient(circle at 85% 20%, rgb(249 115 22 / 18%), transparent 22rem),
+      var(--color-black);
+  }
+
+  .blog-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 6px;
+    background: repeating-linear-gradient(90deg, var(--color-orange-600) 0 22px, transparent 22px 30px);
+  }
+
+  .blog-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    color: rgb(255 255 255 / 64%);
+    font-size: var(--text-sm);
+  }
+
+  .blog-breadcrumb a {
+    color: rgb(255 255 255 / 82%);
+    text-decoration: none;
+  }
+
+  .blog-breadcrumb a:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+
+  .blog-hero__grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .blog-chip {
+    display: inline-block;
+    margin: 0 0 var(--space-4);
+    border: 1px solid rgb(249 115 22 / 60%);
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    color: var(--color-orange-100);
+    font-size: 0.78rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .blog-hero h1 {
+    max-width: 20ch;
+    margin-bottom: var(--space-5);
+    color: var(--color-white);
+    font-size: clamp(2rem, 4.6vw, 3.6rem);
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
+  .blog-hero__lead {
+    max-width: 44rem;
+    margin-bottom: var(--space-6);
+    color: rgb(255 255 255 / 84%);
+    font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .blog-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    color: rgb(255 255 255 / 64%);
+    font-size: var(--text-sm);
+  }
+
+  .blog-hero__stamp {
+    display: none;
+    justify-content: center;
+  }
+
+  .blog-layout {
+    display: grid;
+    gap: var(--space-8);
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .blog-toc {
+    display: none;
+  }
+
+  .blog-body {
+    min-width: 0;
+    max-width: 46rem;
+  }
+
+  .blog-section {
+    scroll-margin-top: calc(var(--header-height) + 1.5rem);
+    margin-bottom: clamp(2.25rem, 5vw, 3.25rem);
+  }
+
+  .blog-section h2,
+  .blog-sources h2,
+  .blog-faq h2,
+  .blog-related h2 {
+    margin-bottom: var(--space-4);
+    color: var(--color-black);
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    line-height: 1.15;
+  }
+
+  .blog-section > p {
+    margin-bottom: var(--space-4);
+    color: var(--color-gray-800);
+    font-size: 1.06rem;
+    line-height: 1.8;
+  }
+
+  .blog-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-5);
+    padding: 0;
+    list-style: none;
+  }
+
+  .blog-list li {
+    position: relative;
+    padding-left: 1.6rem;
+    color: var(--color-gray-800);
+    font-size: 1.03rem;
+    line-height: 1.6;
+  }
+
+  .blog-list li::before {
+    content: "";
+    position: absolute;
+    top: 0.55em;
+    left: 0.2rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border: 2px solid var(--color-orange-600);
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+
+  .blog-list--ordered {
+    counter-reset: blog-list;
+  }
+
+  .blog-list--ordered li {
+    counter-increment: blog-list;
+    padding-left: 2.4rem;
+  }
+
+  .blog-list--ordered li::before {
+    content: counter(blog-list);
+    top: 0.05em;
+    left: 0;
+    display: grid;
+    width: 1.7rem;
+    height: 1.7rem;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--color-white);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-bold);
+    background: var(--color-black);
+    border: 0;
+    transform: none;
+  }
+
+  .blog-callout {
+    margin: var(--space-6) 0;
+    border-left: 5px solid var(--color-orange-600);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: var(--space-5);
+    background: var(--color-orange-50);
+  }
+
+  .blog-callout--source {
+    border-left-color: var(--color-black);
+    background: var(--color-gray-100);
+  }
+
+  .blog-callout--warning {
+    border-left-color: var(--color-orange-800);
+    background: #fff7ed;
+  }
+
+  .blog-callout p {
+    margin: 0;
+    color: var(--color-gray-800);
+    line-height: 1.65;
+  }
+
+  .blog-callout .blog-callout__label {
+    margin-bottom: var(--space-1);
+    color: var(--color-orange-800);
+    font-size: 0.72rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .blog-callout--source .blog-callout__label {
+    color: var(--color-gray-700);
+  }
+
+  .blog-callout .blog-callout__title {
+    margin-bottom: var(--space-2);
+    color: var(--color-black);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .blog-preview {
+    margin: var(--space-6) 0;
+  }
+
+  .blog-preview__paper {
+    display: grid;
+    min-height: 11rem;
+    place-items: center;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background:
+      repeating-linear-gradient(0deg, transparent 0 27px, rgb(17 17 17 / 5%) 27px 28px),
+      var(--color-white);
+  }
+
+  .blog-preview__impression {
+    display: grid;
+    gap: 0.2rem;
+    justify-items: center;
+    max-width: 100%;
+    border: 2px solid #1d3f8f;
+    border-radius: 6px;
+    padding: 0.8rem 1.2rem;
+    color: #1d3f8f;
+    font-size: clamp(0.82rem, 2.6vw, 0.98rem);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.25;
+    text-align: center;
+    transform: rotate(-1.5deg);
+    opacity: 0.9;
+  }
+
+  .blog-preview__line--main {
+    font-size: 1.12em;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .blog-preview figcaption {
+    margin-top: var(--space-2);
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+  }
+
+  .blog-compare {
+    margin: var(--space-6) 0;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .blog-compare__row {
+    display: grid;
+    grid-template-columns: minmax(7rem, 0.8fr) 1fr 1fr;
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  .blog-compare__row > span {
+    padding: var(--space-3) var(--space-4);
+    color: var(--color-gray-800);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .blog-compare__row > span[role="rowheader"] {
+    color: var(--color-black);
+    font-weight: var(--font-weight-bold);
+    background: var(--color-gray-50);
+  }
+
+  .blog-compare__row--head {
+    border-top: 0;
+    background: var(--color-black);
+  }
+
+  .blog-compare__row--head > span {
+    color: var(--color-white);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .blog-compare__row--head > span:nth-child(2) {
+    color: var(--color-orange-100);
+  }
+
+  .blog-steps {
+    display: grid;
+    gap: var(--space-4);
+    margin: var(--space-5) 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: blog-step;
+  }
+
+  .blog-steps li {
+    position: relative;
+    counter-increment: blog-step;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-4) var(--space-4) 4.2rem;
+    background: var(--color-white);
+  }
+
+  .blog-steps li::before {
+    content: counter(blog-step, decimal-leading-zero);
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    display: grid;
+    width: 2.4rem;
+    height: 2.4rem;
+    place-items: center;
+    border: 2px solid var(--color-orange-600);
+    border-radius: 50%;
+    color: var(--color-orange-700);
+    font-weight: var(--font-weight-bold);
+    transform: rotate(-8deg);
+  }
+
+  .blog-steps strong {
+    display: block;
+    margin-bottom: var(--space-1);
+    color: var(--color-black);
+  }
+
+  .blog-steps p {
+    margin: 0;
+    color: var(--color-gray-700);
+    line-height: 1.6;
+  }
+
+  .blog-checklist {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-6) 0;
+    border: 2px dashed var(--color-orange-600);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+  }
+
+  .blog-checklist legend {
+    padding-inline: var(--space-2);
+    color: var(--color-black);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .blog-checklist label {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    color: var(--color-gray-800);
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  .blog-checklist input {
+    flex: 0 0 auto;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0.15rem;
+    accent-color: var(--color-orange-600);
+  }
+
+  .blog-checklist input:checked + span {
+    color: var(--color-gray-500);
+    text-decoration: line-through;
+  }
+
+  .blog-checklist .blog-checklist__hint {
+    margin: 0;
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+  }
+
+  .blog-template {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-5) 0;
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    background: var(--color-black);
+  }
+
+  .blog-template__title {
+    margin: 0;
+    color: var(--color-white);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .blog-template textarea {
+    width: 100%;
+    border: 1px solid rgb(255 255 255 / 20%);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3);
+    color: var(--color-white);
+    font: inherit;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    background: rgb(255 255 255 / 6%);
+    resize: vertical;
+  }
+
+  .blog-template textarea:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  .blog-template__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .blog-sources {
+    margin-bottom: var(--space-10);
+    border-top: 3px solid var(--color-black);
+    padding-top: var(--space-5);
+  }
+
+  .blog-sources > p {
+    color: var(--color-gray-700);
+    font-size: var(--text-sm);
+  }
+
+  .blog-sources ul {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .blog-sources li {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .blog-sources a {
+    color: var(--color-orange-800);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .blog-sources li span {
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+  }
+
+  .blog-faq {
+    margin-bottom: var(--space-8);
+  }
+
+  .blog-faq details {
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .blog-faq summary {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    color: var(--color-black);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .blog-faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .blog-faq summary strong {
+    color: var(--color-orange-700);
+    transition: transform var(--transition-fast);
+  }
+
+  .blog-faq details[open] summary strong {
+    transform: rotate(45deg);
+  }
+
+  .blog-faq details p {
+    margin: 0 0 var(--space-4);
+    color: var(--color-gray-700);
+    line-height: 1.65;
+  }
+
+  .blog-disclaimer {
+    margin-bottom: var(--space-8);
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  .blog-cta {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+    margin-bottom: var(--space-10);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    color: var(--color-white);
+    background:
+      radial-gradient(circle at 90% 10%, rgb(249 115 22 / 28%), transparent 14rem),
+      var(--color-black);
+  }
+
+  .blog-cta h2 {
+    margin-bottom: var(--space-2);
+    color: var(--color-white);
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  }
+
+  .blog-cta p {
+    margin: 0;
+    color: rgb(255 255 255 / 80%);
+    line-height: 1.6;
+  }
+
+  .blog-cta .blog-cta__eyebrow {
+    margin-bottom: var(--space-2);
+    color: var(--color-orange-100);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .blog-related__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .blog-related__links a {
+    border: 1px solid var(--color-gray-300);
+    border-radius: 999px;
+    padding: 0.55rem 1rem;
+    color: var(--color-black);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .blog-related__links a:hover {
+    border-color: var(--color-orange-600);
+    color: var(--color-orange-800);
+  }
+
+  .blog-more {
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+    background: var(--color-gray-50);
+  }
+
+  .blog-more__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .blog-more__head h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  }
+
+  .blog-more__head a {
+    color: var(--color-orange-800);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .blog-more__grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .blog-more__card {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    color: var(--color-black);
+    text-decoration: none;
+    background: var(--color-white);
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .blog-more__card:hover {
+    border-color: var(--color-orange-600);
+    transform: translateY(-2px);
+  }
+
+  .blog-more__card :global(.stamp-mark) {
+    justify-self: start;
+    margin-bottom: var(--space-3);
+  }
+
+  .blog-more__category {
+    color: var(--color-orange-800);
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .blog-more__card strong {
+    font-size: 1.08rem;
+    line-height: 1.3;
+  }
+
+  .blog-more__time {
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 48rem) {
+    .blog-more__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .blog-cta {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .blog-hero__grid {
+      grid-template-columns: minmax(0, 1fr) 18rem;
+    }
+
+    .blog-hero__stamp {
+      display: flex;
+    }
+
+    .blog-layout {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      gap: clamp(2.5rem, 5vw, 4.5rem);
+    }
+
+    .blog-toc {
+      position: sticky;
+      top: calc(var(--header-height) + 1.5rem);
+      display: grid;
+      gap: var(--space-4);
+      align-self: start;
+    }
+
+    .blog-toc__title {
+      margin: 0;
+      color: var(--color-gray-500);
+      font-size: 0.75rem;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .blog-toc ol {
+      display: grid;
+      gap: var(--space-1);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-left: 2px solid var(--color-gray-200);
+    }
+
+    .blog-toc ol a {
+      display: block;
+      margin-left: -2px;
+      border-left: 2px solid transparent;
+      padding: 0.4rem 0 0.4rem var(--space-4);
+      color: var(--color-gray-700);
+      font-size: var(--text-sm);
+      line-height: 1.35;
+      text-decoration: none;
+    }
+
+    .blog-toc ol a:hover,
+    .blog-toc ol a[aria-current] {
+      border-left-color: var(--color-orange-600);
+      color: var(--color-black);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .blog-toc__cta {
+      display: inline-flex;
+      gap: var(--space-2);
+      align-items: center;
+      color: var(--color-orange-800);
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-bold);
+      text-decoration: none;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .blog-compare__row--head {
+      display: none;
+    }
+
+    .blog-compare__row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .blog-compare__row > span[role="rowheader"] {
+      grid-column: 1 / -1;
+    }
+
+    .blog-compare__row > span[role="cell"]::before {
+      content: attr(data-label);
+      display: block;
+      margin-bottom: 0.15rem;
+      color: var(--color-orange-800);
+      font-size: 0.7rem;
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .blog-template__actions :global(.button),
+    .blog-cta :global(.button) {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blog-more__card,
+    .blog-faq summary strong {
+      transition: none;
+    }
+  }
+</style>

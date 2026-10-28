@@ -1,4 +1,5 @@
 import { siteConfig } from "@data/site";
+import { blogIndex, getBlogPost, isBlogIndex } from "@data/blogPosts";
 import { getCommercialHubPage, getCommercialPage } from "@data/commercialPages";
 import { getFaqPage } from "@data/faqPage";
 import { getInternalPage } from "@data/internalPages";
@@ -19,10 +20,11 @@ export const seoByPath: Record<string, SeoEntry> = Object.fromEntries(
     const commercialPage = getCommercialPage(route.path);
     const faqPage = getFaqPage(route.path);
     const internalPage = getInternalPage(route.path);
+    const blogSeo = getBlogPost(route.path)?.seo ?? (isBlogIndex(route.path) ? blogIndex.seo : undefined);
 
     return [
       route.path,
-      legalPage?.seo ?? commercialHubPage?.seo ?? commercialPage?.seo ?? faqPage?.seo ?? internalPage?.seo ?? {
+      blogSeo ?? legalPage?.seo ?? commercialHubPage?.seo ?? commercialPage?.seo ?? faqPage?.seo ?? internalPage?.seo ?? {
         title: route.path === "/" ? "Carimbos Personalizados em BH" : route.draftTitle,
         description:
           route.path === "/"
