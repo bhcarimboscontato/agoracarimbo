@@ -13,6 +13,7 @@ import {
   getWebPageSchema,
   getWebSiteSchema
 } from "@lib/seo";
+import "@styles/fonts.css";
 import "@styles/global.css";
 
 type Props = {
@@ -96,19 +97,33 @@ const ga4MeasurementId = import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? "";
     return false;
   };
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11538800483"></script>
+<script is:inline>
+  // Carrega a biblioteca do Google depois que a página terminou de abrir, para não atrasar o primeiro desenho.
+  // Os comandos acima ficam na fila (dataLayer) e são enviados quando ela chega.
+  (function () {
+    function loadGtag() {
+      if (window.__gtagLoaded) return;
+      window.__gtagLoaded = true;
+      var script = document.createElement("script");
+      script.async = true;
+      script.src = "https://www.googletagmanager.com/gtag/js?id=AW-11538800483";
+      document.head.appendChild(script);
+    }
+    if (document.readyState === "complete") loadGtag();
+    else window.addEventListener("load", loadGtag, { once: true });
+    ["pointerdown", "keydown", "touchstart"].forEach(function (type) {
+      window.addEventListener(type, loadGtag, { once: true, passive: true });
+    });
+  })();
+</script>
 <script>
   import "@lib/tracking";
 </script>
 
     <link rel="icon" href={brandAssets.favicon} sizes="any" />
     <link rel="apple-touch-icon" href={brandAssets.appleTouchIcon} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin />
     {schemas.map((schema) => <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />)}
   </head>
   <body>
