@@ -1,5 +1,5 @@
 ---
-import { brandAssets, businessInfo } from "@data/site";
+import { businessInfo } from "@data/site";
 import { mainNavigation } from "@data/navigation";
 import { getWhatsAppUrl } from "@lib/whatsapp";
 import ButtonLink from "@components/ui/ButtonLink.astro";
@@ -30,7 +30,7 @@ const whatsappUrl = getWhatsAppUrl("general");
       <a class="site-header__brand" href="/" aria-label="Página inicial da BH Carimbos">
         <img
           class="brand-logo brand-logo--header"
-          src={brandAssets.logoHorizontal}
+          src="/assets/logo/logo-horizontal.webp"
           alt="BH Carimbos"
           width="150"
           height="54"
