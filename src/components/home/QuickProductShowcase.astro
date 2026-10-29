@@ -56,7 +56,7 @@ const products = [
 
     <div class="quick-products__scroller" aria-label="Modelos mais procurados">
       {
-        products.map((product) => (
+        products.map((product, index) => (
           <a
             class={`quick-product-card ${product.images.length > 1 ? "quick-product-card--double" : ""}`}
             href={createWhatsAppUrl(product.message)}
@@ -73,7 +73,7 @@ const products = [
                 alt={product.title}
                 width="360"
                 height="280"
-                loading="eager"
+                loading={index < 2 ? "eager" : "lazy"}
                 decoding="async"
               />
               {
